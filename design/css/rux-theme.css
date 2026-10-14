@@ -1,0 +1,1764 @@
+/*
+  rux-theme.css — themes above the compiled four.
+
+  TOKEN OVERRIDES, LAYERED ON A COMPILED THEME. Link it after css/rux.css.
+  Six theme blocks live here, `[data-theme="geist-dark"]`,
+  `[data-theme="rux-dark"]`, `[data-theme="ant-dark"]`, `[data-theme="spotify-dark"]`,
+  `[data-theme="apple-light"]` and `[data-theme="apple-dark"]`, each the
+  whole story for its own theme: every
+  core token its palette redefines, plus derived values for Carbon's
+  button component tokens and transcribed values for its tag,
+  notification, status and content-switcher ones (both below), which are
+  separate maps none of the three supplied palettes name. Custom properties inherit, so anything a
+  block does NOT name keeps white's compiled value from :root — in
+  practice that is almost nothing for any of the three, since each
+  redefines the surface end to end, but it is why a handful of tokens
+  (e.g. the syntax-* and ai-* families) still read white's values under
+  all three — see "WHAT NONE OF THEM TOUCH" below.
+
+  THE MECHANISM IS UNCHANGED FROM BEFORE, AND FROM ONE THEME TO THREE: a
+  plain CSS custom-property override block, never a compiled Sass theme.
+  `node_modules/@carbon/themes/scss/_theme.scss`'s `matches()` selects a
+  theme's component-token values (buttons, tags, notifications) only
+  when the active theme map equals ONE OF Carbon's own registered
+  snapshots exactly; change one key in a copy and every component-token
+  lookup for it falls through to white, silently. A first attempt to add
+  a theme this size as a compiled Sass map was killed in
+  review on exactly that finding before any file was touched. So every
+  block stays what the original twenty-token rux accent already proved:
+  Carbon's Sass never sees `geist-dark`, `ant-dark` or `spotify-dark` —
+  every value below is a CSS custom property read at runtime by
+  components that already say `var(--rux-<token>, <white's value>)`,
+  which is also why `git diff css/rux.css` stays empty no matter how
+  this file changes.
+
+  WHAT REPLACED THE OLD `rux` THEME. The twenty-token purple accent this
+  file used to ship under `[data-theme="rux"]` — "chosen so the mechanism
+  can be seen and measured," per its own comment — is retired as a file
+  default, not recreated: rux does not want it back. `geist-dark` took the
+  fifth, built-in slot instead.
+
+  `geist-dark`, `ant-dark` AND `spotify-dark` ARE ADDITIVE, NOT REPLACEMENTS. Each
+  takes its own slot beside white, g10, g90, g100 and whatever came
+  before it — nothing about an earlier block, or any compiled theme,
+  changes because a later one exists. `js/theme.js`'s `KNOWN` set,
+  `js/custom-themes.js`'s and `theme-creator/theme-creator.js`'s own
+  `RESERVED` sets, `builder/session.mjs`'s draft-theme validation, and
+  every account-panel theme radio (twelve templates, `index.html`, the sink,
+  `builder.html`'s default-theme picker) all carry seven names now, not
+  five.
+
+  TAG, NOTIFICATION, STATUS AND CONTENT-SWITCHER, ADDED 2026-09-10,
+  TRANSCRIBED RATHER THAN DESIGNED. 62 values per block: `tag-*` 40,
+  `notification-*` 10, `status-*` 9, `content-switcher-*` 3. Until today
+  none of the three blocks named one of them, so all 62 fell through to
+  white's compiled `:root` and every one of these three dark themes drew
+  Carbon's tags, inline notifications and status dots light-on-black. The
+  values are Carbon's own `[data-theme=g100]` set, copied: Carbon ships
+  only TWO sets for these families — white and g10 are identical to each
+  other for all 62, and g90 and g100 are identical for 58 — so a dark
+  theme has one set to take, not a palette to invent. Measured from
+  `css/rux.css`, not assumed.
+  GEIST-DARK'S TAGS ARE THE EXCEPTION. Their fill, hover and ink are Geist's
+  quiet badge as the scheduler's trips already wear it: the hue's 200 step
+  (300 for pink and teal) at 27% lightness with its chroma raised by 30%,
+  29% on hover, under the hue's 900 step, 4.57 to 1 at worst. Carbon's cyan
+  is Geist's blue, its magenta Geist's pink, and its three greys Geist's one.
+
+  THE FOUR THAT ARE NOT COPIED are the only place a choice existed.
+  `notification-background-error`, `-success`, `-info` and `-warning` are
+  the four of 62 where g90 and g100 differ, and in each theme the value
+  is that theme's OWN `layer-01` — g90's #393939 and g100's #262626 are
+  exactly their own layer-01 — so spotify-dark #181818 takes its own. An inline notification sits on the page's own raised surface,
+  which is what those themes redefine.
+  ANT-DARK AND GEIST-DARK ARE THE EXCEPTION: both draw a notification as an alert,
+  a tint of the kind's own hue inside a border of it, so their four are tints
+  rather than one neutral surface. Ant-dark takes Ant Design's own alert
+  fills; Geist publishes none, so each of its four is that theme's own support
+  colour mixed 15% into its #000 page — measured at 14.7:1 or better for the
+  text and 4.8:1 or better for the glyph.
+
+  ONE VALUE IS CARRIED THROUGH AS A REFERENCE, not flattened:
+  `notification-action-hover` is `var(--rux-layer-hover)` in Carbon's
+  g100 and stays that here, so it reads each theme's own hover surface.
+  It behaves exactly as g100's does, including when a theme is set below
+  the root element rather than on it — copying Carbon verbatim keeps that
+  identical rather than quietly improving it.
+
+  WHY THIS WAS ASKED FOR RATHER THAN NOTICED HERE. Scheduler files
+  requests against this system, and reported on 2026-09-10 that every
+  trip bar on its board takes its fill from the tag palette, so all three
+  of these themes drew the board pale-blue-on-black. Its count of
+  `status-*` was 7; it is 9. Nothing else in the report was off.
+
+  WHAT NONE OF THEM TOUCH. `ai-*` (Carbon's AI-feature identity) and
+  `syntax-*` (code-block colours) are not part of any of the three
+  supplied palettes, so all three are left alone and keep reading white's
+  values — a page in any of them with a syntax-highlighted code block or
+  an AI-labelled component will look inconsistent there until someone
+  decides those values on purpose. Not an oversight: recorded here so it
+  reads as a decision deferred, not a page nobody checked.
+
+  DERIVED BUTTON TOKENS, GEIST. Carbon's button colours are a
+  component-token map separate from the core tokens above
+  (`@carbon/themes/scss/generated/_button-tokens.scss`), so the supplied
+  Geist palette does not name them — left unset, they would keep white's
+  blue buttons on a black page. Each value below is derived from a token
+  already given, so nothing here is invented from nothing:
+    - button-primary / button-tertiary: interactive (#ededed) — Carbon's
+      own dark themes (g90/g100) already point tertiary at white, and
+      Geist's text-on-color is BLACK, meaning its "brand" colour is a
+      light chip with dark text, not a blue one. hover steps to
+      background-inverse-hover (#d4d4d4, already given); active steps to
+      text-secondary (#a1a1a1, already given) as a second, darker rung.
+    - button-secondary: the layer-active ladder (#333333 → #3f3f3f
+      hover → #525252 active) — Carbon's own g90/g100
+      secondary buttons darken on hover/active the same direction.
+    - button-danger-primary: Geist's error button, read from its own
+      button page: red-800 #e2162a under white text, 4.8:1. Geist
+      lightens it on hover, but its lighter reds under that white fall
+      below 4.5:1 (red-900 3.1, red-700 4.0), so hover and active darken
+      instead: hover to support-error-inverse (#cd2b31, already given),
+      5.3:1, and active a step further to #b81d26, 6.5:1, which still
+      parts from the #0a0a0a surface at 3:1. button-danger-secondary is
+      red text on the page, so it takes red-900, the step Geist writes
+      red in.
+    - button-separator: background (#000000) — Carbon's own g90/g100
+      pick the darkest surface for this, same move here.
+    - button-disabled: the same rgba(237, 237, 237, 0.25) already used
+      for text-disabled/icon-disabled — a neutral "dimmed foreground",
+      not a new value.
+
+  RUX-DARK IS RUX'S OWN THEME, STARTED FROM GEIST-DARK. Its block holds
+  geist-dark's values except the ones its own comment names, and every rule
+  in css/rux-overrides.css that names geist-dark names it too, so the two
+  draw the same shapes until a rule is given to rux-dark alone. It is in the
+  account panel while it is built, so it can be picked on any page.
+
+  ANT-DARK FOLLOWS ANT DESIGN'S DARK ALGORITHM (`theme.darkAlgorithm` on
+  the default seed): its neutrals, text alphas, fills, and its dark blue,
+  red, gold, green, orange and purple palettes. Where Ant's own dark value
+  misses 4.5:1 for text or 3:1 for a shape here, the nearest readable step
+  of the same palette stands in: links and info stay #4096ff, since
+  Ant's #1668dc is 3.2:1 on layer-02; text-error is #e86e6b; helper text
+  is 0.5 alpha and placeholder 0.35. Each field sits one step above its
+  layer, because ant-dark's fields have no underline and Carbon's own fields
+  match their layer. layer-03 and the toggle track have no
+  Ant counterpart, and the notification and content-switcher sets stay
+  Carbon's dark set.
+
+  ANT-DARK TAGS ARE ANT'S SOLID TAG, in the colours of its filled buttons:
+  the sixth step of each dark palette under white text, or the fifth where
+  white needs it (green) and the fourth for cyan, with one step darker on
+  hover. Teal and cyan are both Ant's cyan, which has no teal, and the greys
+  are Ant's spotlight grey #424242. css/rux-overrides.css rounds them, with
+  the rest of ant-dark's corners.
+
+  DERIVED BUTTON TOKENS, ANT-DARK. White text needs 4.5:1 on a filled
+  button, which Ant's light-mode blue #1677ff (4.1:1) and red #ff4d4f
+  (3.3:1) miss, so the filled buttons take Ant's own dark palette, the
+  one the layer-selected tokens already come from:
+    - button-primary, background-brand and interactive: Ant's dark
+      primary #1668dc (5.2:1). hover and active step down that palette,
+      #1554ad then #15417e, darkening as Carbon's own buttons do.
+    - button-tertiary: link-primary #4096ff, because tertiary is text and
+      a border on the page and #1677ff is 4.5:1 only on black. hover
+      fills with link-primary-hover #69b1ff and active with #1677ff, both
+      under Carbon's black text-inverse.
+    - button-secondary: the layer-active ladder (#303030 → #424242
+      hover → #595959 active) — the same move as geist-dark's secondary, reusing already-given values.
+    - button-danger-primary: Ant's dark red #d32029 (5.2:1), then
+      #a61d24 and #791a1f for hover and active; its dark error red
+      #dc4446 is 4.2:1. button-danger-secondary is text on the page, so it
+      takes text-error #e86e6b.
+    - button-separator: background (#000000) — the darkest surface,
+      the same move as every other theme here.
+    - button-disabled: the same rgba(255, 255, 255, 0.25) already used
+      for text-disabled/icon-disabled.
+
+  DERIVED BUTTON TOKENS, SPOTIFY. The cleanest of the three: every value
+  below is an already-given token, nothing computed or extrapolated.
+    - button-primary / button-tertiary: background-brand (#1ed760) as
+      the base — text-on-color is BLACK, so the vivid green itself is
+      the button colour, with dark text on top of it. hover steps to
+      link-primary-hover (#3be477, already given, lighter); active
+      steps to focus-inverse (#169c46, already given, darker) — the
+      only theme here where hover and active move in OPPOSITE
+      directions from the base, because both tones already existed in
+      the given palette and both read correctly against it.
+    - button-secondary: the layer-active ladder (#333333 → #404040
+      hover → #535353 active) — the same move as every other theme
+      here.
+    - button-danger-primary / -secondary: support-error (#f15e6c,
+      already given); hover steps to support-error-inverse (#c93646,
+      already given); active is computed at the same ~0.49 darkening
+      ratio used throughout this file — #762e35.
+    - button-separator: background (#121212) — the darkest surface,
+      the same move as every other theme here.
+    - button-disabled: the same rgba(255, 255, 255, 0.25) already used
+      for text-disabled/icon-disabled.
+
+  RULES UNCHANGED. Every name here is a token css/rux.css already
+  declares; check-tokens fails on one it does not, because a new token
+  is a value no component reads. No selector and no component rule —
+  those go in css/rux-overrides.css. No Carbon file is touched, and
+  css/rux.css is the same bytes whether this file is linked or not.
+*/
+[data-theme="geist-dark"] {
+  /* color-scheme / brand */
+  --rux-color-scheme: dark;
+
+  /* background */
+  --rux-background: #000000;
+  --rux-background-active: rgba(255, 255, 255, 0.18);
+  --rux-background-brand: #ededed;
+  --rux-background-hover: rgba(255, 255, 255, 0.06);
+  --rux-background-inverse: #ededed;
+  --rux-background-inverse-hover: #d4d4d4;
+  --rux-background-selected: rgba(255, 255, 255, 0.1);
+  --rux-background-selected-hover: rgba(255, 255, 255, 0.14);
+
+  /* HOVER AND SELECTED SIT ONE RUNG HIGHER THAN Geist's own ladder first put
+     them. On a #000 page a 7-shade step is not a state anyone sees: the trip
+     roster's day tint, the trip search's keyboard highlight and the editor's
+     bus tiles were all reported invisible. Each state moves one place along
+     the same ladder, so no colour is invented and the theme stays flat; the
+     measured gap between a layer and its selected state goes from the smallest
+     of the seven themes to the same range as the rest. */
+  /* layer */
+  --rux-layer-01: #0a0a0a;
+  --rux-layer-02: #111111;
+  --rux-layer-03: #1a1a1a;
+  --rux-layer-accent-01: #1a1a1a;
+  --rux-layer-accent-02: #242424;
+  --rux-layer-accent-03: #2e2e2e;
+  --rux-layer-accent-active-01: #333333;
+  --rux-layer-accent-active-02: #3f3f3f;
+  --rux-layer-accent-active-03: #525252;
+  --rux-layer-accent-hover-01: #242424;
+  --rux-layer-accent-hover-02: #2e2e2e;
+  --rux-layer-accent-hover-03: #333333;
+  --rux-layer-active-01: #2e2e2e;
+  --rux-layer-active-02: #333333;
+  --rux-layer-active-03: #3f3f3f;
+  --rux-layer-background-01: #000000;
+  --rux-layer-background-02: #0a0a0a;
+  --rux-layer-background-03: #111111;
+  --rux-layer-hover-01: #1a1a1a;
+  --rux-layer-hover-02: #242424;
+  --rux-layer-hover-03: #2e2e2e;
+  --rux-layer-selected-01: #242424;
+  --rux-layer-selected-02: #2e2e2e;
+  --rux-layer-selected-03: #333333;
+  --rux-layer-selected-disabled: #525252;
+  --rux-layer-selected-hover-01: #2e2e2e;
+  --rux-layer-selected-hover-02: #333333;
+  --rux-layer-selected-hover-03: #3f3f3f;
+  --rux-layer-selected-inverse: #ededed;
+
+  /* field */
+  /* A field is the surface it sits on, not a box cut out of it: measured on
+     Geist's own Input and Select pages, where the control's fill is the
+     container's #0a0a0a and a 1px ring is the only thing marking its edge.
+     Carbon reads field-02 for a field on layer-01 and field-03 for one on
+     layer-02, so each step is the layer under it, not its own number's: a
+     field in a side panel or a modal is that surface's #0a0a0a. On the black
+     page a field is #0a0a0a too, as Geist's is. A hovered field moves one
+     place up the ladder from where it rests. */
+  --rux-field-01: #0a0a0a;
+  --rux-field-02: #0a0a0a;
+  --rux-field-03: #111111;
+  --rux-field-hover-01: #1a1a1a;
+  --rux-field-hover-02: #1a1a1a;
+  --rux-field-hover-03: #242424;
+
+  /* border */
+  --rux-border-disabled: rgba(237, 237, 237, 0.25);
+  --rux-border-interactive: #ededed;
+  --rux-border-inverse: #ededed;
+  --rux-border-strong-01: #606060;
+  --rux-border-strong-02: #666666;
+  --rux-border-strong-03: #888888;
+  --rux-border-subtle-00: #1a1a1a;
+  --rux-border-subtle-01: #262626;
+  --rux-border-subtle-02: #333333;
+  --rux-border-subtle-03: #3f3f3f;
+  --rux-border-subtle-selected-01: #3f3f3f;
+  --rux-border-subtle-selected-02: #525252;
+  --rux-border-subtle-selected-03: #666666;
+  --rux-border-tile-01: #333333;
+  --rux-border-tile-02: #3f3f3f;
+  --rux-border-tile-03: #525252;
+
+  /* text */
+  --rux-text-disabled: rgba(237, 237, 237, 0.25);
+  --rux-text-error: #ff6369;
+  --rux-text-helper: #888888;
+  --rux-text-inverse: #000000;
+  --rux-text-on-color: #000000;
+  --rux-text-on-color-disabled: #8f8f8f;
+  --rux-text-placeholder: rgba(237, 237, 237, 0.4);
+  --rux-text-primary: #ededed;
+  --rux-text-secondary: #a1a1a1;
+
+  /* link */
+  /* A link on the light inverse surface is Geist's link blue from its own
+     light mode, blue-900, 4.6:1 on #ededed, and hovers to blue-1000. */
+  --rux-link-inverse: #005ff2;
+  --rux-link-inverse-active: #000000;
+  --rux-link-inverse-hover: #002359;
+  --rux-link-inverse-visited: #7c3aed;
+  --rux-link-primary: #52a8ff;
+  --rux-link-primary-hover: #8fc7ff;
+  --rux-link-secondary: #8fc7ff;
+  --rux-link-visited: #bf7af0;
+
+  /* icon */
+  --rux-icon-disabled: rgba(237, 237, 237, 0.25);
+  --rux-icon-interactive: #ededed;
+  --rux-icon-inverse: #000000;
+  --rux-icon-on-color: #000000;
+  --rux-icon-on-color-disabled: rgba(0, 0, 0, 0.4);
+  --rux-icon-primary: #ededed;
+  --rux-icon-secondary: #a1a1a1;
+
+  /* support. ERROR, SUCCESS AND WARNING ARE GEIST'S OWN 700 STEPS, read from
+     its dark Colors page: red-700 #f13342, green-700 #00ac3a, amber-700
+     #ffae00. They were near-misses for those three before, and the scheduler's
+     trip bar draws every one of its marks in them, so the theme may as well
+     name the colour Geist ships. Amber is the one that moves: a 16px mark
+     measures 4.14 to 4.21 against the ten bar fills, up from 3.80 to 3.86, and
+     the black text on an amber bar goes 10.36 to 11.31. Red and green stand
+     still -- red 1.97-2.00 to 1.94-1.97, green 2.54-2.58 to 2.55-2.59 -- and
+     both are under the 3 to 1 a small mark wants, which is the bar's fill
+     being dark and saturated rather than anything a step would fix. The
+     `-inverse` partners keep the values they had; nothing in these apps pairs
+     one with its base. */
+  --rux-support-caution-major: #f97316;
+  --rux-support-caution-minor: #f5a623;
+  --rux-support-caution-undefined: #8e4ec6;
+  --rux-support-error: #f13342;
+  --rux-support-error-inverse: #cd2b31;
+  --rux-support-info: #52a8ff;
+  --rux-support-info-inverse: #0070f3;
+  --rux-support-success: #00ac3a;
+  --rux-support-success-inverse: #2a7e3b;
+  --rux-support-warning: #ffae00;
+  --rux-support-warning-inverse: #d97706;
+
+  /* focus. WHITE, NOT THE BRAND'S OWN, the same as Carbon's g90 and g100.
+     Three reasons it is not #52a8ff here: white
+     is the higher contrast on every dark theme (measured 2026-09-17: 21.00
+     against this background, against 8.40 for the brand colour); one
+     ring colour is one thing to learn, and the shell wears this theme now, so
+     the header's ring is this one; and `focus-inverse` below keeps the
+     brand's tone for the light surfaces where white would vanish. The two
+     light themes keep their blue, because a white ring on a white page is
+     1.00 -- no ring at all. */
+  --rux-focus: #ffffff;
+  --rux-focus-inset: #000000;
+  --rux-focus-inverse: #0070f3;
+
+  /* chat */
+  --rux-chat-avatar-agent: #ededed;
+  --rux-chat-avatar-bot: #888888;
+  --rux-chat-avatar-user: #52a8ff;
+  --rux-chat-bubble-agent: #111111;
+  --rux-chat-bubble-agent-text: #ededed;
+  --rux-chat-bubble-border: #262626;
+  --rux-chat-bubble-user: #1a1a1a;
+  --rux-chat-bubble-user-text: #ededed;
+  --rux-chat-button: #52a8ff;
+  --rux-chat-button-active: rgba(255, 255, 255, 0.18);
+  --rux-chat-button-hover: rgba(255, 255, 255, 0.06);
+  --rux-chat-button-selected: rgba(255, 255, 255, 0.1);
+  --rux-chat-button-text-hover: #8fc7ff;
+  --rux-chat-button-text-selected: #a1a1a1;
+  --rux-chat-header-background: #0a0a0a;
+  --rux-chat-header-text: #ededed;
+  --rux-chat-prompt-background: #000000;
+  --rux-chat-prompt-border-end: rgba(26, 26, 26, 0);
+  --rux-chat-prompt-border-start: #1a1a1a;
+  --rux-chat-prompt-text: #ededed;
+  --rux-chat-shell-background: #0a0a0a;
+
+  /* misc */
+  --rux-interactive: #ededed;
+  --rux-highlight: #102a43;
+  --rux-overlay: rgba(0, 0, 0, 0.72);
+  --rux-shadow: rgba(0, 0, 0, 0.8);
+  --rux-skeleton-background: #1a1a1a;
+  --rux-skeleton-element: #2e2e2e;
+  --rux-toggle-off: #2e2e2e;
+
+  /* button (component tokens — derived, see header) */
+  --rux-button-primary: #ededed;
+  --rux-button-primary-hover: #d4d4d4;
+  --rux-button-primary-active: #a1a1a1;
+  --rux-button-tertiary: #ededed;
+  --rux-button-tertiary-hover: #d4d4d4;
+  --rux-button-tertiary-active: #a1a1a1;
+  /* GEIST'S SECONDARY IS AN OUTLINE, NOT A FILL: measured on its Button page
+     as the page's own #0a0a0a behind a 1px ring, where Carbon's is a grey
+     block. The ring and the label are in rux-overrides.css, because Carbon
+     writes both straight onto the class. */
+  --rux-button-secondary: #0a0a0a;
+  --rux-button-secondary-hover: #1a1a1a;
+  --rux-button-secondary-active: #2e2e2e;
+  --rux-button-danger-primary: #e2162a;
+  --rux-button-danger-secondary: #ff565f;
+  --rux-button-danger-hover: #cd2b31;
+  --rux-button-danger-active: #b81d26;
+  --rux-button-separator: #000000;
+  /* One disabled look for every kind, Geist's: a #1a1a1a block with a grey
+     label. Carbon's translucent light fill turns a dark button into a pale
+     block, and the label it pairs with it is black at 40%, which on that block
+     is unreadable -- the editor's Reset was the report. */
+  --rux-button-disabled: #1a1a1a;
+
+  /* tag (component tokens — Carbon's own dark set, see header) */
+  --rux-tag-background-red: #4f000f;
+  --rux-tag-color-red: #ff565f;
+  --rux-tag-hover-red: #550614;
+  --rux-tag-background-magenta: #530029;
+  --rux-tag-color-magenta: #ff4d8d;
+  --rux-tag-hover-magenta: #59002e;
+  --rux-tag-background-purple: #3b084d;
+  --rux-tag-color-purple: #c472fb;
+  --rux-tag-hover-purple: #400f53;
+  --rux-tag-background-blue: #002458;
+  --rux-tag-color-blue: #47a8ff;
+  --rux-tag-hover-blue: #00295e;
+  --rux-tag-background-cyan: #002458;
+  --rux-tag-color-cyan: #47a8ff;
+  --rux-tag-hover-cyan: #00295e;
+  --rux-tag-background-teal: #003429;
+  --rux-tag-color-teal: #00cfb7;
+  --rux-tag-hover-teal: #003a2e;
+  --rux-tag-background-green: #003400;
+  --rux-tag-color-green: #00ca50;
+  --rux-tag-hover-green: #003902;
+  --rux-tag-background-gray: #262626;
+  --rux-tag-color-gray: #ededed;
+  --rux-tag-hover-gray: #2b2b2b;
+  --rux-tag-border-red: #fa4d56;
+  --rux-tag-border-blue: #4589ff;
+  --rux-tag-border-cyan: #1192e8;
+  --rux-tag-border-teal: #009d9a;
+  --rux-tag-border-green: #24a148;
+  --rux-tag-border-magenta: #ee5396;
+  --rux-tag-border-purple: #a56eff;
+  --rux-tag-border-gray: #8d8d8d;
+  --rux-tag-border-cool-gray: #878d96;
+  --rux-tag-border-warm-gray: #8f8b8b;
+  --rux-tag-background-cool-gray: #262626;
+  --rux-tag-color-cool-gray: #ededed;
+  --rux-tag-hover-cool-gray: #2b2b2b;
+  --rux-tag-background-warm-gray: #262626;
+  --rux-tag-color-warm-gray: #ededed;
+  --rux-tag-hover-warm-gray: #2b2b2b;
+
+  /* notification (component tokens — Carbon's own dark set;
+     the four surface backgrounds take THIS theme's layer-01) */
+  --rux-notification-background-error: #220b0c;
+  --rux-notification-background-success: #0b190d;
+  --rux-notification-background-info: #0c1926;
+  --rux-notification-background-warning: #251905;
+  --rux-notification-action-hover: var(--rux-layer-hover);
+  --rux-notification-action-tertiary-inverse: #0f62fe;
+  --rux-notification-action-tertiary-inverse-active: #002d9c;
+  --rux-notification-action-tertiary-inverse-hover: #0050e6;
+  --rux-notification-action-tertiary-inverse-text: #ffffff;
+  --rux-notification-action-tertiary-inverse-text-on-color-disabled: #8d8d8d;
+
+  /* status indicator (component tokens — Carbon's own dark set) */
+  --rux-status-red: #fa4d56;
+  --rux-status-orange: #ff832b;
+  --rux-status-orange-outline: #ff832b;
+  --rux-status-yellow: #f1c21b;
+  --rux-status-yellow-outline: #f1c21b;
+  --rux-status-green: #42be65;
+  --rux-status-blue: #4589ff;
+  --rux-status-purple: #a56eff;
+  --rux-status-gray: #8d8d8d;
+
+  /* content switcher (component tokens — Carbon's own dark set) */
+  --rux-content-switcher-background: rgba(0, 0, 0, 0);
+  --rux-content-switcher-background-hover: rgba(141, 141, 141, 0.12);
+  --rux-content-switcher-selected: rgba(141, 141, 141, 0.24);
+}
+
+/* RUX-DARK STARTS AS GEIST-DARK'S VALUES, and this block is where its own
+   are written as they are chosen. A value still equal to geist-dark's is
+   explained in that block and in the header above.
+
+   ITS RAISED GREYS SIT ONE STEP UP GEIST'S LADDER, which runs #0a0a0a,
+   #111111, #1a1a1a, #242424, #2e2e2e, #333333, #3f3f3f, #525252, #666666.
+   Every layer and field token, the secondary and disabled buttons, the
+   skeleton and the chat's shell and bubbles hold the next grey up from
+   geist-dark's, so the first raised surface is #111111, the lightness of the
+   #0d1117 GitHub's Primer draws a tile in, and the greys keep their order.
+   The page stays black, and the grey tags and the tinted fills are
+   geist-dark's.
+
+   TWO VALUES HOLD THEIR CONTRAST ON THE RAISED GREYS. Helper text is
+   #8f8f8f, the grey this block already gives disabled text on a coloured
+   fill, because geist-dark's #888888 falls to 4.4 to 1 on the #242424 of
+   layer-03; #8f8f8f is 4.8 to 1 there. The off toggle's track is Carbon
+   g100's #6f6f6f, 3.8 to 1 on layer-01 and 3.1 on layer-03, because a
+   control's resting shape needs 3 to 1 and the next grey up, #333333, is
+   1.5 to 1 on layer-01.
+
+   ITS BORDERS ARE PRIMER'S, AS NEUTRAL GREYS OF THE SAME LIGHTNESS. Primer
+   outlines a box, a button and a field alike in borderColor-default,
+   #3d444d, which is #434343 without its blue: so border-subtle-01 to -03
+   and the three tile borders hold it. A rule between rows is Primer's
+   borderColor-muted, that colour at 70%, which over a #111111 surface is
+   #343434: border-subtle-00 holds it. The selected borders move one step up
+   Geist's ladder to stay above those. The strong borders are geist-dark's;
+   its #606060 is already near Primer's borderColor-emphasis, #656c76. */
+[data-theme="rux-dark"] {
+  /* color-scheme / brand */
+  --rux-color-scheme: dark;
+
+  /* background */
+  --rux-background: #000000;
+  --rux-background-active: rgba(255, 255, 255, 0.18);
+  --rux-background-brand: #ededed;
+  --rux-background-hover: rgba(255, 255, 255, 0.06);
+  --rux-background-inverse: #ededed;
+  --rux-background-inverse-hover: #d4d4d4;
+  --rux-background-selected: rgba(255, 255, 255, 0.1);
+  --rux-background-selected-hover: rgba(255, 255, 255, 0.14);
+
+  /* layer */
+  --rux-layer-01: #111111;
+  --rux-layer-02: #1a1a1a;
+  --rux-layer-03: #242424;
+  --rux-layer-accent-01: #242424;
+  --rux-layer-accent-02: #2e2e2e;
+  --rux-layer-accent-03: #333333;
+  --rux-layer-accent-active-01: #3f3f3f;
+  --rux-layer-accent-active-02: #525252;
+  --rux-layer-accent-active-03: #666666;
+  --rux-layer-accent-hover-01: #2e2e2e;
+  --rux-layer-accent-hover-02: #333333;
+  --rux-layer-accent-hover-03: #3f3f3f;
+  --rux-layer-active-01: #333333;
+  --rux-layer-active-02: #3f3f3f;
+  --rux-layer-active-03: #525252;
+  --rux-layer-background-01: #000000;
+  --rux-layer-background-02: #111111;
+  --rux-layer-background-03: #1a1a1a;
+  --rux-layer-hover-01: #242424;
+  --rux-layer-hover-02: #2e2e2e;
+  --rux-layer-hover-03: #333333;
+  --rux-layer-selected-01: #2e2e2e;
+  --rux-layer-selected-02: #333333;
+  --rux-layer-selected-03: #3f3f3f;
+  --rux-layer-selected-disabled: #666666;
+  --rux-layer-selected-hover-01: #333333;
+  --rux-layer-selected-hover-02: #3f3f3f;
+  --rux-layer-selected-hover-03: #525252;
+  --rux-layer-selected-inverse: #ededed;
+
+  /* field */
+  --rux-field-01: #111111;
+  --rux-field-02: #111111;
+  --rux-field-03: #1a1a1a;
+  --rux-field-hover-01: #242424;
+  --rux-field-hover-02: #242424;
+  --rux-field-hover-03: #2e2e2e;
+
+  /* border */
+  --rux-border-disabled: rgba(237, 237, 237, 0.25);
+  --rux-border-interactive: #ededed;
+  --rux-border-inverse: #ededed;
+  --rux-border-strong-01: #606060;
+  --rux-border-strong-02: #666666;
+  --rux-border-strong-03: #888888;
+  --rux-border-subtle-00: #343434;
+  --rux-border-subtle-01: #434343;
+  --rux-border-subtle-02: #434343;
+  --rux-border-subtle-03: #434343;
+  --rux-border-subtle-selected-01: #525252;
+  --rux-border-subtle-selected-02: #666666;
+  --rux-border-subtle-selected-03: #888888;
+  --rux-border-tile-01: #434343;
+  --rux-border-tile-02: #434343;
+  --rux-border-tile-03: #434343;
+
+  /* text */
+  --rux-text-disabled: rgba(237, 237, 237, 0.25);
+  --rux-text-error: #ff6369;
+  --rux-text-helper: #8f8f8f;
+  --rux-text-inverse: #000000;
+  --rux-text-on-color: #000000;
+  --rux-text-on-color-disabled: #8f8f8f;
+  --rux-text-placeholder: rgba(237, 237, 237, 0.4);
+  --rux-text-primary: #ededed;
+  --rux-text-secondary: #a1a1a1;
+
+  /* link */
+  --rux-link-inverse: #005ff2;
+  --rux-link-inverse-active: #000000;
+  --rux-link-inverse-hover: #002359;
+  --rux-link-inverse-visited: #7c3aed;
+  --rux-link-primary: #52a8ff;
+  --rux-link-primary-hover: #8fc7ff;
+  --rux-link-secondary: #8fc7ff;
+  --rux-link-visited: #bf7af0;
+
+  /* icon */
+  --rux-icon-disabled: rgba(237, 237, 237, 0.25);
+  --rux-icon-interactive: #ededed;
+  --rux-icon-inverse: #000000;
+  --rux-icon-on-color: #000000;
+  --rux-icon-on-color-disabled: rgba(0, 0, 0, 0.4);
+  --rux-icon-primary: #ededed;
+  --rux-icon-secondary: #a1a1a1;
+
+  /* support */
+  --rux-support-caution-major: #f97316;
+  --rux-support-caution-minor: #f5a623;
+  --rux-support-caution-undefined: #8e4ec6;
+  --rux-support-error: #f13342;
+  --rux-support-error-inverse: #cd2b31;
+  --rux-support-info: #52a8ff;
+  --rux-support-info-inverse: #0070f3;
+  --rux-support-success: #00ac3a;
+  --rux-support-success-inverse: #2a7e3b;
+  --rux-support-warning: #ffae00;
+  --rux-support-warning-inverse: #d97706;
+
+  /* focus */
+  --rux-focus: #ffffff;
+  --rux-focus-inset: #000000;
+  --rux-focus-inverse: #0070f3;
+
+  /* chat */
+  --rux-chat-avatar-agent: #ededed;
+  --rux-chat-avatar-bot: #888888;
+  --rux-chat-avatar-user: #52a8ff;
+  --rux-chat-bubble-agent: #1a1a1a;
+  --rux-chat-bubble-agent-text: #ededed;
+  --rux-chat-bubble-border: #434343;
+  --rux-chat-bubble-user: #242424;
+  --rux-chat-bubble-user-text: #ededed;
+  --rux-chat-button: #52a8ff;
+  --rux-chat-button-active: rgba(255, 255, 255, 0.18);
+  --rux-chat-button-hover: rgba(255, 255, 255, 0.06);
+  --rux-chat-button-selected: rgba(255, 255, 255, 0.1);
+  --rux-chat-button-text-hover: #8fc7ff;
+  --rux-chat-button-text-selected: #a1a1a1;
+  --rux-chat-header-background: #111111;
+  --rux-chat-header-text: #ededed;
+  --rux-chat-prompt-background: #000000;
+  --rux-chat-prompt-border-end: rgba(52, 52, 52, 0);
+  --rux-chat-prompt-border-start: #343434;
+  --rux-chat-prompt-text: #ededed;
+  --rux-chat-shell-background: #111111;
+
+  /* misc */
+  --rux-interactive: #ededed;
+  --rux-highlight: #102a43;
+  --rux-overlay: rgba(0, 0, 0, 0.72);
+  --rux-shadow: rgba(0, 0, 0, 0.8);
+  --rux-skeleton-background: #242424;
+  --rux-skeleton-element: #333333;
+  --rux-toggle-off: #6f6f6f;
+
+  /* button */
+  --rux-button-primary: #ededed;
+  --rux-button-primary-hover: #d4d4d4;
+  --rux-button-primary-active: #a1a1a1;
+  --rux-button-tertiary: #ededed;
+  --rux-button-tertiary-hover: #d4d4d4;
+  --rux-button-tertiary-active: #a1a1a1;
+  --rux-button-secondary: #111111;
+  --rux-button-secondary-hover: #242424;
+  --rux-button-secondary-active: #333333;
+  --rux-button-danger-primary: #e2162a;
+  --rux-button-danger-secondary: #ff565f;
+  --rux-button-danger-hover: #cd2b31;
+  --rux-button-danger-active: #b81d26;
+  --rux-button-separator: #000000;
+  --rux-button-disabled: #242424;
+
+  /* tag */
+  --rux-tag-background-red: #4f000f;
+  --rux-tag-color-red: #ff565f;
+  --rux-tag-hover-red: #550614;
+  --rux-tag-background-magenta: #530029;
+  --rux-tag-color-magenta: #ff4d8d;
+  --rux-tag-hover-magenta: #59002e;
+  --rux-tag-background-purple: #3b084d;
+  --rux-tag-color-purple: #c472fb;
+  --rux-tag-hover-purple: #400f53;
+  --rux-tag-background-blue: #002458;
+  --rux-tag-color-blue: #47a8ff;
+  --rux-tag-hover-blue: #00295e;
+  --rux-tag-background-cyan: #002458;
+  --rux-tag-color-cyan: #47a8ff;
+  --rux-tag-hover-cyan: #00295e;
+  --rux-tag-background-teal: #003429;
+  --rux-tag-color-teal: #00cfb7;
+  --rux-tag-hover-teal: #003a2e;
+  --rux-tag-background-green: #003400;
+  --rux-tag-color-green: #00ca50;
+  --rux-tag-hover-green: #003902;
+  --rux-tag-background-gray: #262626;
+  --rux-tag-color-gray: #ededed;
+  --rux-tag-hover-gray: #2b2b2b;
+  --rux-tag-border-red: #fa4d56;
+  --rux-tag-border-blue: #4589ff;
+  --rux-tag-border-cyan: #1192e8;
+  --rux-tag-border-teal: #009d9a;
+  --rux-tag-border-green: #24a148;
+  --rux-tag-border-magenta: #ee5396;
+  --rux-tag-border-purple: #a56eff;
+  --rux-tag-border-gray: #8d8d8d;
+  --rux-tag-border-cool-gray: #878d96;
+  --rux-tag-border-warm-gray: #8f8b8b;
+  --rux-tag-background-cool-gray: #262626;
+  --rux-tag-color-cool-gray: #ededed;
+  --rux-tag-hover-cool-gray: #2b2b2b;
+  --rux-tag-background-warm-gray: #262626;
+  --rux-tag-color-warm-gray: #ededed;
+  --rux-tag-hover-warm-gray: #2b2b2b;
+
+  /* notification */
+  --rux-notification-background-error: #220b0c;
+  --rux-notification-background-success: #0b190d;
+  --rux-notification-background-info: #0c1926;
+  --rux-notification-background-warning: #251905;
+  --rux-notification-action-hover: var(--rux-layer-hover);
+  --rux-notification-action-tertiary-inverse: #0f62fe;
+  --rux-notification-action-tertiary-inverse-active: #002d9c;
+  --rux-notification-action-tertiary-inverse-hover: #0050e6;
+  --rux-notification-action-tertiary-inverse-text: #ffffff;
+  --rux-notification-action-tertiary-inverse-text-on-color-disabled: #8d8d8d;
+
+  /* status indicator */
+  --rux-status-red: #fa4d56;
+  --rux-status-orange: #ff832b;
+  --rux-status-orange-outline: #ff832b;
+  --rux-status-yellow: #f1c21b;
+  --rux-status-yellow-outline: #f1c21b;
+  --rux-status-green: #42be65;
+  --rux-status-blue: #4589ff;
+  --rux-status-purple: #a56eff;
+  --rux-status-gray: #8d8d8d;
+
+  /* content switcher */
+  --rux-content-switcher-background: rgba(0, 0, 0, 0);
+  --rux-content-switcher-background-hover: rgba(141, 141, 141, 0.12);
+  --rux-content-switcher-selected: rgba(141, 141, 141, 0.24);
+}
+
+
+[data-theme="ant-dark"] {
+  /* color-scheme / brand */
+  --rux-color-scheme: dark;
+
+  /* background */
+  --rux-background: #000000;
+  --rux-background-active: rgba(255, 255, 255, 0.18);
+  --rux-background-brand: #1668dc;
+  --rux-background-hover: rgba(255, 255, 255, 0.08);
+  --rux-background-inverse: #f5f5f5;
+  --rux-background-inverse-hover: #d9d9d9;
+  --rux-background-selected: rgba(22, 119, 255, 0.16);
+  --rux-background-selected-hover: rgba(22, 119, 255, 0.24);
+
+  /* layer */
+  --rux-layer-01: #141414;
+  --rux-layer-02: #1f1f1f;
+  --rux-layer-03: #262626;
+  --rux-layer-accent-01: #1f1f1f;
+  --rux-layer-accent-02: #2a2a2a;
+  --rux-layer-accent-03: #353535;
+  --rux-layer-accent-active-01: #424242;
+  --rux-layer-accent-active-02: #595959;
+  --rux-layer-accent-active-03: #737373;
+  --rux-layer-accent-hover-01: #303030;
+  --rux-layer-accent-hover-02: #3a3a3a;
+  --rux-layer-accent-hover-03: #454545;
+  --rux-layer-active-01: #303030;
+  --rux-layer-active-02: #424242;
+  --rux-layer-active-03: #595959;
+  --rux-layer-background-01: #000000;
+  --rux-layer-background-02: #141414;
+  --rux-layer-background-03: #1f1f1f;
+  --rux-layer-hover-01: #1f1f1f;
+  --rux-layer-hover-02: #292929;
+  --rux-layer-hover-03: #303030;
+  --rux-layer-selected-01: #112545;
+  --rux-layer-selected-02: #15325b;
+  --rux-layer-selected-03: #15417e;
+  --rux-layer-selected-disabled: #595959;
+  --rux-layer-selected-hover-01: #15325b;
+  --rux-layer-selected-hover-02: #15417e;
+  --rux-layer-selected-hover-03: #1554ad;
+  --rux-layer-selected-inverse: #f5f5f5;
+
+  /* field */
+  --rux-field-01: #1f1f1f;
+  --rux-field-02: #262626;
+  --rux-field-03: #303030;
+  --rux-field-hover-01: #262626;
+  --rux-field-hover-02: #303030;
+  --rux-field-hover-03: #3a3a3a;
+
+  /* border */
+  --rux-border-disabled: rgba(255, 255, 255, 0.2);
+  --rux-border-interactive: #4096ff;
+  --rux-border-inverse: #f5f5f5;
+  --rux-border-strong-01: #626262;
+  --rux-border-strong-02: #737373;
+  --rux-border-strong-03: #8c8c8c;
+  --rux-border-subtle-00: #262626;
+  --rux-border-subtle-01: #303030;
+  --rux-border-subtle-02: #424242;
+  --rux-border-subtle-03: #595959;
+  --rux-border-subtle-selected-01: #424242;
+  --rux-border-subtle-selected-02: #595959;
+  --rux-border-subtle-selected-03: #737373;
+  --rux-border-tile-01: #303030;
+  --rux-border-tile-02: #424242;
+  --rux-border-tile-03: #595959;
+
+  /* text */
+  --rux-text-disabled: rgba(255, 255, 255, 0.25);
+  --rux-text-error: #e86e6b;
+  --rux-text-helper: rgba(255, 255, 255, 0.5);
+  --rux-text-inverse: #000000;
+  --rux-text-on-color: #ffffff;
+  --rux-text-on-color-disabled: rgba(255, 255, 255, 0.3);
+  --rux-text-placeholder: rgba(255, 255, 255, 0.35);
+  --rux-text-primary: rgba(255, 255, 255, 0.85);
+  --rux-text-secondary: rgba(255, 255, 255, 0.65);
+
+  /* link */
+  --rux-link-inverse: #0958d9;
+  --rux-link-inverse-active: #000000;
+  --rux-link-inverse-hover: #003eb3;
+  --rux-link-inverse-visited: #531dab;
+  --rux-link-primary: #4096ff;
+  --rux-link-primary-hover: #65a9f3;
+  --rux-link-secondary: #65a9f3;
+  --rux-link-visited: #ab7ae0;
+
+  /* icon */
+  --rux-icon-disabled: rgba(255, 255, 255, 0.25);
+  --rux-icon-interactive: #4096ff;
+  --rux-icon-inverse: #000000;
+  --rux-icon-on-color: #ffffff;
+  --rux-icon-on-color-disabled: rgba(255, 255, 255, 0.3);
+  --rux-icon-primary: rgba(255, 255, 255, 0.85);
+  --rux-icon-secondary: rgba(255, 255, 255, 0.65);
+
+  /* support */
+  --rux-support-caution-major: #d87a16;
+  --rux-support-caution-minor: #d89614;
+  --rux-support-caution-undefined: #ab7ae0;
+  --rux-support-error: #dc4446;
+  --rux-support-error-inverse: #cf1322;
+  --rux-support-info: #4096ff;
+  --rux-support-info-inverse: #0958d9;
+  --rux-support-success: #49aa19;
+  --rux-support-success-inverse: #389e0d;
+  --rux-support-warning: #d89614;
+  --rux-support-warning-inverse: #d48806;
+
+  /* focus. WHITE, NOT THE BRAND'S OWN, the same as Carbon's g90 and g100.
+     Three reasons it is not #4096ff here: white
+     is the higher contrast on every dark theme (measured 2026-09-17: 21.00
+     against this background, against 7.02 for the brand colour); one
+     ring colour is one thing to learn, and the shell wears this theme now, so
+     the header's ring is this one; and `focus-inverse` below keeps the
+     brand's tone for the light surfaces where white would vanish. The two
+     light themes keep their blue, because a white ring on a white page is
+     1.00 -- no ring at all. */
+  --rux-focus: #ffffff;
+  --rux-focus-inset: #000000;
+  --rux-focus-inverse: #1677ff;
+
+  /* chat */
+  --rux-chat-avatar-agent: #d9d9d9;
+  --rux-chat-avatar-bot: #8c8c8c;
+  --rux-chat-avatar-user: #1677ff;
+  --rux-chat-bubble-agent: #1f1f1f;
+  --rux-chat-bubble-agent-text: rgba(255, 255, 255, 0.85);
+  --rux-chat-bubble-border: #303030;
+  --rux-chat-bubble-user: #262626;
+  --rux-chat-bubble-user-text: rgba(255, 255, 255, 0.85);
+  --rux-chat-button: #4096ff;
+  --rux-chat-button-active: rgba(22, 119, 255, 0.3);
+  --rux-chat-button-hover: rgba(22, 119, 255, 0.12);
+  --rux-chat-button-selected: rgba(22, 119, 255, 0.2);
+  --rux-chat-button-text-hover: #65a9f3;
+  --rux-chat-button-text-selected: rgba(255, 255, 255, 0.65);
+  --rux-chat-header-background: #141414;
+  --rux-chat-header-text: rgba(255, 255, 255, 0.85);
+  --rux-chat-prompt-background: #141414;
+  --rux-chat-prompt-border-end: rgba(38, 38, 38, 0);
+  --rux-chat-prompt-border-start: #262626;
+  --rux-chat-prompt-text: rgba(255, 255, 255, 0.85);
+  --rux-chat-shell-background: #141414;
+
+  /* misc */
+  --rux-interactive: #1668dc;
+  --rux-highlight: #111a2c;
+  --rux-overlay: rgba(0, 0, 0, 0.68);
+  --rux-shadow: rgba(0, 0, 0, 0.85);
+  --rux-skeleton-background: #1f1f1f;
+  --rux-skeleton-element: #303030;
+  --rux-toggle-off: #595959;
+
+  /* button (component tokens — derived, see header) */
+  --rux-button-primary: #1668dc;
+  --rux-button-primary-hover: #1554ad;
+  --rux-button-primary-active: #15417e;
+  --rux-button-tertiary: #4096ff;
+  --rux-button-tertiary-hover: #65a9f3;
+  --rux-button-tertiary-active: #1677ff;
+  --rux-button-secondary: #303030;
+  --rux-button-secondary-hover: #424242;
+  --rux-button-secondary-active: #595959;
+  --rux-button-danger-primary: #d32029;
+  --rux-button-danger-secondary: #e86e6b;
+  --rux-button-danger-hover: #a61d24;
+  --rux-button-danger-active: #791a1f;
+  --rux-button-separator: #000000;
+  --rux-button-disabled: rgba(255, 255, 255, 0.25);
+
+  /* tag (component tokens — Ant's solid dark tag, see header) */
+  --rux-tag-background-red: #d32029;
+  --rux-tag-color-red: #ffffff;
+  --rux-tag-hover-red: #a61d24;
+  --rux-tag-border-red: #d32029;
+  --rux-tag-background-magenta: #cb2b82;
+  --rux-tag-color-magenta: #ffffff;
+  --rux-tag-hover-magenta: #a02668;
+  --rux-tag-border-magenta: #cb2b82;
+  --rux-tag-background-purple: #642ab5;
+  --rux-tag-color-purple: #ffffff;
+  --rux-tag-hover-purple: #51258f;
+  --rux-tag-border-purple: #642ab5;
+  --rux-tag-background-blue: #1668dc;
+  --rux-tag-color-blue: #ffffff;
+  --rux-tag-hover-blue: #1554ad;
+  --rux-tag-border-blue: #1668dc;
+  --rux-tag-background-cyan: #146262;
+  --rux-tag-color-cyan: #ffffff;
+  --rux-tag-hover-cyan: #144848;
+  --rux-tag-border-cyan: #146262;
+  --rux-tag-background-teal: #146262;
+  --rux-tag-color-teal: #ffffff;
+  --rux-tag-hover-teal: #144848;
+  --rux-tag-border-teal: #146262;
+  --rux-tag-background-green: #3c8618;
+  --rux-tag-color-green: #ffffff;
+  --rux-tag-hover-green: #306317;
+  --rux-tag-border-green: #3c8618;
+  --rux-tag-background-gray: #424242;
+  --rux-tag-color-gray: #ffffff;
+  --rux-tag-hover-gray: #303030;
+  --rux-tag-border-gray: #424242;
+  --rux-tag-background-cool-gray: #424242;
+  --rux-tag-color-cool-gray: #ffffff;
+  --rux-tag-hover-cool-gray: #303030;
+  --rux-tag-border-cool-gray: #424242;
+  --rux-tag-background-warm-gray: #424242;
+  --rux-tag-color-warm-gray: #ffffff;
+  --rux-tag-hover-warm-gray: #303030;
+  --rux-tag-border-warm-gray: #424242;
+
+  /* notification (component tokens — Carbon's own dark set; the four surface
+     backgrounds are Ant Design's own dark alert fills, one per kind) */
+  --rux-notification-background-error: #2a1215;
+  --rux-notification-background-success: #162312;
+  --rux-notification-background-info: #111a2c;
+  --rux-notification-background-warning: #2b2111;
+  --rux-notification-action-hover: var(--rux-layer-hover);
+  --rux-notification-action-tertiary-inverse: #0f62fe;
+  --rux-notification-action-tertiary-inverse-active: #002d9c;
+  --rux-notification-action-tertiary-inverse-hover: #0050e6;
+  --rux-notification-action-tertiary-inverse-text: #ffffff;
+  --rux-notification-action-tertiary-inverse-text-on-color-disabled: #8d8d8d;
+
+  /* status indicator (component tokens — Ant's dark palette) */
+  --rux-status-red: #dc4446;
+  --rux-status-orange: #d87a16;
+  --rux-status-orange-outline: #d87a16;
+  --rux-status-yellow: #d8bd14;
+  --rux-status-yellow-outline: #d8bd14;
+  --rux-status-green: #49aa19;
+  --rux-status-blue: #4096ff;
+  --rux-status-purple: #ab7ae0;
+  --rux-status-gray: #8c8c8c;
+
+  /* content switcher (component tokens — Carbon's own dark set) */
+  --rux-content-switcher-background: rgba(0, 0, 0, 0);
+  --rux-content-switcher-background-hover: rgba(141, 141, 141, 0.12);
+  --rux-content-switcher-selected: rgba(141, 141, 141, 0.24);
+}
+
+[data-theme="spotify-dark"] {
+  /* color-scheme / brand */
+  --rux-color-scheme: dark;
+
+  /* background */
+  --rux-background: #121212;
+  --rux-background-active: rgba(255, 255, 255, 0.2);
+  --rux-background-brand: #1ed760;
+  --rux-background-hover: rgba(255, 255, 255, 0.08);
+  --rux-background-inverse: #ffffff;
+  --rux-background-inverse-hover: #e6e6e6;
+  --rux-background-selected: rgba(30, 215, 96, 0.14);
+  --rux-background-selected-hover: rgba(30, 215, 96, 0.2);
+
+  /* layer */
+  --rux-layer-01: #181818;
+  --rux-layer-02: #242424;
+  --rux-layer-03: #2a2a2a;
+  --rux-layer-accent-01: #242424;
+  --rux-layer-accent-02: #333333;
+  --rux-layer-accent-03: #404040;
+  --rux-layer-accent-active-01: #404040;
+  --rux-layer-accent-active-02: #535353;
+  --rux-layer-accent-active-03: #727272;
+  --rux-layer-accent-hover-01: #333333;
+  --rux-layer-accent-hover-02: #404040;
+  --rux-layer-accent-hover-03: #4a4a4a;
+  --rux-layer-active-01: #333333;
+  --rux-layer-active-02: #404040;
+  --rux-layer-active-03: #535353;
+  --rux-layer-background-01: #121212;
+  --rux-layer-background-02: #181818;
+  --rux-layer-background-03: #242424;
+  --rux-layer-hover-01: #242424;
+  --rux-layer-hover-02: #2a2a2a;
+  --rux-layer-hover-03: #333333;
+  --rux-layer-selected-01: #193824;
+  --rux-layer-selected-02: #1d472b;
+  --rux-layer-selected-03: #225834;
+  --rux-layer-selected-disabled: #535353;
+  --rux-layer-selected-hover-01: #1d472b;
+  --rux-layer-selected-hover-02: #225834;
+  --rux-layer-selected-hover-03: #276b3e;
+  --rux-layer-selected-inverse: #ffffff;
+
+  /* field */
+  --rux-field-01: #242424;
+  --rux-field-02: #2a2a2a;
+  --rux-field-03: #333333;
+  --rux-field-hover-01: #2a2a2a;
+  --rux-field-hover-02: #333333;
+  --rux-field-hover-03: #404040;
+
+  /* border */
+  --rux-border-disabled: rgba(255, 255, 255, 0.22);
+  --rux-border-interactive: #1ed760;
+  --rux-border-inverse: #ffffff;
+  --rux-border-strong-01: #646464;
+  --rux-border-strong-02: #727272;
+  --rux-border-strong-03: #8f8f8f;
+  --rux-border-subtle-00: #292929;
+  --rux-border-subtle-01: #333333;
+  --rux-border-subtle-02: #404040;
+  --rux-border-subtle-03: #535353;
+  --rux-border-subtle-selected-01: #404040;
+  --rux-border-subtle-selected-02: #535353;
+  --rux-border-subtle-selected-03: #727272;
+  --rux-border-tile-01: #333333;
+  --rux-border-tile-02: #404040;
+  --rux-border-tile-03: #535353;
+
+  /* text */
+  --rux-text-disabled: rgba(255, 255, 255, 0.25);
+  --rux-text-error: #ff7b88;
+  --rux-text-helper: #8f8f8f;
+  --rux-text-inverse: #121212;
+  --rux-text-on-color: #000000;
+  --rux-text-on-color-disabled: rgba(0, 0, 0, 0.4);
+  --rux-text-placeholder: rgba(255, 255, 255, 0.4);
+  --rux-text-primary: #f5f5f5;
+  --rux-text-secondary: #b3b3b3;
+
+  /* link */
+  /* A link on the white inverse surface is a dark step of the green, since
+     #169c46 reads 3.6:1 there. A notification's action keeps this colour
+     over the #e6e6e6 hover fill, so it is chosen to pass on both: 6.6:1 on
+     white and 5.3:1 on the hover fill. */
+  --rux-link-inverse: #0e6b30;
+  --rux-link-inverse-active: #121212;
+  --rux-link-inverse-hover: #0a4a21;
+  --rux-link-inverse-visited: #7b4bb7;
+  --rux-link-primary: #1ed760;
+  --rux-link-primary-hover: #3be477;
+  --rux-link-secondary: #69e99a;
+  --rux-link-visited: #c49cff;
+
+  /* icon */
+  --rux-icon-disabled: rgba(255, 255, 255, 0.25);
+  --rux-icon-interactive: #1ed760;
+  --rux-icon-inverse: #121212;
+  --rux-icon-on-color: #000000;
+  --rux-icon-on-color-disabled: rgba(0, 0, 0, 0.4);
+  --rux-icon-primary: #f5f5f5;
+  --rux-icon-secondary: #b3b3b3;
+
+  /* support */
+  --rux-support-caution-major: #ff8c42;
+  --rux-support-caution-minor: #f5c344;
+  --rux-support-caution-undefined: #a970ff;
+  --rux-support-error: #f15e6c;
+  --rux-support-error-inverse: #c93646;
+  --rux-support-info: #4cb3ff;
+  --rux-support-info-inverse: #0d72ea;
+  --rux-support-success: #1ed760;
+  --rux-support-success-inverse: #169c46;
+  --rux-support-warning: #f5c344;
+  --rux-support-warning-inverse: #c99416;
+
+  /* focus. WHITE, NOT THE BRAND'S OWN, the same as Carbon's g90 and g100.
+     Three reasons it is not #1ed760 here: white
+     is the higher contrast on every dark theme (measured 2026-09-17: 18.73
+     against this background, against 9.76 for the brand colour); one
+     ring colour is one thing to learn, and the shell wears this theme now, so
+     the header's ring is this one; and `focus-inverse` below keeps the
+     brand's tone for the light surfaces where white would vanish. The two
+     light themes keep their blue, because a white ring on a white page is
+     1.00 -- no ring at all. */
+  --rux-focus: #ffffff;
+  --rux-focus-inset: #121212;
+  --rux-focus-inverse: #169c46;
+
+  /* chat */
+  --rux-chat-avatar-agent: #e6e6e6;
+  --rux-chat-avatar-bot: #8f8f8f;
+  --rux-chat-avatar-user: #1ed760;
+  --rux-chat-bubble-agent: #242424;
+  --rux-chat-bubble-agent-text: #f5f5f5;
+  --rux-chat-bubble-border: #333333;
+  --rux-chat-bubble-user: #2a2a2a;
+  --rux-chat-bubble-user-text: #f5f5f5;
+  --rux-chat-button: #1ed760;
+  --rux-chat-button-active: rgba(30, 215, 96, 0.3);
+  --rux-chat-button-hover: rgba(30, 215, 96, 0.12);
+  --rux-chat-button-selected: rgba(30, 215, 96, 0.2);
+  --rux-chat-button-text-hover: #3be477;
+  --rux-chat-button-text-selected: #b3b3b3;
+  --rux-chat-header-background: #181818;
+  --rux-chat-header-text: #f5f5f5;
+  --rux-chat-prompt-background: #181818;
+  --rux-chat-prompt-border-end: rgba(36, 36, 36, 0);
+  --rux-chat-prompt-border-start: #242424;
+  --rux-chat-prompt-text: #f5f5f5;
+  --rux-chat-shell-background: #181818;
+
+  /* misc */
+  --rux-interactive: #1ed760;
+  --rux-highlight: #124f2a;
+  --rux-overlay: rgba(0, 0, 0, 0.72);
+  --rux-shadow: rgba(0, 0, 0, 0.85);
+  --rux-skeleton-background: #242424;
+  --rux-skeleton-element: #333333;
+  --rux-toggle-off: #535353;
+
+  /* button (component tokens — derived, see header) */
+  --rux-button-primary: #1ed760;
+  --rux-button-primary-hover: #3be477;
+  --rux-button-primary-active: #169c46;
+  --rux-button-tertiary: #1ed760;
+  --rux-button-tertiary-hover: #3be477;
+  --rux-button-tertiary-active: #169c46;
+  --rux-button-secondary: #333333;
+  --rux-button-secondary-hover: #404040;
+  --rux-button-secondary-active: #535353;
+  --rux-button-danger-primary: #f15e6c;
+  --rux-button-danger-secondary: #f15e6c;
+  --rux-button-danger-hover: #c93646;
+  --rux-button-danger-active: #762e35;
+  --rux-button-separator: #121212;
+  --rux-button-disabled: rgba(255, 255, 255, 0.25);
+
+  /* tag (component tokens — Carbon's own dark set, see header), except each
+     hover, which goes 80% of the way from the tag's fill to Carbon's hover:
+     Carbon's own left the light text at 4.35 to 1, and this holds 4.62. */
+  --rux-tag-background-red: #a2191f;
+  --rux-tag-color-red: #ffd7d9;
+  --rux-tag-hover-red: #bc1d24;
+  --rux-tag-background-magenta: #9f1853;
+  --rux-tag-color-magenta: #ffd6e8;
+  --rux-tag-hover-magenta: #b91c60;
+  --rux-tag-background-purple: #6929c4;
+  --rux-tag-color-purple: #e8daff;
+  --rux-tag-hover-purple: #7839d2;
+  --rux-tag-background-blue: #0043ce;
+  --rux-tag-color-blue: #d0e2ff;
+  --rux-tag-hover-blue: #0050f5;
+  --rux-tag-background-cyan: #00539a;
+  --rux-tag-color-cyan: #bae6ff;
+  --rux-tag-hover-cyan: #0062b6;
+  --rux-tag-background-teal: #005d5d;
+  --rux-tag-color-teal: #9ef0f0;
+  --rux-tag-hover-teal: #006c6c;
+  --rux-tag-background-green: #0e6027;
+  --rux-tag-color-green: #a7f0ba;
+  --rux-tag-hover-green: #10702d;
+  --rux-tag-background-gray: #525252;
+  --rux-tag-color-gray: #f4f4f4;
+  --rux-tag-hover-gray: #606060;
+  --rux-tag-border-red: #fa4d56;
+  --rux-tag-border-blue: #4589ff;
+  --rux-tag-border-cyan: #1192e8;
+  --rux-tag-border-teal: #009d9a;
+  --rux-tag-border-green: #24a148;
+  --rux-tag-border-magenta: #ee5396;
+  --rux-tag-border-purple: #a56eff;
+  --rux-tag-border-gray: #8d8d8d;
+  --rux-tag-border-cool-gray: #878d96;
+  --rux-tag-border-warm-gray: #8f8b8b;
+  --rux-tag-background-cool-gray: #4d5358;
+  --rux-tag-color-cool-gray: #f2f4f8;
+  --rux-tag-hover-cool-gray: #5a6166;
+  --rux-tag-background-warm-gray: #565151;
+  --rux-tag-color-warm-gray: #f7f3f2;
+  --rux-tag-hover-warm-gray: #655f5f;
+
+  /* notification (component tokens — Carbon's own dark set;
+     the four surface backgrounds take THIS theme's layer-01) */
+  --rux-notification-background-error: #181818;
+  --rux-notification-background-success: #181818;
+  --rux-notification-background-info: #181818;
+  --rux-notification-background-warning: #181818;
+  --rux-notification-action-hover: var(--rux-layer-hover);
+  --rux-notification-action-tertiary-inverse: #0f62fe;
+  --rux-notification-action-tertiary-inverse-active: #002d9c;
+  --rux-notification-action-tertiary-inverse-hover: #0050e6;
+  --rux-notification-action-tertiary-inverse-text: #ffffff;
+  --rux-notification-action-tertiary-inverse-text-on-color-disabled: #8d8d8d;
+
+  /* status indicator (component tokens — Carbon's own dark set) */
+  --rux-status-red: #fa4d56;
+  --rux-status-orange: #ff832b;
+  --rux-status-orange-outline: #ff832b;
+  --rux-status-yellow: #f1c21b;
+  --rux-status-yellow-outline: #f1c21b;
+  --rux-status-green: #42be65;
+  --rux-status-blue: #4589ff;
+  --rux-status-purple: #a56eff;
+  --rux-status-gray: #8d8d8d;
+
+  /* content switcher (component tokens — Carbon's own dark set) */
+  --rux-content-switcher-background: rgba(0, 0, 0, 0);
+  --rux-content-switcher-background-hover: rgba(141, 141, 141, 0.12);
+  --rux-content-switcher-selected: rgba(141, 141, 141, 0.24);
+}
+
+/* APPLE-LIGHT: A LIGHT THEME READ FROM APPLE'S OWN SOFTWARE. Every value is
+   in docs/apple-token-map.md beside where it was read: the Human Interface
+   Guidelines' colour tables, and AppKit under the light appearance. White's
+   compiled values stand for whatever this block does not name, which is the
+   chat family.
+
+   - The page is AppKit's under-page background and a surface on it is white,
+     so a card stands off the page by its fill, as a Mac's window does.
+   - Text is the label colour laid on white. Secondary text is the Guidelines'
+     increased-contrast grey, because the secondary label makes 3.95 to 1 on
+     white and that grey 5.23.
+   - The filled button is the Guidelines' increased-contrast blue under a
+     white label, 4.57 to 1, where the Mac's own accent makes 4.02. It darkens
+     through the link colour to the selected-content blue.
+   - A status colour is the increased-contrast step of its hue, each of which
+     Apple set at 4.5 to 1 on white.
+   - A tag is its hue's default at 14% on white, and its words the
+     increased-contrast step darkened until they make 4.5 to 1 on that tint.
+   - Red words take the red tag's ink, because the increased-contrast red
+     makes 4.22 to 1 on the grey page: an error under a field, and the
+     words of a danger button that has no fill.
+   - A field is white inside a line, so the three field steps are one. */
+[data-theme="apple-light"] {
+  --rux-color-scheme: light;
+
+  /* background */
+  --rux-background: #f6f6f6;
+  --rux-background-active: #dcdcdc;
+  --rux-background-brand: #1e6ef4;
+  --rux-background-hover: #ededed;
+  --rux-background-inverse: #272727;
+  --rux-background-inverse-hover: #3a3a3a;
+  --rux-background-selected: #e6e6e6;
+  --rux-background-selected-hover: #dcdcdc;
+
+  /* layer */
+  --rux-layer-01: #ffffff;
+  --rux-layer-02: #ffffff;
+  --rux-layer-03: #f6f6f6;
+  --rux-layer-accent-01: #f3f3f3;
+  --rux-layer-accent-02: #ebebeb;
+  --rux-layer-accent-03: #e6e6e6;
+  --rux-layer-accent-active-01: #e6e6e6;
+  --rux-layer-accent-active-02: #dcdcdc;
+  --rux-layer-accent-active-03: #c7c7cc;
+  --rux-layer-accent-hover-01: #ebebeb;
+  --rux-layer-accent-hover-02: #e6e6e6;
+  --rux-layer-accent-hover-03: #dcdcdc;
+  --rux-layer-active-01: #e6e6e6;
+  --rux-layer-active-02: #e6e6e6;
+  --rux-layer-active-03: #dcdcdc;
+  --rux-layer-background-01: #ffffff;
+  --rux-layer-background-02: #ffffff;
+  --rux-layer-background-03: #f6f6f6;
+  --rux-layer-hover-01: #f3f3f3;
+  --rux-layer-hover-02: #f3f3f3;
+  --rux-layer-hover-03: #ebebeb;
+  --rux-layer-selected-01: #ebebeb;
+  --rux-layer-selected-02: #ebebeb;
+  --rux-layer-selected-03: #e6e6e6;
+  --rux-layer-selected-disabled: #aeaeb2;
+  --rux-layer-selected-hover-01: #e6e6e6;
+  --rux-layer-selected-hover-02: #e6e6e6;
+  --rux-layer-selected-hover-03: #dcdcdc;
+  --rux-layer-selected-inverse: #272727;
+
+  /* field */
+  --rux-field-01: #ffffff;
+  --rux-field-02: #ffffff;
+  --rux-field-03: #ffffff;
+  --rux-field-hover-01: #f8f8f8;
+  --rux-field-hover-02: #f8f8f8;
+  --rux-field-hover-03: #f3f3f3;
+
+  /* border */
+  --rux-border-disabled: #e6e6e6;
+  --rux-border-interactive: #1e6ef4;
+  --rux-border-inverse: #272727;
+  --rux-border-strong-01: #c7c7cc;
+  --rux-border-strong-02: #aeaeb2;
+  --rux-border-strong-03: #8e8e93;
+  --rux-border-subtle-00: #e6e6e6;
+  --rux-border-subtle-01: #e6e6e6;
+  --rux-border-subtle-02: #d9d9d9;
+  --rux-border-subtle-03: #d9d9d9;
+  --rux-border-subtle-selected-01: #d9d9d9;
+  --rux-border-subtle-selected-02: #d9d9d9;
+  --rux-border-subtle-selected-03: #c7c7cc;
+  --rux-border-tile-01: #e6e6e6;
+  --rux-border-tile-02: #d9d9d9;
+  --rux-border-tile-03: #d9d9d9;
+
+  /* text */
+  --rux-text-disabled: rgba(0, 0, 0, 0.247);
+  --rux-text-error: #cd1228;
+  --rux-text-helper: #6c6c70;
+  --rux-text-inverse: #ffffff;
+  --rux-text-on-color: #ffffff;
+  --rux-text-on-color-disabled: #8e8e93;
+  --rux-text-placeholder: rgba(0, 0, 0, 0.498);
+  --rux-text-primary: #272727;
+  --rux-text-secondary: #6c6c70;
+
+  /* link */
+  --rux-link-inverse: #5cb8ff;
+  --rux-link-inverse-active: #ffffff;
+  --rux-link-inverse-hover: #8fd0ff;
+  --rux-link-inverse-visited: #a7aaff;
+  --rux-link-primary: #0068da;
+  --rux-link-primary-hover: #0064e1;
+  --rux-link-secondary: #0064e1;
+  --rux-link-visited: #564ade;
+
+  /* icon */
+  --rux-icon-disabled: rgba(0, 0, 0, 0.247);
+  --rux-icon-interactive: #1e6ef4;
+  --rux-icon-inverse: #ffffff;
+  --rux-icon-on-color: #ffffff;
+  --rux-icon-on-color-disabled: #8e8e93;
+  --rux-icon-primary: #272727;
+  --rux-icon-secondary: #6c6c70;
+
+  /* support */
+  --rux-support-caution-major: #ff8d28;
+  --rux-support-caution-minor: #a16a00;
+  --rux-support-caution-undefined: #b02fc2;
+  --rux-support-error: #ff383c;
+  --rux-support-error-inverse: #ff6165;
+  --rux-support-info: #1e6ef4;
+  --rux-support-info-inverse: #5cb8ff;
+  --rux-support-success: #34c759;
+  --rux-support-success-inverse: #4ad968;
+  --rux-support-warning: #ff8d28;
+  --rux-support-warning-inverse: #fedf43;
+
+  /* focus */
+  --rux-focus: #0067f4;
+  --rux-focus-inset: #ffffff;
+  --rux-focus-inverse: #ffffff;
+
+  /* interactive */
+  --rux-interactive: #1e6ef4;
+  --rux-highlight: #b3d7ff;
+  --rux-overlay: rgba(0, 0, 0, 0.3);
+  --rux-shadow: rgba(0, 0, 0, 0.16);
+  --rux-skeleton-background: #f3f3f3;
+  --rux-skeleton-element: #e6e6e6;
+  --rux-toggle-off: #aeaeb2;
+
+  /* button */
+  --rux-button-primary: #1e6ef4;
+  --rux-button-primary-hover: #0068da;
+  --rux-button-primary-active: #0064e1;
+  --rux-button-tertiary: #0068da;
+  --rux-button-tertiary-hover: #0068da;
+  --rux-button-tertiary-active: #0064e1;
+  --rux-button-secondary: #ebebeb;
+  --rux-button-secondary-hover: #e6e6e6;
+  --rux-button-secondary-active: #dcdcdc;
+  --rux-button-danger-primary: #e9152d;
+  --rux-button-danger-secondary: #cd1228;
+  --rux-button-danger-hover: #cd1228;
+  --rux-button-danger-active: #b11022;
+  --rux-button-separator: #d9d9d9;
+  --rux-button-disabled: #f3f3f3;
+
+  /* tag */
+  --rux-tag-background-red: #ffe3e4;
+  --rux-tag-color-red: #cd1228;
+  --rux-tag-hover-red: #ffd3d4;
+  --rux-tag-background-magenta: #ffe2e7;
+  --rux-tag-color-magenta: #d01045;
+  --rux-tag-hover-magenta: #ffd1da;
+  --rux-tag-background-purple: #f8e2fb;
+  --rux-tag-color-purple: #a92dba;
+  --rux-tag-hover-purple: #f4d1f8;
+  --rux-tag-background-blue: #dbeeff;
+  --rux-tag-color-blue: #1b63dc;
+  --rux-tag-hover-blue: #c7e5ff;
+  --rux-tag-background-cyan: #dbf6fc;
+  --rux-tag-color-cyan: #0076a4;
+  --rux-tag-hover-cyan: #c7f1fa;
+  --rux-tag-background-teal: #dbf7f8;
+  --rux-tag-color-teal: #00798f;
+  --rux-tag-hover-teal: #c7f2f5;
+  --rux-tag-background-green: #e3f7e8;
+  --rux-tag-color-green: #007e2e;
+  --rux-tag-hover-green: #d2f3da;
+  --rux-tag-background-gray: #efeff0;
+  --rux-tag-color-gray: #6c6c70;
+  --rux-tag-hover-gray: #e6e6e7;
+  --rux-tag-border-red: #cd1228;
+  --rux-tag-border-blue: #1b63dc;
+  --rux-tag-border-cyan: #0076a4;
+  --rux-tag-border-teal: #00798f;
+  --rux-tag-border-green: #007e2e;
+  --rux-tag-border-magenta: #d01045;
+  --rux-tag-border-purple: #a92dba;
+  --rux-tag-border-gray: #6c6c70;
+  --rux-tag-border-cool-gray: #6c6c70;
+  --rux-tag-border-warm-gray: #89644b;
+  --rux-tag-background-cool-gray: #efeff0;
+  --rux-tag-color-cool-gray: #6c6c70;
+  --rux-tag-hover-cool-gray: #e6e6e7;
+  --rux-tag-background-warm-gray: #f3ede8;
+  --rux-tag-color-warm-gray: #89644b;
+  --rux-tag-hover-warm-gray: #ede3dc;
+
+  /* notification */
+  --rux-notification-background-error: #ffebec;
+  --rux-notification-background-success: #e7f8eb;
+  --rux-notification-background-info: #e6f3ff;
+  --rux-notification-background-warning: #fff1e5;
+  --rux-notification-action-hover: #f3f3f3;
+  --rux-notification-action-tertiary-inverse: #ffffff;
+  --rux-notification-action-tertiary-inverse-active: #c7c7cc;
+  --rux-notification-action-tertiary-inverse-hover: #f3f3f3;
+  --rux-notification-action-tertiary-inverse-text: #272727;
+  --rux-notification-action-tertiary-inverse-text-on-color-disabled: #8e8e93;
+
+  /* status */
+  --rux-status-red: #ff383c;
+  --rux-status-orange: #ff8d28;
+  --rux-status-orange-outline: #ff8d28;
+  --rux-status-yellow: #ffcc00;
+  --rux-status-yellow-outline: #a16a00;
+  --rux-status-green: #34c759;
+  --rux-status-blue: #1e6ef4;
+  --rux-status-purple: #b02fc2;
+  --rux-status-gray: #6c6c70;
+
+  /* content-switcher */
+  --rux-content-switcher-background: #ebebeb;
+  --rux-content-switcher-background-hover: #e6e6e6;
+  --rux-content-switcher-selected: #1e6ef4;
+}
+
+/* APPLE-DARK: APPLE-LIGHT'S DARK COMPANION, read from the same software
+   under the dark appearance. Every value is in docs/apple-dark-token-map.md
+   beside where it was read. It names the chat family too, as the other dark
+   themes do, because white's values for it are light.
+
+   - The page and a surface on it are Calendar's two greys, the dark one its
+     month lies on and the lighter one of its days outside the month. They
+     are AppKit's window and under-page greys with the faint blue Calendar
+     shows them in, so a card stands off the page by its fill, as
+     apple-light's does. Each grey laid on one of them carries that blue.
+   - A field is the darker inside a Mac's text field has, within a line.
+   - Text is the label colour laid on the raised surface. Secondary text is
+     the Guidelines' increased-contrast grey, because the secondary label
+     makes 4.30 to 1 on a chosen row's fill and that grey 5.21.
+   - The filled button is apple-light's own, the increased-contrast blue
+     under a white label at 4.57 to 1: the Mac's accent is one colour in both
+     appearances and makes 4.02.
+   - A link is the increased-contrast dark blue, because AppKit's dark link
+     colour makes 4.07 to 1 on a chosen row's fill.
+   - A status mark is its hue's dark default, and words in a hue take the
+     increased-contrast dark step.
+   - A tag is its hue's dark default at 40% on black, 44% under the pointer,
+     under the increased-contrast dark step. Calendar mixes an event's colour
+     into black, which keeps the hue's whole strength; mixed into this
+     theme's grey surfaces a tint loses a third of it and reads muddy. Red's
+     step makes 4.1 to 1 on its tint, so it is moved 13% toward white, 4.7.
+   - A notification's fill is the same mix at 28%, seven tenths of a tag's.
+   - The inverse surface is a light one here, so what is drawn on it takes
+     Apple's light increased-contrast steps. */
+[data-theme="apple-dark"] {
+  --rux-color-scheme: dark;
+
+  /* background */
+  --rux-background: #1f2022;
+  --rux-background-active: #464646;
+  --rux-background-brand: #1e6ef4;
+  --rux-background-hover: #2f3031;
+  --rux-background-inverse: #dedede;
+  --rux-background-inverse-hover: #c8c8c8;
+  --rux-background-selected: #353638;
+  --rux-background-selected-hover: #464646;
+
+  /* layer */
+  --rux-layer-01: #28282a;
+  --rux-layer-02: #28282a;
+  --rux-layer-03: #1f2022;
+  --rux-layer-accent-01: #323234;
+  --rux-layer-accent-02: #39393b;
+  --rux-layer-accent-03: #3d3d3f;
+  --rux-layer-accent-active-01: #3d3d3f;
+  --rux-layer-accent-active-02: #464646;
+  --rux-layer-accent-active-03: #545456;
+  --rux-layer-accent-hover-01: #39393b;
+  --rux-layer-accent-hover-02: #3d3d3f;
+  --rux-layer-accent-hover-03: #464646;
+  --rux-layer-active-01: #3d3d3f;
+  --rux-layer-active-02: #3d3d3f;
+  --rux-layer-active-03: #464646;
+  --rux-layer-background-01: #28282a;
+  --rux-layer-background-02: #28282a;
+  --rux-layer-background-03: #1f2022;
+  --rux-layer-hover-01: #323234;
+  --rux-layer-hover-02: #323234;
+  --rux-layer-hover-03: #303133;
+  --rux-layer-selected-01: #39393b;
+  --rux-layer-selected-02: #39393b;
+  --rux-layer-selected-03: #353638;
+  --rux-layer-selected-disabled: #636366;
+  --rux-layer-selected-hover-01: #3d3d3f;
+  --rux-layer-selected-hover-02: #3d3d3f;
+  --rux-layer-selected-hover-03: #464646;
+  --rux-layer-selected-inverse: #dedede;
+
+  /* field */
+  --rux-field-01: #161616;
+  --rux-field-02: #161616;
+  --rux-field-03: #161616;
+  --rux-field-hover-01: #1c1c1c;
+  --rux-field-hover-02: #1c1c1c;
+  --rux-field-hover-03: #212121;
+
+  /* border */
+  --rux-border-disabled: #3d3d3f;
+  --rux-border-interactive: #0091ff;
+  --rux-border-inverse: #dedede;
+  --rux-border-strong-01: #545456;
+  --rux-border-strong-02: #636366;
+  --rux-border-strong-03: #8e8e93;
+  --rux-border-subtle-00: #3d3d3f;
+  --rux-border-subtle-01: #3d3d3f;
+  --rux-border-subtle-02: #48484a;
+  --rux-border-subtle-03: #48484a;
+  --rux-border-subtle-selected-01: #48484a;
+  --rux-border-subtle-selected-02: #48484a;
+  --rux-border-subtle-selected-03: #545456;
+  --rux-border-tile-01: #3d3d3f;
+  --rux-border-tile-02: #48484a;
+  --rux-border-tile-03: #48484a;
+
+  /* text */
+  --rux-text-disabled: rgba(255, 255, 255, 0.247);
+  --rux-text-error: #ff6165;
+  --rux-text-helper: #aeaeb2;
+  --rux-text-inverse: #1f2022;
+  --rux-text-on-color: #ffffff;
+  --rux-text-on-color-disabled: #636366;
+  --rux-text-placeholder: rgba(255, 255, 255, 0.549);
+  --rux-text-primary: #dedede;
+  --rux-text-secondary: #aeaeb2;
+
+  /* link */
+  --rux-link-inverse: #0059d1;
+  --rux-link-inverse-active: #1f2022;
+  --rux-link-inverse-hover: #0047a7;
+  --rux-link-inverse-visited: #564ade;
+  --rux-link-primary: #5cb8ff;
+  --rux-link-primary-hover: #8fd0ff;
+  --rux-link-secondary: #8fd0ff;
+  --rux-link-visited: #a7aaff;
+
+  /* icon */
+  --rux-icon-disabled: rgba(255, 255, 255, 0.247);
+  --rux-icon-interactive: #0091ff;
+  --rux-icon-inverse: #1f2022;
+  --rux-icon-on-color: #ffffff;
+  --rux-icon-on-color-disabled: #636366;
+  --rux-icon-primary: #dedede;
+  --rux-icon-secondary: #aeaeb2;
+
+  /* support */
+  --rux-support-caution-major: #ff9230;
+  --rux-support-caution-minor: #ffd600;
+  --rux-support-caution-undefined: #db34f2;
+  --rux-support-error: #ff4245;
+  --rux-support-error-inverse: #e9152d;
+  --rux-support-info: #0091ff;
+  --rux-support-info-inverse: #1e6ef4;
+  --rux-support-success: #30d158;
+  --rux-support-success-inverse: #008932;
+  --rux-support-warning: #ff9230;
+  --rux-support-warning-inverse: #a16a00;
+
+  /* focus */
+  --rux-focus: #1aa9ff;
+  --rux-focus-inset: #1f2022;
+  --rux-focus-inverse: #0067f4;
+
+  /* interactive */
+  --rux-interactive: #0091ff;
+  --rux-highlight: #3f638b;
+  --rux-overlay: rgba(0, 0, 0, 0.5);
+  --rux-shadow: rgba(0, 0, 0, 0.5);
+  --rux-skeleton-background: #323234;
+  --rux-skeleton-element: #3d3d3f;
+  --rux-toggle-off: #636366;
+
+  /* button */
+  --rux-button-primary: #1e6ef4;
+  --rux-button-primary-hover: #0068da;
+  --rux-button-primary-active: #0064e1;
+  --rux-button-tertiary: #5cb8ff;
+  --rux-button-tertiary-hover: #5cb8ff;
+  --rux-button-tertiary-active: #8fd0ff;
+  --rux-button-secondary: #39393b;
+  --rux-button-secondary-hover: #3d3d3f;
+  --rux-button-secondary-active: #464646;
+  --rux-button-danger-primary: #e9152d;
+  --rux-button-danger-secondary: #ff6165;
+  --rux-button-danger-hover: #cd1228;
+  --rux-button-danger-active: #b11022;
+  --rux-button-separator: #48484a;
+  --rux-button-disabled: #323234;
+
+  /* tag */
+  --rux-tag-background-red: #661a1c;
+  --rux-tag-color-red: #ff7679;
+  --rux-tag-hover-red: #701d1e;
+  --rux-tag-background-magenta: #661626;
+  --rux-tag-color-magenta: #ff8ac4;
+  --rux-tag-hover-magenta: #70182a;
+  --rux-tag-background-purple: #581561;
+  --rux-tag-color-purple: #ea8dff;
+  --rux-tag-hover-purple: #60176a;
+  --rux-tag-background-blue: #003a66;
+  --rux-tag-color-blue: #5cb8ff;
+  --rux-tag-hover-blue: #004070;
+  --rux-tag-background-cyan: #185466;
+  --rux-tag-color-cyan: #6dd9ff;
+  --rux-tag-hover-cyan: #1a5d70;
+  --rux-tag-background-teal: #00545a;
+  --rux-tag-color-teal: #3bddec;
+  --rux-tag-hover-teal: #005c63;
+  --rux-tag-background-green: #135423;
+  --rux-tag-color-green: #4ad968;
+  --rux-tag-hover-green: #155c27;
+  --rux-tag-background-gray: #39393b;
+  --rux-tag-color-gray: #aeaeb2;
+  --rux-tag-hover-gray: #3e3e41;
+  --rux-tag-border-red: #ff7679;
+  --rux-tag-border-blue: #5cb8ff;
+  --rux-tag-border-cyan: #6dd9ff;
+  --rux-tag-border-teal: #3bddec;
+  --rux-tag-border-green: #4ad968;
+  --rux-tag-border-magenta: #ff8ac4;
+  --rux-tag-border-purple: #ea8dff;
+  --rux-tag-border-gray: #aeaeb2;
+  --rux-tag-border-cool-gray: #aeaeb2;
+  --rux-tag-border-warm-gray: #dba679;
+  --rux-tag-background-cool-gray: #39393b;
+  --rux-tag-color-cool-gray: #aeaeb2;
+  --rux-tag-hover-cool-gray: #3e3e41;
+  --rux-tag-background-warm-gray: #493729;
+  --rux-tag-color-warm-gray: #dba679;
+  --rux-tag-hover-warm-gray: #513d2d;
+
+  /* notification */
+  --rux-notification-background-error: #471213;
+  --rux-notification-background-success: #0d3b19;
+  --rux-notification-background-info: #002947;
+  --rux-notification-background-warning: #47290d;
+  --rux-notification-action-hover: #323234;
+  --rux-notification-action-tertiary-inverse: #1f2022;
+  --rux-notification-action-tertiary-inverse-active: #48484a;
+  --rux-notification-action-tertiary-inverse-hover: #323234;
+  --rux-notification-action-tertiary-inverse-text: #dedede;
+  --rux-notification-action-tertiary-inverse-text-on-color-disabled: #8e8e93;
+
+  /* status */
+  --rux-status-red: #ff4245;
+  --rux-status-orange: #ff9230;
+  --rux-status-orange-outline: #ff9230;
+  --rux-status-yellow: #ffd600;
+  --rux-status-yellow-outline: #ffd600;
+  --rux-status-green: #30d158;
+  --rux-status-blue: #0091ff;
+  --rux-status-purple: #db34f2;
+  --rux-status-gray: #aeaeb2;
+
+  /* content-switcher */
+  --rux-content-switcher-background: #39393b;
+  --rux-content-switcher-background-hover: #3d3d3f;
+  --rux-content-switcher-selected: #1e6ef4;
+
+  /* chat */
+  --rux-chat-avatar-agent: #aeaeb2;
+  --rux-chat-avatar-bot: #8e8e93;
+  --rux-chat-avatar-user: #0091ff;
+  --rux-chat-bubble-agent: #28282a;
+  --rux-chat-bubble-agent-text: #dedede;
+  --rux-chat-bubble-border: #48484a;
+  --rux-chat-bubble-user: #39393b;
+  --rux-chat-bubble-user-text: #dedede;
+  --rux-chat-button: #5cb8ff;
+  --rux-chat-button-active: rgba(141, 141, 141, 0.4);
+  --rux-chat-button-hover: rgba(141, 141, 141, 0.16);
+  --rux-chat-button-selected: rgba(141, 141, 141, 0.24);
+  --rux-chat-button-text-hover: #8fd0ff;
+  --rux-chat-button-text-selected: #aeaeb2;
+  --rux-chat-header-background: #28282a;
+  --rux-chat-header-text: #dedede;
+  --rux-chat-prompt-background: #1f2022;
+  --rux-chat-prompt-border-end: rgba(40, 40, 42, 0);
+  --rux-chat-prompt-border-start: #28282a;
+  --rux-chat-prompt-text: #dedede;
+  --rux-chat-shell-background: #28282a;
+}

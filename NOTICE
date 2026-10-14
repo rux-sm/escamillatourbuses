@@ -1,0 +1,17 @@
+Escamilla Tour Buses website
+
+The words, photos and logo on these pages are Escamilla Tour Buses'.
+
+design/ is a copy of the built files of Design, a part of rux-sm.github.io,
+made by tools/sync-design.mjs. They carry their own terms:
+
+  design/css/ is compiled from the Carbon Design System,
+    Copyright IBM Corp. 2015, 2026, under the Apache License, Version 2.0.
+    design/LICENSE is that license and design/NOTICE says what changed.
+
+  design/assets/fonts/ holds IBM Plex, Copyright IBM Corp., under the SIL
+    Open Font License, Version 1.1, in design/assets/fonts/LICENSE.txt.
+
+  The icon sprite each page carries draws `i-` symbols from Carbon's icons,
+    Copyright IBM Corp., and `m-` symbols from Material Symbols,
+    Copyright Google LLC, both under the Apache License, Version 2.0.

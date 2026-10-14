@@ -1,0 +1,2490 @@
+/*
+  rux-overrides.css — component-level changes.
+
+  THE ONLY PLACE A COMPONENT'S LOOK IS CHANGED. Link it after css/rux.css and
+  after css/rux-theme.css, so its rules win on equal specificity with no
+  !important. A change that is a colour is not a rule here: it is a token, in
+  css/rux-theme.css, so every component reading that token moves together.
+
+  RULES. Selectors use classes css/rux.css compiles; check-classes fails on one
+  it does not, because a class Carbon never wrote is markup no capture backs.
+  Match Carbon's own specificity rather than beating it — a rule that needs
+  !important is aimed at the wrong selector. No Carbon file is touched, and
+  `git diff css/rux.css` after any edit here is empty.
+
+  EVERY RULE BELOW REPAIRS A BOX THAT RENDERS WRONG, except ant-dark's
+  shapes at the end, which a theme needs because its reference rounds its
+  corners and fills its fields where Carbon squares and underlines them.
+  Nothing else has been decided about rux's look beyond Carbon's. The
+  example below is the shape of a rule that WOULD move the capture for every
+  theme, commented out:
+
+  .rux--btn { border-radius: 0.25rem; }
+
+  SHARED, LIKE THE THEME. Every app links this file from /design/css/, so the
+  rule below is the same rule in every app; an app's own rux-overrides.css is
+  linked after it and carries only that app's deltas.
+*/
+
+/* THE ACCOUNT PANEL'S CONTENT. Carbon's header panel ships no inner padding —
+   the switcher pads its own items — and the account panel holds a plain
+   stack of form items. Two compiled classes at Carbon's own specificity; the
+   token is the one the shell's other 1rem gaps read. The stack also carries
+   Carbon's own `layer-two`, measured 2026-09-02: on the panel's layer-01 a
+   text input's field-01 is the same #262626 in g100, so the field was its
+   underline and nothing else. Stepping the layer up is Carbon's mechanism
+   for exactly that, and it is a class, not a rule here. */
+.rux--header-panel > .rux--stack-vertical { padding: var(--rux-spacing-05); }
+
+/* THE ACCOUNT PANEL'S ROWS. The panel is two of Carbon's switcher lists, and
+   Carbon's list holds links alone, so what else stands in one is dressed as
+   a row here: the theme's inline select, the word over the apps, and an
+   app's icon before its name. Their room is on the list's own item, so each
+   of Carbon's parts keeps Carbon's box, and the theme's label is written as
+   a row's words are. A row a script has not shown yet takes no room, and
+   nor does the list of apps where there is nowhere else to go. Over the
+   rows a script writes who is logged in, their picture beside their name,
+   in the page's first ink. */
+.rux--header-panel > .rux--switcher > li { inline-size: 100%; }
+.rux--header-panel > .rux--switcher[hidden] { display: none; }
+.rux--header-panel > .rux--switcher > li:has(> .rux--form-item) { padding: var(--rux-spacing-03) var(--rux-spacing-05); }
+.rux--header-panel > .rux--switcher > li:has(> .rux--label) { padding: var(--rux-spacing-03) var(--rux-spacing-05) 0; }
+.rux--header-panel > .rux--switcher .rux--select--inline { justify-content: space-between; inline-size: 100%; }
+.rux--header-panel > .rux--switcher .rux--select--inline .rux--label {
+  font-size: var(--rux-heading-compact-01-font-size, 0.875rem);
+  font-weight: var(--rux-heading-compact-01-font-weight, 600);
+  line-height: var(--rux-heading-compact-01-line-height, 1.28572);
+  letter-spacing: var(--rux-heading-compact-01-letter-spacing, 0.16px);
+}
+.rux--header-panel > .rux--stack-vertical > .rux--stack-horizontal { align-items: center; justify-content: start; color: var(--rux-text-primary); }
+.rux--switcher__item-link > [aria-hidden="true"] { display: inline-block; margin-inline-end: var(--rux-spacing-03); block-size: 1rem; inline-size: 1rem; vertical-align: -0.1875rem; }
+
+/* A HIDDEN BUTTON MUST NOT RENDER. Found by looking, 2026-09-02, after every
+   gate had passed: the account panel's sign-in button ships `hidden` and was
+   drawn anyway, because Carbon's `.rux--btn { display: inline-flex }` is an
+   author rule and the browser's `[hidden] { display: none }` is not — origin
+   beats specificity, and no gate reads the attribute against the box. One
+   more class on the selector keeps it at Carbon's own specificity. */
+.rux--btn[hidden] { display: none; }
+
+/* A CLICKABLE TILE FILLS ITS GRID CELL. Found on the hub, measured 2026-09-03:
+   two cells in the same row both stretched to 152px, but the tiles inside
+   them measured 152 and 128, so the shorter card stopped above the taller
+   one and the row had a ragged bottom edge. Carbon's grid stretches the
+   COLUMN; the tile is a block inside it and takes its content height, and
+   nothing in rux.css tells it otherwise. One compiled class, at Carbon's own
+   specificity, no !important. Scoped to the clickable variant because that
+   is what an app-directory or component-index card is; a plain tile in
+   prose should still be its own height. portal.html's own component grid
+   carries titles of uneven length and shows the same condition. */
+.rux--tile--clickable { block-size: 100%; }
+
+/* A CLICKABLE TILE IS ONE SURFACE, PRESSED AND FOCUSED AS WELL AS AT REST.
+   The tile is an <a> carrying `rux--link` too, as Carbon's ClickableTile
+   does. Carbon's tile rules keep the text primary and plain on hover and on
+   visited, but its link rules for :active and :focus-visible carry a
+   `:not(.rux--link--disabled)` the tile's do not, so they outrank the tile's
+   and the text turns link blue and underlined with a 1px outline, which
+   reads as three links inside a box. Each selector here is the link's own
+   with the tile's class in its place, so it ties and wins on order. Focus
+   is the tile's 2px inset outline; a press draws none. */
+.rux--tile--clickable:active:not(.rux--link--disabled),
+.rux--tile--clickable:active:not(.rux--link--disabled):visited:hover {
+  color: var(--rux-text-primary);
+  outline: none;
+  text-decoration: none;
+}
+.rux--tile--clickable:focus-visible:not(.rux--link--disabled) {
+  color: var(--rux-text-primary);
+  outline: 2px solid var(--rux-focus);
+  text-decoration: none;
+}
+
+/* A HIDDEN DATE-PICKER INPUT MUST NOT RENDER, and this is the `.rux--btn`
+   rule above one component over. Asked for by Scheduler 2026-09-11, whose
+   week picker reads its value rather than showing it: `hidden` on
+   `.rux--date-picker__input` left a 288x40 ISO field beside the formatted week
+   the toolbar already prints. Carbon's `.rux--date-picker__input
+   { display: block }` (rux.css:14620) is an author declaration and the UA's
+   `[hidden] { display: none }` is not important, so the attribute loses.
+
+   MEASURED 2026-09-11 ON A PAGE WITH NO HARNESS, because the sink's has one:
+   `sink/harness.css:112` declares `[hidden] { display: none !important }` to
+   stand in for Carbon's mount/unmount, so on kitchen-sink.html `hidden` works
+   on everything and the condition is invisible. On a consumer page in Chrome
+   152 a `[hidden]` element carrying an author `display: block` — by class or
+   inline — computes `block`. js/date-picker.js said the opposite and has been
+   corrected in the same pass. */
+.rux--date-picker__input[hidden] { display: none; }
+
+/* A HIDDEN CLEAR BUTTON MUST NOT RENDER, the same rule again. js/list-box.js
+   hides a combo box's clear button with `hidden` while the field is empty, and
+   Carbon's `.rux--list-box__selection { display: flex }` is an author
+   declaration the attribute loses to. */
+.rux--list-box__selection[hidden] { display: none; }
+
+/* The same rule for two things a module hides and Carbon gives a `display`:
+   a tag overflow's count while every tag fits (js/tag-overflow.js), and a
+   notifications panel's empty state while it holds notifications
+   (js/notifications-panel.js). */
+.rux--tag-overflow__indicator[hidden],
+.rux--empty-state[hidden] { display: none; }
+
+/* A HIDDEN MENU ITEM OR RULE MUST NOT RENDER, the same rule again. An app
+   hides the items that cannot act on what the menu was opened on, and the
+   rule left between two empty groups, and Carbon's `.rux--menu-item
+   { display: grid }` and `.rux--menu-item-divider { display: block }` are
+   author declarations the attribute loses to. js/menu.js skips hidden items
+   when the arrow keys move. */
+.rux--menu-item[hidden],
+.rux--menu-item-divider[hidden] { display: none; }
+
+/* A CONTAINED LIST'S LABEL TAKES ITS HEADER'S TYPE. This repair is of this
+   system's own divergence, not Carbon's: Carbon renders `__label` on a `<div>`
+   that inherits the header's type, and `sink/contained-list.html` deliberately
+   uses an `<h3>` instead so the label carries a heading level. Carbon's own
+   type reset then gives that `<h3>` `heading-04` (rux.css:210), and
+   `.rux--contained-list__label` sets only `inline-size`, so nothing puts the
+   variant's type back.
+
+   MEASURED ON kitchen-sink.html 2026-09-11, both variants, both wrong:
+   `--on-page` header 14px/600 with a 28px/400 label, `--disclosed` header
+   12px/400 with the same 28px/400 label — so the component's own demo shows
+   neither type it defines, and a label reads 2.3x its header. `font: inherit`
+   restores exactly what Carbon's `<div>` computes and keeps the heading.
+   Reported by Scheduler 2026-09-10, who measured 28px there too. */
+.rux--contained-list__label { font: inherit; }
+
+/* A CONTAINED LIST ROW'S ACTION SITS IN THE MIDDLE OF THE ROW. Carbon pins it
+   to the row's top, which is its middle only while the row is one button tall;
+   a row of two lines left it high. Asked for by Scheduler, whose bus and
+   driver rows are two lines. */
+.rux--contained-list-item__action {
+  inset-block: 0;
+  align-items: center;
+}
+
+/* A TOGGLE IS 44PX TO A FINGER. The label is the hit area, and with no label
+   text it is only the switch: 16px tall when small, 24px at default. On a
+   touch screen an invisible square, at least 44px and centred on the switch,
+   widens the label's hit area without moving anything. Asked for by
+   Scheduler, whose Billing switches carry no label text. */
+@media (pointer: coarse) {
+  .rux--toggle__appearance { position: relative; }
+  .rux--toggle__appearance::before {
+    position: absolute;
+    block-size: max(100%, 2.75rem);
+    content: "";
+    inline-size: max(100%, 2.75rem);
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* A TOGGLE'S FOCUS RING STANDS 2PX OFF THE SWITCH. Carbon's 1px gap rounds
+   away along the switch's flat top and bottom at a browser zoom under 100%,
+   and the ring reads as cut off there while its ends still show the gap.
+   Carbon's two selectors, so its specificity. */
+.rux--toggle__button:focus-visible + .rux--toggle__label .rux--toggle__switch::after,
+.rux--toggle:not(.rux--toggle--disabled):active .rux--toggle__switch::after {
+  outline-offset: 2px;
+}
+
+/* A SIDE-NAV ROW IS 44PX TO A FINGER. Carbon draws a link and a submenu
+   button 32px tall, and the rows are stacked edge to edge, so the hit area
+   cannot grow invisibly the way a toggle's does: on a touch screen the row
+   itself is 44px. A large item keeps its 48px, which Carbon sets with a more
+   specific rule. Asked for by Notes, whose side nav is how a phone moves
+   between pages. */
+@media (pointer: coarse) {
+  a.rux--side-nav__link { min-block-size: 2.75rem; }
+  .rux--side-nav__menu a.rux--side-nav__link {
+    block-size: 2.75rem;
+    min-block-size: 2.75rem;
+  }
+  .rux--side-nav__submenu { block-size: 2.75rem; }
+}
+
+/* A NAV THAT OPENS OVER THE PAGE IS DRAWN AS A HEADER PANEL. The collapsible
+   shell's nav, the one carrying `--side-nav--hidden`, is closed at every width
+   until the hamburger opens it over the content, which is what a header panel
+   does; js/ui-shell.js gives its hamburger the panel trigger's active state.
+   So it takes the panel's own layer and edges, from Carbon's
+   `.rux--header-panel` and `--expanded`, and the active button joins onto it
+   as the switcher's does. A persistent nav keeps Carbon's background, because
+   it is part of the page beside the content. */
+.rux--side-nav--hidden { background-color: var(--rux-layer); }
+.rux--side-nav--hidden.rux--side-nav--expanded {
+  border-inline-end: 1px solid var(--rux-border-subtle);
+  border-inline-start: 1px solid var(--rux-border-subtle);
+}
+/* The header's links mirrored into it take the same layer, as a header menu's
+   links do when it opens: Carbon fills each with the header's background,
+   which drew them as a dark strip across the lighter panel. */
+.rux--side-nav--hidden a.rux--header__menu-item { background-color: var(--rux-layer); }
+.rux--side-nav--hidden a.rux--header__menu-item:hover { background-color: var(--rux-layer-hover); }
+.rux--side-nav--hidden a.rux--header__menu-item:active { background-color: var(--rux-layer-active); }
+
+/* AN OPEN HEADER BUTTON AND ITS PANEL ARE ONE SURFACE. Carbon draws the open
+   button as a tab: its layer, a line down each side and, below it, the
+   header's own bottom line, so the button and the panel it opened read as
+   two pieces. The side lines go -- the panel is wider than its button, so
+   each ran into the panel's top as a stray divider -- and the button covers
+   the header's line beneath it with its own layer, through the transparent
+   bottom border Carbon already gives it. The global actions already span
+   the header's full 48px; the menu toggle is centred in the 47px above the
+   line and so stopped half a pixel short, and is set to the header's top as
+   they are. Carbon's selectors, so its specificity. */
+.rux--header__action--active {
+  border-inline-end-color: transparent;
+  border-inline-start-color: transparent;
+}
+.rux--header__menu-toggle { align-self: flex-start; }
+
+/* A FILTERED LIST'S FIRST ROW DRAWS A LINE ABOVE ITSELF. Carbon separates
+   options with a line on each one's top edge and takes it off
+   `:first-of-type`, but js/list-box.js filters by marking an option `hidden`
+   and leaving it in the list, so `:first-of-type` is usually a row nobody can
+   see and the first row shown keeps a line across the top of the menu. The
+   repair names the first row shown -- a shown option with no shown option
+   before it -- which needs more specificity than Carbon's rule, because it is
+   the narrower case of it. Only the line is taken off; every other row keeps
+   whatever colour its layer gives it, so nothing here restates a colour. */
+.rux--list-box__menu-item:not([hidden]):not(.rux--list-box__menu-item:not([hidden]) ~ *) > .rux--list-box__menu-item__option {
+  border-block-start-color: transparent;
+}
+
+/* A DARK THEME'S AVATARS TAKE CARBON'S DARK SET. Carbon ships two sets of
+   avatar colours and switches by a `.rux--g90` or `.rux--g100` class, which no
+   page here carries, so every dark theme drew the light set under its own dark
+   `text-inverse`: dark initials on a dark fill, as low as 1.8 to 1. These are
+   Carbon's dark set, copied, and they read at 5.4 to 1 or better under each
+   dark theme's `text-inverse`. */
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-1-cyan { background-color: #1192e8; }
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-2-gray { background-color: #8d8d8d; }
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-3-green { background-color: #24a148; }
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-4-magenta { background-color: #ee5396; }
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-5-purple { background-color: #a56eff; }
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-6-teal { background-color: #009d9a; }
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-7-cyan { background-color: #82cfff; }
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-8-gray { background-color: #c6c6c6; }
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-9-green { background-color: #6fdc8c; }
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-10-magenta { background-color: #ffafd2; }
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-11-purple { background-color: #d4bbff; }
+:is([data-theme="g90"], [data-theme="g100"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="ant-dark"], [data-theme="spotify-dark"], [data-theme="apple-dark"]) .rux--user-avatar--order-12-teal { background-color: #3ddbd9; }
+
+/* ROUNDED THEMES. Ant Design Pro and Geist were both measured at the same
+   three radii -- a tag 4px, a control 6px, a surface 8px -- and both draw a
+   field as a filled box with no underline, so one set of rules serves both and
+   the numbers are written once. A theme joins by being added to the list; one
+   wanting different numbers gets its own block rather than a second copy of
+   this. Every other theme keeps Carbon's square, underlined controls. Focus
+   and invalid states are outlines in Carbon, so they still show without the
+   underline. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--btn,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--text-input,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--text-area,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--select-input,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--date-picker__input,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--number input[type=number],
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--number input[type=text],
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--search-input,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--list-box,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--dropdown {
+  border-radius: 6px;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--text-input,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--text-area,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--select-input,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--date-picker__input,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--number input[type=number],
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--number input[type=text],
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--search-input,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--list-box,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--dropdown {
+  border-block-end-color: transparent;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--tile,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--file__drop-container,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--list-box__menu,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--menu,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--date-picker__calendar,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--popover-content,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification {
+  border-radius: 8px;
+}
+/* Ant's tag is a 4px rectangle. Geist has no square badge at all -- its Badge
+   and its Pill are both fully round, at the same 24px height Carbon's tag
+   already has -- so a 4px corner here squares a pill Carbon drew correctly and
+   Geist keeps the one it was given. */
+[data-theme="ant-dark"] .rux--tag {
+  border-radius: 4px;
+}
+/* THE TWO BIGGEST SURFACES TAKE A BIGGER CURVE. Both themes scale a radius
+   with the size of the thing: Geist's button was measured at 4px, 6px and 8px
+   as it grew from 32 to 40 tall. A side panel and a modal are the largest
+   boxes on the page -- the panel is the full height of the window -- so 8px
+   reads tighter on them than on a tile. 12px is the next step up. The
+   scheduler's week takes it too, through its own `--scheduler-surface-radius`. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--side-panel,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-container {
+  border-radius: 12px;
+}
+
+/* GEIST'S TERTIARY BUTTON IS PLAIN TEXT, NOT A LINK. Carbon paints a ghost
+   button's label with `link-primary` and everything else about it -- its icon,
+   and the glyph of its icon-only form -- with `icon-primary`, so one control
+   changes colour on whether it carries a word or a picture. Geist draws its
+   tertiary button as the page's own text at every size and keeps blue for
+   links, so the label takes `text-primary` here and meets the icons beside it.
+   Disabled is excluded by name because Carbon's disabled rule carries the same
+   specificity and this file loads after it; `danger--ghost` is its own class
+   and keeps its red. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--ghost:not(:disabled):not(.rux--btn--disabled) {
+  color: var(--rux-text-primary, #161616);
+}
+
+/* A FILLED BUTTON'S LABEL IS DARK ONLY WHERE THE FILL IS THE BRAND'S. Carbon
+   gives every filled button `text-on-color`, which this theme sets to black
+   because its brand colour -- the primary button, the badge, the batch bar,
+   the picked date -- is a light one. The two fills that are not: the secondary
+   button, which Geist draws as the page behind a ring and labels in the page's
+   own text, and the danger button -- and a danger menu item, which fills with
+   the same red on hover -- whose red Geist labels in pure white, 4.8:1
+   where the page's #ededed would reach only 4.1; rux-theme.css darkens the
+   hover and active fills so the white holds 4.5:1 in every state. Each is named here rather
+   than the token moving, because moving it would blacken nothing and whiten
+   four things that are right. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--secondary:not(:disabled):not(.rux--btn--disabled),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--secondary:hover:not(:disabled):not(.rux--btn--disabled),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--secondary:focus-visible:not(:disabled):not(.rux--btn--disabled) {
+  color: var(--rux-text-primary, #161616);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--danger:not(:disabled):not(.rux--btn--disabled),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--danger:hover:not(:disabled):not(.rux--btn--disabled),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--menu-item--danger:not(.rux--menu-item--disabled):is(:hover, :focus-visible) {
+  color: #ffffff;
+}
+/* Spotify's text-on-color is black for the same reason, a light green brand,
+   and its secondary fill is a dark grey, so that button is labelled in the
+   page's own text as well. */
+[data-theme="spotify-dark"] .rux--btn--secondary:not(:disabled):not(.rux--btn--disabled),
+[data-theme="spotify-dark"] .rux--btn--secondary:hover:not(:disabled):not(.rux--btn--disabled),
+[data-theme="spotify-dark"] .rux--btn--secondary:focus-visible:not(:disabled):not(.rux--btn--disabled) {
+  color: var(--rux-text-primary, #161616);
+}
+/* The ring that makes the outline. Carbon already draws a 1px border on the
+   secondary button and leaves it transparent, so only its colour is named.
+   Disabled is excluded from both, as it is for the ghost above: Carbon's
+   disabled rule names one class and would lose to these, leaving a button that
+   cannot be pressed looking like one that can. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--secondary:not(:disabled):not(.rux--btn--disabled) {
+  border-color: var(--rux-border-subtle-02, #e0e0e0);
+}
+/* Under keyboard focus the border is the focus colour again, as Carbon has it:
+   the border is the outer half of its 2px ring, and the rule above outranks
+   Carbon's own, which left this button a 1px ring beside every other's 2px. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--secondary:not(:disabled):not(.rux--btn--disabled):focus-visible {
+  border-color: var(--rux-button-focus-color, var(--rux-focus));
+}
+/* THE TERTIARY BUTTON IS THAT SAME OUTLINE. Carbon rings it in the brand
+   colour and fills it with the brand on hover, focus and press; the brand
+   here is #ededed, so it was the brightest outline on the page. Geist has one
+   outlined button, its secondary -- the page behind a #2e2e2e ring, labelled
+   in the page's own text, measured on its Button page -- so the tertiary
+   takes the secondary's ring, label and fills in every state. Focus keeps
+   Carbon's inset ring and gives up its fill, which would put the label's own
+   colour behind it. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--tertiary:not(:disabled):not(.rux--btn--disabled) {
+  border-color: var(--rux-border-subtle-02, #e0e0e0);
+  color: var(--rux-text-primary, #161616);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--tertiary:not(:disabled):not(.rux--btn--disabled):hover {
+  background-color: var(--rux-button-secondary-hover);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--tertiary:not(:disabled):not(.rux--btn--disabled):focus-visible {
+  border-color: var(--rux-button-focus-color, var(--rux-focus));
+  background-color: transparent;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn--tertiary:not(:disabled):not(.rux--btn--disabled):active {
+  border-color: var(--rux-border-subtle-02, #e0e0e0);
+  background-color: var(--rux-button-secondary-active);
+}
+
+/* A SELECTABLE TAG RINGS LIKE THE OUTLINE BUTTON. Carbon draws it with
+   `border-inverse`, the brightest line the theme has, so the trip editor's
+   Needs chips shout beside the fields around them. Geist rings an outlined
+   control in a grey barely above its surface -- measured at #2e2e2e on its own
+   secondary button -- so the tag takes the same line this theme already gives
+   that button. The content switcher keeps the bright ring: it is a control
+   that says which of several views is showing, and the line is what says it. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--tag--selectable {
+  border-color: var(--rux-border-subtle-02, #e0e0e0);
+}
+
+/* The option at each end of a list takes the menu's curve. A selected or
+   highlighted row paints its own background across the full width, and a
+   square one shows in the rounded menu's corners -- most visible on a search
+   that returns a single row, which is the first and the last at once.
+   The end is the end of what is SHOWN: filtering marks an option `hidden` and
+   leaves it in the list, so `:first-child` is often a row nobody can see.
+   Every shown option is curved, and the curve is taken back from any that has
+   a shown option before it, above, or after it, below. Geist-dark's options sit
+   inside the menu's padding as pills of their own, so this is ant-dark's. */
+[data-theme="ant-dark"] .rux--list-box__menu-item:not([hidden]) {
+  border-radius: 8px;
+}
+[data-theme="ant-dark"] .rux--list-box__menu-item:not([hidden]) ~ .rux--list-box__menu-item:not([hidden]) {
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+[data-theme="ant-dark"] .rux--list-box__menu-item:not([hidden]):has(~ .rux--list-box__menu-item:not([hidden])) {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+/* A highlighted first option is Carbon's pseudo-element: a square 2px box
+   with a 1px top, so the ring joins the menu to the field above it. Ant-dark's
+   menu is a detached rounded box, so that option wears the outline every other
+   option wears, which follows the corner it sits in. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--combo-box .rux--list-box__menu-item:first-child.rux--list-box__menu-item--highlighted::before,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--multi-select--filterable.rux--multi-select--selected .rux--list-box__menu-item:first-child.rux--list-box__menu-item--highlighted::before,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--multi-select.rux--multi-select--selected .rux--list-box__menu-item:first-child.rux--list-box__menu-item--highlighted::before {
+  content: none;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--combo-box .rux--list-box__menu-item:first-child.rux--list-box__menu-item--highlighted,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--multi-select--filterable.rux--multi-select--selected .rux--list-box__menu-item:first-child.rux--list-box__menu-item--highlighted,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--multi-select.rux--multi-select--selected .rux--list-box__menu-item:first-child.rux--list-box__menu-item--highlighted {
+  outline-color: var(--rux-focus, #0f62fe);
+}
+/* The field keeps its 2px focus ring while an option is active. Carbon thins
+   it to 1px so the field and the menu read as one box; ant-dark's are two
+   rounded boxes, and a thin ring only reads as the field losing focus. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--combo-box.rux--list-box--expanded:has(input[aria-activedescendant]:not([aria-activedescendant=""])) .rux--combo-box--input--focus.rux--text-input,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--multi-select.rux--list-box--expanded .rux--list-box__field--wrapper:has(button[aria-activedescendant]:not([aria-activedescendant=""])),
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--multi-select--filterable.rux--list-box--expanded:has(input[aria-activedescendant]:not([aria-activedescendant=""])) {
+  outline-offset: -2px;
+  outline-width: 2px;
+}
+/* A date range reads as one box, the way Ant's range picker does: its two
+   inputs keep Carbon's 1px seam and square the corners that meet there. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--date-picker--range .rux--date-picker-container--from .rux--date-picker__input {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--date-picker--range .rux--date-picker-container--to .rux--date-picker__input {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+/* The picked day's number is the ink for a vivid fill, not the inverse of the
+   page. Carbon pairs the interactive colour with text-inverse, which is the
+   right ink in every theme whose interactive colour is light; ant-dark's is a
+   mid blue, and black on it reads 4.05 where 14px text needs 4.5. White reads
+   5.19. Only this rule pairs those two tokens, so only it moves. */
+[data-theme="ant-dark"] .rux--date-picker--next .rux--date-picker__day.selected {
+  color: var(--rux-text-on-color);
+}
+/* Geist's Calendar page and Ant's DatePicker page both round each day's box
+   4px, so the picked day is a rounded square and not a block. The days
+   between a range's two ends keep their square band, which the two ends
+   close. apple-light draws its days its own way, with its other shapes. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--date-picker--next .rux--date-picker__day:not(.inRange) {
+  border-radius: 4px;
+}
+/* The two arrows that change the month take no fill under the pointer,
+   measured on the same two pages: each system draws the arrow dimmer at rest
+   and in the text's colour under the pointer, on nothing, where Carbon fills
+   a 40px square. The resting arrow is the secondary icon, the nearest token
+   to Geist's gray 700 and to Ant's white at 45%. Geist's arrow is a circle,
+   filled only while pressed; Ant's has no shape of its own, so its focus
+   ring takes the 4px its days have. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--date-picker--next .rux--date-picker__month-nav:hover {
+  background-color: transparent;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--date-picker--next .rux--date-picker__month-nav svg {
+  fill: var(--rux-icon-secondary);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--date-picker--next .rux--date-picker__month-nav:is(:hover, :focus-visible) svg {
+  fill: var(--rux-icon-primary);
+}
+[data-theme="ant-dark"] .rux--date-picker--next .rux--date-picker__month-nav {
+  border-radius: 4px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--date-picker--next .rux--date-picker__month-nav {
+  border-radius: 50%;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--date-picker--next .rux--date-picker__month-nav:active {
+  background-color: var(--rux-layer-active);
+}
+/* ANT-DARK'S TABLE IS THE OTHER ANSWER, and it was measured too, on Ant's own
+   Table page in its dark mode: the table takes the raised layer as a fill and
+   NO border, rounds only its top two corners, and keeps both the filled header
+   and the rule under every row. Ours already keeps those two, so only the fill
+   and the top corners are missing. Geist's box below is the opposite choice;
+   neither was guessed. */
+[data-theme="ant-dark"] .rux--data-table-container {
+  background: var(--rux-layer-01);
+  border-start-start-radius: 8px;
+  border-start-end-radius: 8px;
+  overflow: hidden;
+}
+/* GEIST'S HEADER IS PARTED BY THE SAME HAIRLINE AS EVERY OTHER REGION. The bar
+   sits on the page's own black (js/theme.js leaves it there), so the line under
+   it is its only edge, and it takes border-subtle-01 -- the 14% white Geist
+   draws between every region -- rather than the fainter step Carbon gives a
+   header outside any layer. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--header,
+.rux--header:is([data-theme="geist-dark"], [data-theme="rux-dark"]) {
+  border-block-end-color: var(--rux-border-subtle-01);
+}
+/* GEIST'S HEADER IS 64px, measured on its own site: 16px on every side of
+   32px controls, the name 24px in. Carbon's is 48px of edge-to-edge 48px
+   squares. The bar keeps Carbon's parts: its icons become 32px buttons with
+   6px corners, 8px apart, and the name starts 8px past the bar's 16px.
+   Everything Carbon places under the header -- the page's content, the side
+   nav and its overlay, the header's panels and a side panel -- moves to 4rem
+   with it. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--header,
+.rux--header:is([data-theme="geist-dark"], [data-theme="rux-dark"]) {
+  block-size: 4rem;
+  padding-inline: var(--rux-spacing-05);
+}
+:is(:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--header, .rux--header:is([data-theme="geist-dark"], [data-theme="rux-dark"])) .rux--header__global {
+  align-items: center;
+  gap: var(--rux-spacing-03);
+}
+:is(:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--header, .rux--header:is([data-theme="geist-dark"], [data-theme="rux-dark"])) .rux--header__action {
+  block-size: 2rem;
+  min-block-size: 2rem;
+  inline-size: 2rem;
+  min-inline-size: 2rem;
+  border-radius: 6px;
+}
+/* RUX-DARK RINGS ITS HEADER BUTTONS, as GitHub rings the buttons in its
+   header: the 1px border each one already carries takes the colour a
+   button's border has. The account button is a face and takes none, as
+   GitHub's does not, and the ring gives way to the focus ring, which is that
+   same border. */
+:is([data-theme="rux-dark"] .rux--header, .rux--header[data-theme="rux-dark"]) .rux--header__action:not(:has(.rux--user-avatar), :focus-visible) {
+  border-color: var(--rux-border-subtle-02);
+}
+/* THE ACCOUNT BUTTON IS THE FACE ITSELF where the header's buttons are 32px:
+   the picture is Carbon's 32px avatar in every theme, which sits inside
+   Carbon's 48px button and fills these. So the button is round with it, the
+   picture is kept from shrinking into the 30px the border leaves, and since
+   the face covers the border the focus ring is drawn on, the ring is an
+   outline 2px clear of it. */
+:is(:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--header, .rux--header:is([data-theme="geist-dark"], [data-theme="rux-dark"])) .rux--header__action:has(.rux--user-avatar) {
+  border-radius: 50%;
+}
+:is(:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--header, .rux--header:is([data-theme="geist-dark"], [data-theme="rux-dark"])) .rux--header__action:has(.rux--user-avatar):focus-visible {
+  outline: 2px solid var(--rux-focus);
+  outline-offset: 2px;
+}
+:is(:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--header, .rux--header:is([data-theme="geist-dark"], [data-theme="rux-dark"])) .rux--header__action .rux--user-avatar {
+  flex: none;
+}
+/* A count on one of those 32px buttons has no corner to sit in: Carbon's 4px
+   inset is measured for a 48px button, and here it lands the count on the
+   glyph. So it hangs off the button's top corner, half over the edge. */
+:is(:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--header, .rux--header:is([data-theme="geist-dark"], [data-theme="rux-dark"])) .rux--header__action .rux--badge-indicator--count {
+  margin-block-start: -0.375rem;
+  margin-inline-end: -0.5rem;
+}
+:is(:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--header, .rux--header:is([data-theme="geist-dark"], [data-theme="rux-dark"])) .rux--header__name {
+  padding-inline-start: var(--rux-spacing-03);
+}
+/* The menu toggle is set to the header's top, above, so that in Carbon's bar
+   it spans the full 48px its neighbours do. Here it is a 32px button in a
+   64px bar, and the top is 16px above the row the name and the other buttons
+   sit on, so it takes that row's centre. */
+:is(:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--header, .rux--header:is([data-theme="geist-dark"], [data-theme="rux-dark"])) .rux--header__menu-toggle {
+  align-self: center;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--header ~ .rux--content, div:has(.rux--header) ~ .rux--content) {
+  margin-block-start: 4rem;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--side-nav--ux, .rux--side-nav__overlay, .rux--header-panel, .rux--side-panel) {
+  inset-block-start: 4rem;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--header ~ .rux--side-nav, .rux--side-panel) {
+  block-size: calc(100% - 4rem);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--header ~ .rux--side-nav {
+  inset-block-start: 4rem;
+}
+/* GEIST'S FIELDS ARE OUTLINED, NOT FILLED. Its control takes the container's
+   own surface and a 1px ring, measured on Geist's Input page at rgba(255 255
+   255 / 0.14) -- which is what border-subtle-01 already resolves to here. The
+   fill comes from the field tokens in rux-theme.css; this draws the ring. It
+   is inset, so nothing moves. Ant fills its fields instead, and keeps them. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--text-input, .rux--text-area, .rux--select-input, .rux--date-picker__input, .rux--search-input, .rux--list-box, .rux--dropdown),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--number :is(input[type=number], input[type=text]) {
+  box-shadow: inset 0 0 0 1px var(--rux-border-subtle-01);
+}
+/* A DISABLED FIELD IS THE ONE THAT LIFTS OFF ITS SURFACE: #1a1a1a with its
+   value in #8f8f8f inside the same ring, measured on Geist's Input, Select
+   and Textarea pages. Carbon keeps the enabled fill and dims the value to a
+   quarter, which here left a disabled field looking like an empty one. The
+   two colours are the disabled button's, so the theme has one disabled look;
+   an empty one's placeholder keeps Carbon's dimmer text, as Geist's does. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--text-input, .rux--text-area, .rux--select-input, .rux--date-picker__input):disabled,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--search-input[disabled],
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--number :is(input[type=number], input[type=text]):disabled,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--list-box--disabled, .rux--dropdown--disabled),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--list-box--disabled, .rux--dropdown--disabled):hover {
+  background-color: var(--rux-button-disabled);
+  color: var(--rux-text-on-color-disabled);
+  -webkit-text-fill-color: var(--rux-text-on-color-disabled);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--list-box--disabled, .rux--dropdown--disabled) .rux--list-box__label {
+  color: var(--rux-text-on-color-disabled);
+}
+/* GEIST'S CHECKBOX AND RADIO REST IN A GREY RING AND FILL WHEN CHOSEN,
+   measured on its Checkbox and Radio pages: a 16px box with 4px corners and a
+   16px circle, each ringed #8f8f8f at rest, and #ededed with a black tick or
+   an #ededed dot when chosen. Carbon rings both in the text colour at rest, so
+   an empty box was as bright as a ticked one, squares its box at 2px and draws
+   the radio at 18px. border-strong-03 is the nearest line this theme has. The
+   theme's name adds no weight here, so Carbon's own chosen, disabled, invalid
+   and read-only rules still outrank these, as they outrank its resting rule. */
+:where([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--checkbox-label::before {
+  border-color: var(--rux-border-strong-03);
+  border-radius: 4px;
+}
+:where([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--radio-button__appearance {
+  border-color: var(--rux-border-strong-03);
+  block-size: 1rem;
+  inline-size: 1rem;
+}
+/* GEIST'S TOGGLE IS BLUE WHEN ON, WITH A LIGHT THUMB, measured on its Toggle
+   page: a #2e2e2e track that turns #0070f3, and an #ededed thumb in both.
+   Carbon's is green with a thumb in the on-colour text, which this theme sets
+   to black. The off track is the toggle-off token in rux-theme.css; the small
+   toggle's tick takes the track's blue. The size stays Carbon's 48px by 24px,
+   where Geist's is 28px by 14px, too small a target for a thumb on a phone.
+   Carbon's disabled and read-only rules outrank all three, as above. */
+:where([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--toggle__switch--checked {
+  background-color: var(--rux-support-info-inverse);
+}
+:where([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--toggle__switch::before {
+  background-color: var(--rux-icon-primary);
+}
+:where([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--toggle__check {
+  fill: var(--rux-support-info-inverse);
+}
+/* GEIST'S BREADCRUMB IS GREY, NOT A ROW OF LINKS, measured on its Breadcrumbs
+   page: each step and the mark between them #a1a1a1, which is text-secondary
+   here. A step lifts to the text colour under the pointer, and the current
+   page keeps the text colour Carbon gives it. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--breadcrumb-item:not(.rux--breadcrumb-item--current) .rux--link,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--breadcrumb-item:not(.rux--breadcrumb-item--current) .rux--link:visited {
+  color: var(--rux-text-secondary);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--breadcrumb-item:not(.rux--breadcrumb-item--current) .rux--link:hover,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--breadcrumb-item:not(.rux--breadcrumb-item--current) .rux--link:visited:hover {
+  color: var(--rux-text-primary);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--breadcrumb-item::after {
+  color: var(--rux-text-secondary);
+}
+/* GEIST'S TOOLTIP IS A SMALL LIGHT LABEL, measured on its Tooltip page: 13px
+   text with 6px above and below and 8px at the sides. Carbon sets 14px text
+   in 2px and 16px. The light fill and the 8px corners were already Geist's. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--tooltip-content {
+  padding: 6px var(--rux-spacing-03);
+  font-size: 0.8125rem;
+}
+/* GEIST'S POP-OVER CARD IS ITS MENU'S SURFACE, measured on its Materials page:
+   the menu material, #0a0a0a inside a thin ring with 12px corners. The fill
+   and the ring were already so; the corner was the 8px every rounded surface
+   shares, where this theme's menus are 12px. A tooltip is the smaller
+   material and keeps 8px, and a tab tip keeps the square corners that join it
+   to its tab. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--popover-container:not(.rux--popover--tab-tip) .rux--popover-content:not(.rux--tooltip-content) {
+  border-radius: 12px;
+}
+/* GEIST'S SPINNER IS GREY, measured on its Spinner page at #8f8f8f, where
+   Carbon draws its ring in the brand colour, here the page's brightest.
+   icon-secondary is the nearest this theme has. Geist's is a ring of twelve
+   fading bars; Carbon's turning arc is kept. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--loading__stroke {
+  stroke: var(--rux-icon-secondary);
+}
+/* GEIST'S DEFAULT CONTROL IS 36px, measured on its Button and Input pages:
+   the default button and the default field are both 36px with 6px corners,
+   between a 32px small and a 40px large. Carbon's md size is 40, and three
+   scopes set it -- the page, a popover's content and the table toolbar -- so
+   each takes 36 here, and every button, field, dropdown, tab and switcher
+   sized md follows. A button given no size draws at Carbon's 48 and takes the
+   md size too, unless it or a container around it names a size. The date
+   picker's field fixes its own 40 and takes the md size with the fields beside
+   it. Buttons that set their own height keep it: the header's actions, the
+   page-number buttons of the pagination nav and the dialog's 64px footer. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--popover-content, .rux--table-toolbar) {
+  --rux-layout-size-height-md: 2.25rem;
+}
+/* ANT'S DEFAULT CONTROL IS 32px, measured on its Button, Input and DatePicker
+   pages, between a 24px small and a 40px large. It takes the same three
+   scopes, and the two rules after it serve both themes. Carbon's small size
+   is 32px too and keeps it: the scheduler's card rows are sized from it.
+   From 42rem up only: 32px is a pointer's size, and on a phone a field and a
+   footer button keep Carbon's 40px for a finger. */
+@media (min-width: 42rem) {
+  [data-theme="ant-dark"],
+  [data-theme="ant-dark"] :is(.rux--popover-content, .rux--table-toolbar) {
+    --rux-layout-size-height-md: 2rem;
+  }
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--btn:not([class*="rux--layout--size-"]):not([class*="rux--layout--size-"] *) {
+  --rux-layout-size-height: var(--rux-layout-size-height-md);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--date-picker__input:not(.rux--date-picker__input--lg, .rux--date-picker__input--sm) {
+  block-size: var(--rux-layout-size-height-md);
+}
+/* GEIST'S TYPE, measured on its Typography page in dark mode. The face is
+   Geist Sans, which js/theme.js loads for this theme alone; Plex stays in the
+   stack for the moment before it arrives and for a page that runs no script.
+   Carbon names Plex on `body` and on a handful of controls and lets
+   everything else inherit, so those are the selectors named here. Its code
+   face becomes Geist Mono through Carbon's own two tokens.
+   - Body, label and button text has no tracking in Geist; Carbon's 0.16px and
+     0.32px are optical corrections for Plex, so they go.
+   - A heading is 600 at every size with tracking that tightens as it grows:
+     -0.28px at 14, -0.32px at 16, -0.4px at 20, -0.96px at 24, -1.28px at 32.
+     Carbon's 28px step is not one of Geist's, so heading-04 -- the page
+     title -- takes Geist's 24 on a 32px line. Its 42px and 54px steps keep
+     their size and take the weight and the -0.06em of Geist's 40 and above.
+   - Line heights stay Carbon's: the apps size rows from them.
+   - A button, a tag and a table's header are 500, and the header is the
+     secondary grey, as on Geist's Button, Badge and Table pages.
+   - A date or a time is set in the sans with its figures all one width, as
+     Geist's own date field is, where Carbon sets them in the code face. */
+[data-theme="geist-dark"],
+[data-theme="rux-dark"] {
+  font-family: 'Geist', 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif;
+  --rux-body-01-letter-spacing: 0;
+  --rux-body-compact-01-letter-spacing: 0;
+  --rux-body-long-01-letter-spacing: 0;
+  --rux-body-short-01-letter-spacing: 0;
+  --rux-caption-01-letter-spacing: 0;
+  --rux-caption-02-letter-spacing: 0;
+  --rux-code-01-letter-spacing: 0;
+  --rux-code-02-letter-spacing: 0;
+  --rux-helper-text-01-letter-spacing: 0;
+  --rux-helper-text-02-letter-spacing: 0;
+  --rux-label-01-letter-spacing: 0;
+  --rux-label-02-letter-spacing: 0;
+  --rux-legal-01-letter-spacing: 0;
+  --rux-legal-02-letter-spacing: 0;
+  --rux-heading-01-letter-spacing: -0.28px;
+  --rux-heading-compact-01-letter-spacing: -0.28px;
+  --rux-productive-heading-01-letter-spacing: -0.28px;
+  --rux-expressive-heading-01-letter-spacing: -0.28px;
+  --rux-heading-02-letter-spacing: -0.32px;
+  --rux-heading-compact-02-letter-spacing: -0.32px;
+  --rux-productive-heading-02-letter-spacing: -0.32px;
+  --rux-expressive-heading-02-letter-spacing: -0.32px;
+  --rux-heading-03-font-weight: 600;
+  --rux-heading-03-letter-spacing: -0.4px;
+  --rux-productive-heading-03-font-weight: 600;
+  --rux-productive-heading-03-letter-spacing: -0.4px;
+  --rux-heading-04-font-size: 1.5rem;
+  --rux-heading-04-line-height: 1.33333;
+  --rux-heading-04-font-weight: 600;
+  --rux-heading-04-letter-spacing: -0.96px;
+  --rux-productive-heading-04-font-size: 1.5rem;
+  --rux-productive-heading-04-line-height: 1.33333;
+  --rux-productive-heading-04-font-weight: 600;
+  --rux-productive-heading-04-letter-spacing: -0.96px;
+  --rux-heading-05-font-weight: 600;
+  --rux-heading-05-letter-spacing: -1.28px;
+  --rux-productive-heading-05-font-weight: 600;
+  --rux-productive-heading-05-letter-spacing: -1.28px;
+  --rux-heading-06-font-weight: 600;
+  --rux-heading-06-letter-spacing: -0.06em;
+  --rux-productive-heading-06-font-weight: 600;
+  --rux-productive-heading-06-letter-spacing: -0.06em;
+  --rux-heading-07-font-weight: 600;
+  --rux-heading-07-letter-spacing: -0.06em;
+  --rux-productive-heading-07-font-weight: 600;
+  --rux-productive-heading-07-letter-spacing: -0.06em;
+  --rux-code-01-font-family: 'Geist Mono', 'IBM Plex Mono', system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', monospace;
+  --rux-code-02-font-family: 'Geist Mono', 'IBM Plex Mono', system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', monospace;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) body,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(input[type=number], input[type=text].rux--number, .rux--number input, .rux--content-switcher-btn, .rux--snippet .rux--popover-container, .rux--snippet-btn--expand, .rux--type-sans) {
+  font-family: 'Geist', 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(code, .rux--type-mono) {
+  font-family: 'Geist Mono', 'IBM Plex Mono', system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', monospace;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--date-picker__input, .rux--time-picker__input-field) {
+  font-family: 'Geist', 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--btn, .rux--tag, .rux--data-table thead) {
+  font-weight: 500;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table :is(th, .rux--table-sort) {
+  color: var(--rux-text-secondary);
+}
+/* GEIST'S SPACING INSIDE A CONTROL, measured on its own pages. Carbon's
+   spacing stays everywhere else, including cards and menus, which are not
+   measured yet.
+   - A button holds its label 10px from each side, centred. Carbon keeps 64px
+     at the end for an icon whether or not there is one; here an icon follows
+     its label 8px after it, in the same 10px. Carbon's button carries a 1px
+     border inside its padding, so each side is a pixel less. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--btn:not(.rux--btn--icon-only) {
+  padding-inline: 9px;
+  justify-content: center;
+  text-align: center;
+}
+/* The icon is in the flow after its label. Carbon places it absolutely in the
+   trailing padding the rule above takes back, so left there it sits on the
+   words. It is centred on the button: the label's line is 18px and the icon
+   16, so at the top of that line it sits a pixel high. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--btn:not(.rux--btn--icon-only) .rux--btn__icon {
+  position: static;
+  align-self: center;
+  margin-block-start: 0;
+  margin-inline-start: var(--rux-spacing-03);
+}
+/* ANT'S BUTTON HOLDS ITS LABEL AND ITS ICON TOGETHER IN THE MIDDLE, measured
+   on its Button page: 15px inside its border on each side and 8px between
+   the two. Carbon sets the label at the start and the icon against the end,
+   in 64px kept for it whether or not there is one, so a wide button read as
+   a row with a stray mark. */
+[data-theme="ant-dark"] .rux--btn:not(.rux--btn--icon-only) {
+  padding-inline: 15px;
+  justify-content: center;
+}
+[data-theme="ant-dark"] .rux--btn:not(.rux--btn--icon-only) .rux--btn__icon {
+  position: static;
+  align-self: center;
+  margin-block-start: 0;
+  margin-inline-start: var(--rux-spacing-03);
+}
+/* - A field starts its text 12px in, and a mark at its end -- a select's or a
+     dropdown's arrow, a date field's calendar -- sits 12px from that end. A
+     combo box's field only frames its input, which takes the 12px itself, so
+     it keeps Carbon's 0; `:where` keeps the rule at the specificity it had.
+     Ant's Input page gives the same 12px, 11px inside a 1px border, so
+     ant-dark shares the rule. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--text-input, .rux--text-area, .rux--select-input, .rux--date-picker__input, .rux--list-box__field:not(:where(.rux--combo-box) *)),
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--number :is(input[type=number], input[type=text]) {
+  padding-inline-start: 12px;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--select__arrow, .rux--date-picker__icon) {
+  inset-inline-end: 12px;
+}
+/* - Tabs sit 24px apart, each only as wide as its label, so the line under
+     the chosen one is the label's width. Carbon follows every tab with a
+     spacer, or with the close button of a tab that can be closed, so the
+     24px goes on each tab rather than between the list's children, and the
+     spacers go. A tab followed by its close button keeps Carbon's end
+     padding, which the button sits in. The list is inset so the first label
+     stays where Carbon's 16px padding put it. Contained and vertical tabs are
+     boxes and keep Carbon's spacing. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tab--list {
+  padding-inline-start: 14px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-item--close--hidden {
+  display: none;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-link {
+  flex: none;
+  padding-inline-start: 2px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-link:not(:has(+ .rux--tabs__nav-item--close)) {
+  padding-inline-end: 2px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-link:not(:first-child) {
+  margin-inline-start: 24px;
+}
+/*   The row takes one hairline under all its tabs, as Geist's does, and a tab
+     draws its own line only when chosen, or hovered, so the rule is not
+     broken into a grey stroke under each label. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tab--list {
+  box-shadow: inset 0 -1px 0 var(--rux-border-subtle-01);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-link:not(.rux--tabs__nav-item--selected, :hover) {
+  border-block-end-color: transparent;
+}
+/*   The chosen tab is told apart by its line and its ink, not its weight:
+     Geist's Tabs page sets every tab at 400, the chosen one in #ededed over
+     the others' #a1a1a1, so choosing one never changes its width. Carbon
+     sets the chosen tab in its heading type, whose tracking this theme
+     tightens, so the tracking is the body's too. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-item--selected {
+  font-weight: 400;
+  letter-spacing: 0;
+}
+/* ANT'S TABS, measured on its Tabs page: each as wide as its label with no
+   inset of its own and 32px from the next, 14px at 400 whether chosen or
+   not, the chosen one in the primary colour over a 2px bar of it and the
+   rest in the page's own text. The colour is link-primary, #4096ff: the
+   step of Ant's blue this theme already takes where #1668dc misses 4.5 to 1
+   on its surfaces. The pointed tab takes it too, as Ant's does. A tab is
+   46px, 12px above and below its label, where the theme's 32px control
+   would make it 32. The spacers, the one hairline under the row and the
+   first label's 16px are as geist-dark has them above. */
+[data-theme="ant-dark"] .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) {
+  --rux-layout-size-height: 2.875rem;
+}
+[data-theme="ant-dark"] .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tab--list {
+  padding-inline-start: 16px;
+  box-shadow: inset 0 -1px 0 var(--rux-border-subtle-01);
+}
+[data-theme="ant-dark"] .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-item--close--hidden {
+  display: none;
+}
+[data-theme="ant-dark"] .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-link {
+  flex: none;
+  padding-inline-start: 0;
+}
+[data-theme="ant-dark"] .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-link:not(:has(+ .rux--tabs__nav-item--close)) {
+  padding-inline-end: 0;
+}
+[data-theme="ant-dark"] .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-link:not(:first-child) {
+  margin-inline-start: 32px;
+}
+[data-theme="ant-dark"] .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-link:not(.rux--tabs__nav-item--selected, :hover) {
+  border-block-end-color: transparent;
+}
+[data-theme="ant-dark"] .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-link:not(.rux--tabs__nav-item--disabled) {
+  color: var(--rux-text-primary);
+}
+[data-theme="ant-dark"] .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-link:is(.rux--tabs__nav-item--selected, :hover):not(.rux--tabs__nav-item--disabled) {
+  color: var(--rux-link-primary);
+}
+[data-theme="ant-dark"] .rux--tabs:not(.rux--tabs--contained, .rux--tabs--vertical) .rux--tabs__nav-item--selected {
+  font-weight: 400;
+}
+/* - A table's cells are 8px from each side, 16px between two columns; the
+     first and last keep 12px to the box's edge, the toolbar's own inset, so
+     a column's words start under the search field's edge and end under the
+     last button's. A sortable header's button carries the padding in place
+     of its cell. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table :is(td, th) {
+  padding-inline: 8px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table :is(td, th):first-child {
+  padding-inline-start: var(--rux-spacing-04);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table :is(td, th):last-child {
+  padding-inline-end: var(--rux-spacing-04);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table th:has(> .rux--table-sort) {
+  padding-inline: 0;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table .rux--table-sort {
+  padding-inline: 8px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table th:first-child > .rux--table-sort {
+  padding-inline-start: var(--rux-spacing-04);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table th:last-child > .rux--table-sort {
+  padding-inline-end: var(--rux-spacing-04);
+}
+/*   In a sortable table Carbon leaves a header that does not sort no padding
+     on its cell and 16px on its label, to stand it under the sort buttons'
+     own 16px. Here that cell keeps its 8px, so the label gives its own up:
+     with both, a column that does not sort was headed 16px to the right of
+     its values. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table.rux--data-table--sort th > .rux--table-header-label {
+  padding-inline: 0;
+}
+/* - A row is 40px and the header row 36px, measured on Geist's Table page,
+     where Carbon's default is 48px for both. Geist gets its 40px from 10px
+     above and below one line, so a cell of two lines makes a 54px row
+     rather than crowding 40. This is Carbon's default size, named `lg` or
+     not; a table that names another size keeps it. In a sortable table
+     Carbon holds every header cell and each sort button at 48px itself, so
+     both are named too. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table:not(.rux--data-table--xs, .rux--data-table--sm, .rux--data-table--md, .rux--data-table--xl) tbody tr {
+  block-size: 2.5rem;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table:not(.rux--data-table--xs, .rux--data-table--sm, .rux--data-table--md, .rux--data-table--xl) tbody :is(td, th) {
+  padding-block: 10px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table:not(.rux--data-table--xs, .rux--data-table--sm, .rux--data-table--md, .rux--data-table--xl) thead tr {
+  block-size: 2.25rem;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table:not(.rux--data-table--xs, .rux--data-table--sm, .rux--data-table--md, .rux--data-table--xl) thead th {
+  block-size: 2.25rem;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table:not(.rux--data-table--xs, .rux--data-table--sm, .rux--data-table--md, .rux--data-table--xl) th .rux--table-sort__flex {
+  min-block-size: 2.25rem;
+}
+/*   A tag or a small avatar in a cell takes one line's room, so a row that
+     holds one stays 40px: the cell's 10px above and below fit an 18px line,
+     and a 24px tag made the row 45px. Each gives up what it stands over the
+     line, 3px above and below, and the 20px small tag 1px. It sits at the
+     line's top rather than on its baseline, where the room under a baseline
+     made the line 20px and the row a third of a pixel over. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table td :is(.rux--tag, .rux--user-avatar--sm) {
+  margin-block: -3px;
+  vertical-align: top;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table td :is(.rux--tag--sm, .rux--tag.rux--layout--size-sm) {
+  margin-block: -1px;
+}
+/* - The small tag is 20px, Geist's small badge, where Carbon's is 18px. The
+     24px default is already Geist's. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--tag--sm, .rux--tag.rux--layout--size-sm) {
+  min-block-size: 1.25rem;
+}
+/* - A menu's items are 36px at every menu size, with their text 8px in, so
+     inside the menu's 6px they start 14px from its edge, as on Geist's Menu
+     page. That covers Carbon's menu, a dropdown's or combo box's options and
+     the overflow menu. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--menu .rux--menu-item {
+  block-size: 2.25rem;
+  padding-inline: 8px;
+}
+/*   An item rests in the page's own text, #ededed on Geist's Menu page,
+     where Carbon rests it in the secondary grey and lifts it on hover; the
+     hover pill is what marks the pointed one here. Only Carbon's menu was
+     measured, so only it moves. One class under the danger item's hover
+     rule, which keeps its white on red. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--menu-item:not(.rux--menu-item--disabled) {
+  color: var(--rux-text-primary);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--list-box__menu-item, .rux--overflow-menu-options__option) {
+  --rux-layout-size-height-local: 2.25rem;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--list-box__menu-item__option {
+  margin-inline: 8px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--overflow-menu-options__btn {
+  padding-inline: 8px;
+}
+/* - A dialog's title and body sit 20px from its edges. The header keeps
+     Carbon's 48px at the end for the close button. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-header {
+  padding-block-start: 20px;
+  padding-inline-start: 20px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-content {
+  padding: 20px;
+}
+/* Rux Dark holds a dialog's title and body 24px in, the inset its side
+   panels give what they hold, so a dialog and a panel share one margin; its
+   buttons and its close keep the 12px every bar's buttons keep. */
+[data-theme="rux-dark"] .rux--modal-header {
+  padding-block-start: 24px;
+  padding-inline-start: 24px;
+}
+[data-theme="rux-dark"] .rux--modal-content {
+  padding: 24px;
+}
+/* GEIST'S SELECTION BAR IS NOT A BRAND SLAB. Every other theme fills this bar
+   with its brand colour and gets a blue, purple or green band; geist-dark's brand
+   is near-white, so on a black page inside an outlined box it was the loudest
+   thing on screen. It takes the selected surface instead -- still a state, and
+   the same step the roster's day tint uses -- inside the hairline every box
+   of Geist's has. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--batch-actions {
+  background-color: var(--rux-layer-selected-01);
+  color: var(--rux-text-primary);
+  border: 1px solid var(--rux-border-subtle-01);
+}
+/* The count and the actions are brand-coloured too, so that they disappear
+   into a brand bar. On the quiet bar they have to stop being boxes of their
+   own, or the strip reads as three patches rather than one band. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--batch-actions .rux--batch-summary,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--batch-actions .rux--btn--primary {
+  background-color: transparent;
+  color: var(--rux-text-primary);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--batch-actions .rux--btn--primary:hover {
+  background-color: var(--rux-layer-selected-hover-01);
+}
+/* Their icons follow the words. Carbon fills them with the on-colour icon,
+   for a brand bar; here that is black, on a bar that is no longer the brand. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--batch-actions .rux--action-list .rux--btn .rux--btn__icon {
+  fill: currentColor;
+}
+/* A DISABLED SEARCH KEEPS ITS MAGNIFIER. Carbon fills it with the disabled
+   on-colour icon, which in these two themes is a faint black, for their light
+   brand; the field it sits on is dark, so it takes the disabled icon colour
+   every other disabled field's icon has. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme="spotify-dark"]) .rux--search--disabled svg {
+  fill: var(--rux-icon-disabled);
+}
+/* GEIST OUTLINES A TABLE. Measured on Geist's own Table page: the table
+   carries no border and no corners, and a wrapper around it does — 1px at 14%
+   white, 8px, over the raised layer. `data-table-content` is our equivalent
+   wrapper and already scrolls, so the corners clip what is inside them.
+   Scoped to geist-dark because Geist is what was measured; Ant's tables were not,
+   and a guess would only look like a rule.
+   IT GOES ON THE CONTAINER, NOT THE SCROLLING CONTENT, because a table's title
+   and its toolbar are the container's other children: on the content the box
+   started below them and they floated loose above the line. The container
+   clips, so a filled toolbar takes the corners with it.
+   Carbon's 2px above the box's first child goes: under it the toolbar's
+   controls stood 14px from the top and 12px from every other edge. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table-container {
+  padding-block-start: 0;
+  background: var(--rux-layer-01);
+  border: 1px solid var(--rux-border-subtle-01);
+  border-radius: 8px;
+  overflow: hidden;
+}
+/* Inside the box, the header takes no fill and carries one rule under it, as
+   Geist's does on the same page; Carbon's filled header inside a bordered box
+   reads as two boxes fighting.
+   THE ROW RULE STAYS, WHERE GEIST DROPS IT. Geist's own tables are one line a
+   row, and ours are not: the Notes walkthroughs wrap two lines in two columns
+   at once, and with no rule at all the eye loses which cell belongs to which
+   row. Both were drawn and looked at. It steps down to the faintest border
+   instead -- present enough to track a row, quiet enough to leave the box the
+   only edge anyone reads. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table thead,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table th {
+  background-color: transparent;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table thead tr {
+  border-block-end: 1px solid var(--rux-border-subtle-01);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table td,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table tbody th {
+  border-block-end-color: var(--rux-border-subtle-00);
+}
+/* A sortable header is a button, and Carbon fills the button rather than the
+   cell, so the transparent header above still drew a grey block behind every
+   sortable column and a lighter one behind the sorted column, beside plain
+   columns in the box's own surface. The buttons take no fill either; a hovered
+   one lifts to the hover layer, and the arrow alone says which column sorts. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--table-sort,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--table-sort.rux--table-sort--active {
+  background: transparent;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--table-sort:hover {
+  background: var(--rux-layer-hover-01);
+}
+/* THE TOOLBAR SITS INSIDE THE BOX, as Geist's own controls sit inside a card:
+   12px from every edge and 8px apart, so its 36px controls make a 60px bar.
+   12px is what Geist's Modal and Fieldset footers hold their buttons at, and
+   it is this theme's one inset for a bar of buttons, a footer's included. The
+   search field's ring and the buttons' corners no longer lie on the box's
+   outline, doubling its line and meeting its 8px corners with their 6px
+   ones. The toolbar takes the box's surface rather than a fill of its own. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table-container .rux--table-toolbar {
+  block-size: auto;
+  padding: var(--rux-spacing-04);
+  background-color: transparent;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table-container .rux--toolbar-content {
+  gap: var(--rux-spacing-03);
+}
+/* THE SELECTION BAR STANDS WHERE THE CONTROLS IT COVERS STAND: 12px from the
+   toolbar's edges, on the control's corner. Carbon lays it along the
+   toolbar's lower edge at the controls' height, which in a 60px toolbar left
+   24px of empty bar above a square band. It clips, because the count and
+   each action carry the band's fill as boxes of their own. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table-container .rux--table-toolbar .rux--batch-actions {
+  overflow: hidden;
+  border-radius: 6px;
+  inset-block-end: var(--rux-spacing-04);
+  inset-inline: var(--rux-spacing-04);
+}
+/* ANT'S TOOLBAR STANDS INSIDE THE BOX TOO: 16px from every edge and 8px
+   apart, so its 32px controls make a 64px bar, the height of the foot under
+   the rows. Measured on Ant Design Pro's Search Table page, whose toolbar
+   keeps 16px above and below 32px controls with 8px between them. Flush, the
+   search's 6px corners met the box's 8px ones and its fill ran into the
+   header's. The selection bar takes the same inset, and Carbon's 2px above
+   the box's first child goes as it does for Geist. */
+[data-theme="ant-dark"] .rux--data-table-container {
+  padding-block-start: 0;
+}
+[data-theme="ant-dark"] .rux--data-table-container .rux--table-toolbar {
+  block-size: auto;
+  padding: var(--rux-spacing-05);
+}
+[data-theme="ant-dark"] .rux--data-table-container .rux--toolbar-content {
+  gap: var(--rux-spacing-03);
+}
+[data-theme="ant-dark"] .rux--data-table-container .rux--table-toolbar .rux--batch-actions {
+  overflow: hidden;
+  border-radius: 6px;
+  inset-block-end: var(--rux-spacing-05);
+  inset-inline: var(--rux-spacing-05);
+}
+/* A ghost button in the bar is Geist's outlined button: the secondary's quiet
+   ring on the 1px border a ghost button already carries, as Geist's Modal
+   footer rings Cancel and Previous beside its filled Submit. Under keyboard
+   focus that border is the focus ring's, so the rule steps aside. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--table-toolbar .rux--btn--ghost:not(:disabled):not(.rux--btn--disabled):not(:focus-visible) {
+  border-color: var(--rux-border-subtle-02);
+}
+/* A TABLE'S FOOT IS BUILT AS ITS TOOLBAR IS, in every rounded theme. Carbon's
+   pagination bar is a row of square cells parted by lines, each the bar's
+   full height. A rounded control in one of those cells bends its dividing
+   line into a bracket and meets the bar's edges, and a ringed select lies
+   over the bar's own line. So the lines go and the controls stand inside the
+   bar at their own height, 8px apart, the arrows on the control's 6px corner.
+   The bar's top line goes with them: the last row's rule already parts the
+   two, and inside a table's box the pair drew 2px.
+   The inset is 12px for Geist and Apple, their one inset for a bar of
+   buttons, so the foot is the toolbar's height. It is on the bar's two
+   halves and not the bar, which is the container Carbon's width queries
+   measure: padding there hides the page select 24px sooner. The count then
+   starts under the first column's words. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--pagination {
+  gap: var(--rux-spacing-03);
+  border-block-start: 0;
+  inline-size: 100%;
+  min-block-size: calc(var(--rux-layout-size-height-local) + 2 * var(--rux-spacing-04));
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--pagination :is(.rux--pagination__left, .rux--pagination__right) {
+  gap: var(--rux-spacing-03);
+  padding: 0;
+  border: 0;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--pagination .rux--pagination__left {
+  padding-inline-start: var(--rux-spacing-04);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--pagination .rux--pagination__right {
+  padding-inline-end: var(--rux-spacing-04);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--pagination :is(.rux--pagination__left, .rux--pagination__right) .rux--pagination__text {
+  margin-inline: 0;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--pagination .rux--pagination__control-buttons {
+  gap: var(--rux-spacing-03);
+  margin-inline-start: var(--rux-spacing-03);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--pagination .rux--select--inline .rux--select-input {
+  block-size: var(--rux-layout-size-height-local);
+  padding-inline: 12px 2.25rem;
+  border-inline-end: 0;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--pagination .rux--select__arrow {
+  transform: translate(0, -50%);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--pagination .rux--pagination__button {
+  border: 0;
+  border-radius: 6px;
+}
+/* Ant keeps 16px round its pager, measured on its Table page: a 32px pager
+   with a 16px margin above and below, under the rows. Its arrows are bare,
+   8px apart on the 6px corner, measured on its Pagination page. */
+[data-theme="ant-dark"] .rux--pagination {
+  min-block-size: calc(var(--rux-layout-size-height-local) + 2 * var(--rux-spacing-05));
+}
+[data-theme="ant-dark"] .rux--pagination .rux--pagination__left {
+  padding-inline-start: var(--rux-spacing-05);
+}
+[data-theme="ant-dark"] .rux--pagination .rux--pagination__right {
+  padding-inline-end: var(--rux-spacing-05);
+}
+/* Geist has no pager for rows -- its Pagination page is the previous and next
+   links under an article, and sends a numbered pager elsewhere -- so the
+   arrows are what a plain button is in the toolbar: outlined, with the same
+   quiet ring. A disabled one keeps it under the pointer, where Carbon swaps
+   the border's colour. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--pagination .rux--pagination__button,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--pagination .rux--pagination__button:is(:disabled, .rux--pagination__button--no-index):hover {
+  border: 1px solid var(--rux-border-subtle-02);
+}
+/* A bar that follows a table's box, or the wrapper that holds the box last,
+   closes it: the box's two lower corners square off where they meet. Geist's
+   box is an outline, so the bar there carries the outline round its other
+   three sides, on the box's 8px. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--data-table-container:has(+ .rux--pagination),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :has(+ .rux--pagination) > .rux--data-table-container:last-child {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--data-table-container, :has(> .rux--data-table-container:last-child)) + .rux--pagination {
+  border: 1px solid var(--rux-border-subtle-01);
+  border-block-start: 0;
+  border-end-start-radius: 8px;
+  border-end-end-radius: 8px;
+}
+/* GEIST'S SEGMENTED CONTROL, measured on its Switch page: a box on the
+   surface inside a 1px ring, 6px corners and 4px of padding, holding 28px
+   options with 12px sides and no dividers. An option is secondary text, and
+   the chosen one is primary text on a 4px pill one grey step up. Carbon's
+   switcher instead draws an inverse outline round the group and fills the
+   chosen option with the inverse colour, which in this theme is a white frame
+   with a white slab in it. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher {
+  block-size: auto;
+  padding: var(--rux-spacing-02);
+  border-radius: 6px;
+  outline: 0;
+  box-shadow: inset 0 0 0 1px var(--rux-border-subtle-01);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn:first-child,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn:last-child {
+  block-size: 28px;
+  padding-block: 0;
+  padding-inline: var(--rux-spacing-04);
+  border-block: 0;
+  border-radius: 4px;
+  box-shadow: none;
+  color: var(--rux-text-secondary);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher-btn::before {
+  display: none;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher-btn:hover:not(.rux--content-switcher--selected) {
+  background-color: transparent;
+  color: var(--rux-text-primary);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher .rux--content-switcher-btn.rux--content-switcher--selected {
+  color: var(--rux-text-primary);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher-btn.rux--content-switcher--selected::after {
+  border-radius: 4px;
+  background-color: var(--rux-layer-hover-01);
+}
+/* An icon-only option keeps Carbon's square size and loses the same lines: the
+   group's ring is already drawn by the box. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher--icon-only .rux--content-switcher-btn,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher--icon-only .rux--content-switcher-btn:first-child,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher--icon-only .rux--content-switcher-btn:last-child {
+  border-block: 0;
+  border-radius: 4px;
+  box-shadow: none;
+}
+/* An icon-only option is the same two greys as a worded one. Carbon fills the
+   chosen icon with the inverse colour, for the inverse slab it draws under it;
+   on this theme's grey pill that is a black icon on near-black. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher--icon-only .rux--content-switcher-btn:not([disabled]) svg {
+  fill: var(--rux-icon-secondary);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher--icon-only .rux--content-switcher-btn:not([disabled]):hover svg,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--content-switcher--icon-only .rux--content-switcher-btn.rux--content-switcher--selected:not([disabled]) svg {
+  fill: var(--rux-icon-primary);
+}
+/* ANT'S SEGMENTED CONTROL, measured on its Segmented page in dark: a track
+   with 2px of padding and 6px corners, holding options with 4px corners, 11px
+   sides and no dividers. An option is secondary text; hover lays Ant's
+   secondary fill under it, and the chosen one is primary text on a pill. A
+   disabled option is disabled text, and a disabled chosen one keeps its pill.
+   The large size is 8px and 6px. Ant draws the track in its layout black on a
+   #141414 surface and the pill in #1f1f1f. This theme's page is that black
+   already, where such a track has no edge, so both sit one step up: the track
+   on the surface grey and the pill on #303030, which is also what Ant's hover
+   fill comes to on that track, as its own hover matches its own pill.
+   Carbon's switcher instead draws an inverse outline round the group and
+   fills the chosen option with the inverse colour. The heights stay this
+   theme's own. */
+[data-theme="ant-dark"] .rux--content-switcher {
+  padding: 2px;
+  border-radius: 6px;
+  background-color: var(--rux-layer-01);
+  outline: 0;
+}
+[data-theme="ant-dark"] .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn,
+[data-theme="ant-dark"] .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn:first-child,
+[data-theme="ant-dark"] .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn:last-child {
+  padding-block: 0;
+  padding-inline: 11px;
+  border-block: 0;
+  border-radius: 4px;
+  box-shadow: none;
+}
+[data-theme="ant-dark"] .rux--content-switcher-btn::before {
+  display: none;
+}
+@media (any-hover: hover) {
+  [data-theme="ant-dark"] .rux--content-switcher-btn:hover:not(.rux--content-switcher--selected, :disabled) {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+}
+[data-theme="ant-dark"] .rux--content-switcher-btn:active:not(.rux--content-switcher--selected, :disabled) {
+  background-color: var(--rux-background-active);
+}
+[data-theme="ant-dark"] .rux--content-switcher .rux--content-switcher-btn.rux--content-switcher--selected:not(:disabled) {
+  color: var(--rux-text-primary);
+}
+[data-theme="ant-dark"] .rux--content-switcher-btn.rux--content-switcher--selected::after,
+[data-theme="ant-dark"] .rux--content-switcher .rux--content-switcher-btn.rux--content-switcher--selected:disabled {
+  background-color: var(--rux-layer-active-01);
+}
+/* An icon-only option is a button by class, so it is sized and rounded as one.
+   Here it is an option like the worded ones: as tall as the track allows, and
+   Ant's 36px wide. Its icon is the same two greys as the words. */
+[data-theme="ant-dark"] .rux--content-switcher--icon-only .rux--content-switcher-popover__wrapper .rux--content-switcher-btn {
+  border-block: 0;
+  border-radius: 4px;
+  box-shadow: none;
+  block-size: 100%;
+  min-block-size: 0;
+  inline-size: 2.25rem;
+}
+[data-theme="ant-dark"] .rux--content-switcher--icon-only .rux--content-switcher-btn:not([disabled]) svg {
+  fill: var(--rux-icon-secondary);
+}
+[data-theme="ant-dark"] .rux--content-switcher--icon-only .rux--content-switcher-btn:not([disabled]):hover svg,
+[data-theme="ant-dark"] .rux--content-switcher--icon-only .rux--content-switcher-btn.rux--content-switcher--selected:not([disabled]) svg {
+  fill: var(--rux-icon-primary);
+}
+[data-theme="ant-dark"] .rux--content-switcher--lg {
+  border-radius: 8px;
+}
+[data-theme="ant-dark"] .rux--content-switcher--lg .rux--content-switcher-btn,
+[data-theme="ant-dark"] .rux--content-switcher--lg .rux--content-switcher-btn:first-child,
+[data-theme="ant-dark"] .rux--content-switcher--lg .rux--content-switcher-btn:last-child,
+[data-theme="ant-dark"] .rux--content-switcher--lg .rux--content-switcher-btn::after {
+  border-radius: 6px;
+}
+/* GEIST'S RAISED SURFACES TAKE AN EDGE. Geist is flat by design: every layer
+   above the page is within 1.05 of what it sits on, so a surface is told apart
+   by its border, not its fill. The theme already does this for the modal, which
+   carries a 1px subtle border; the tile, the popover, the menus and the date
+   picker's calendar carried none and so had no visible shape at all — the
+   editor's bus tile was reported invisible. They take the modal's own
+   treatment, at the border level that matches the layer they sit on, as an
+   inset ring so nothing moves. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--tile, .rux--popover-content, .rux--list-box__menu, .rux--menu, .rux--overflow-menu-options, .rux--date-picker__calendar) {
+  box-shadow: inset 0 0 0 1px var(--rux-border-subtle-02);
+}
+/* GEIST'S MENU HOLDS ITS ITEMS OFF ITS EDGE, measured on its Menu page: 6px of
+   padding inside a 12px corner, and each item a 6px pill, so the corners nest.
+   Carbon runs its items to the menu's edge, which in this theme laid a hovered
+   item's fill over the ring on both sides and squared the focus outline against
+   the rounded box. The outline follows the item's corner. The overflow menu is
+   the same surface and takes the same answer. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--menu, .rux--overflow-menu-options) {
+  padding: 6px;
+  border-radius: 12px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--menu-item, .rux--overflow-menu-options__option, .rux--overflow-menu-options__btn) {
+  border-radius: 6px;
+}
+/* An overflow menu's divider is a straight line between two options, 4px
+   clear of each, as the menu's own divider is. Carbon draws it as the top
+   border of the option under it, and on that option's 6px corner the line
+   bends down at both ends. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--overflow-menu--divider {
+  position: relative;
+  border-block-start: 0;
+  margin-block-start: 9px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--overflow-menu--divider::before {
+  position: absolute;
+  border-block-start: 1px solid var(--rux-border-subtle);
+  content: "";
+  inset-block-start: -5px;
+  inset-inline: 0;
+}
+/* A dropdown's or combo box's list is the same surface and takes the same
+   answer. Its options also carry Carbon's rule between them, which Geist's
+   lists do not draw; the pill a hovered or chosen option takes is what parts
+   them. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--list-box__menu {
+  padding: 6px;
+  border-radius: 12px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--list-box__menu-item {
+  border-radius: 6px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--list-box__menu-item__option {
+  border-block-start-color: transparent;
+}
+/* The side panel takes a real border rather than that ring, because its own
+   header and action row paint opaque fills over its top and bottom edges and
+   would cover one. Carbon sizes every box from its border, so the 1px comes
+   out of the panel's width and nothing moves. The modal already carries the
+   same border in this theme. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--side-panel {
+  border: 1px solid var(--rux-border-subtle-01);
+}
+/* And a rule under its title. Carbon draws its header's divider only as the
+   panel scrolls, or always on a header whose title does not animate, and
+   separates a resting one by spacing alone. In geist-dark every other band
+   carries a line, so the absence reads as the one thing someone forgot. The
+   line is Carbon's own divider, shown at rest: a border as well drew two where
+   Carbon already draws one. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--side-panel .rux--side-panel__header::before {
+  opacity: 1;
+}
+/* A BREADCRUMB UNDER 42rem. Carbon lays the list out as a wrapping row only
+   from 42rem up, and gives every item a box of its own at every width; below
+   that the list falls back to `inline` while each item keeps its box, so a
+   two-crumb trail takes two lines in room enough for six. Naming the list at
+   Carbon's own specificity and outside the query lets a trail wrap when it
+   runs out of room rather than stack when it has not. */
+.rux--breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+}
+/* THE ROUNDED THEMES' NOTIFICATIONS. Both draw an alert as a tint of its own
+   hue inside a 1px border, whether or not it carries an action: Ant's as
+   these rules have it, the border in the hue and the text in the page's own
+   ink, and Geist's quieter, in the rules after them. Carbon draws one as an inverse slab with a 3px
+   bar down one side, which on a dark page is the brightest thing on screen. The four tints are the
+   notification-background tokens, set per theme in rux-theme.css; the borders
+   and the glyphs are the support colours each theme already carries. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification {
+  border: 1px solid transparent;
+  color: var(--rux-text-primary);
+}
+/* A toast carries three parts an inline notification does not -- a subtitle, a
+   caption and a close button of its own -- and each names Carbon's inverse ink
+   rather than inheriting the card's, so on a tinted card they draw in black.
+   The container's colour above is what the title reads by. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification__subtitle,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification__caption,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification__subtitle,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification__caption {
+  color: var(--rux-text-primary);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification a {
+  color: var(--rux-link-primary);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification .rux--inline-notification__close-icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification .rux--inline-notification__close-icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification .rux--toast-notification__close-icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification .rux--actionable-notification__close-icon {
+  fill: var(--rux-icon-primary);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--error,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--error,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--error {
+  background: var(--rux-notification-background-error);
+  border-color: var(--rux-support-error);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--error .rux--inline-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--error .rux--toast-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--error :is(.rux--inline-notification__icon, .rux--toast-notification__icon, .rux--actionable-notification__icon) {
+  fill: var(--rux-support-error);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--success,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--success,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--success {
+  background: var(--rux-notification-background-success);
+  border-color: var(--rux-support-success);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--success .rux--inline-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--success .rux--toast-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--success :is(.rux--inline-notification__icon, .rux--toast-notification__icon, .rux--actionable-notification__icon) {
+  fill: var(--rux-support-success);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--info,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--info-square,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--info,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--info-square,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--info,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--info-square {
+  background: var(--rux-notification-background-info);
+  border-color: var(--rux-support-info);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--info .rux--inline-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--info-square .rux--inline-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--info .rux--toast-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--info-square .rux--toast-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--info :is(.rux--inline-notification__icon, .rux--toast-notification__icon, .rux--actionable-notification__icon),
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--info-square :is(.rux--inline-notification__icon, .rux--toast-notification__icon, .rux--actionable-notification__icon) {
+  fill: var(--rux-support-info);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--warning,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--warning-alt,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--warning,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--warning-alt,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--warning,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--warning-alt {
+  background: var(--rux-notification-background-warning);
+  border-color: var(--rux-support-warning);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--warning .rux--inline-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--inline-notification--warning-alt .rux--inline-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--warning .rux--toast-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--toast-notification--warning-alt .rux--toast-notification__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--warning :is(.rux--inline-notification__icon, .rux--toast-notification__icon, .rux--actionable-notification__icon),
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification--warning-alt :is(.rux--inline-notification__icon, .rux--toast-notification__icon, .rux--actionable-notification__icon) {
+  fill: var(--rux-support-warning);
+}
+/* GEIST'S NOTE IS QUIETER THAN ANT'S ALERT, measured on its Note page: 6px
+   corners, a border that is a dark step of the note's own hue -- #5b3000
+   round a warning whose words are #ff9300 -- and the words in the hue rather
+   than the page's ink. 30% of the support colour over the tint lands within
+   a shade of each of Geist's borders, and the support colour reads on its
+   tint at 4.72 to 1 at worst, the error's. A toast's and an actionable
+   notification's subtitle and caption name their own ink, so they are named
+   here too. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--inline-notification, .rux--toast-notification, .rux--actionable-notification) {
+  border-radius: 6px;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--inline-notification--error, .rux--toast-notification--error, .rux--actionable-notification--error) {
+  border-color: color-mix(in srgb, var(--rux-support-error) 30%, var(--rux-notification-background-error));
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--inline-notification--error, .rux--toast-notification--error, .rux--actionable-notification--error),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--toast-notification--error, .rux--actionable-notification--error) :is(.rux--toast-notification__subtitle, .rux--toast-notification__caption, .rux--actionable-notification__subtitle, .rux--actionable-notification__caption) {
+  color: var(--rux-support-error);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--inline-notification--success, .rux--toast-notification--success, .rux--actionable-notification--success) {
+  border-color: color-mix(in srgb, var(--rux-support-success) 30%, var(--rux-notification-background-success));
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--inline-notification--success, .rux--toast-notification--success, .rux--actionable-notification--success),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--toast-notification--success, .rux--actionable-notification--success) :is(.rux--toast-notification__subtitle, .rux--toast-notification__caption, .rux--actionable-notification__subtitle, .rux--actionable-notification__caption) {
+  color: var(--rux-support-success);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--inline-notification--info, .rux--inline-notification--info-square, .rux--toast-notification--info, .rux--toast-notification--info-square, .rux--actionable-notification--info, .rux--actionable-notification--info-square) {
+  border-color: color-mix(in srgb, var(--rux-support-info) 30%, var(--rux-notification-background-info));
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--inline-notification--info, .rux--inline-notification--info-square, .rux--toast-notification--info, .rux--toast-notification--info-square, .rux--actionable-notification--info, .rux--actionable-notification--info-square),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--toast-notification--info, .rux--toast-notification--info-square, .rux--actionable-notification--info, .rux--actionable-notification--info-square) :is(.rux--toast-notification__subtitle, .rux--toast-notification__caption, .rux--actionable-notification__subtitle, .rux--actionable-notification__caption) {
+  color: var(--rux-support-info);
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) :is(.rux--inline-notification--warning, .rux--inline-notification--warning-alt, .rux--toast-notification--warning, .rux--toast-notification--warning-alt, .rux--actionable-notification--warning, .rux--actionable-notification--warning-alt) {
+  border-color: color-mix(in srgb, var(--rux-support-warning) 30%, var(--rux-notification-background-warning));
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--inline-notification--warning, .rux--inline-notification--warning-alt, .rux--toast-notification--warning, .rux--toast-notification--warning-alt, .rux--actionable-notification--warning, .rux--actionable-notification--warning-alt),
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) :is(.rux--toast-notification--warning, .rux--toast-notification--warning-alt, .rux--actionable-notification--warning, .rux--actionable-notification--warning-alt) :is(.rux--toast-notification__subtitle, .rux--toast-notification__caption, .rux--actionable-notification__subtitle, .rux--actionable-notification__caption) {
+  color: var(--rux-support-warning);
+}
+/* A notification's action is each system's own small button, not Carbon's
+   link-coloured text. Geist's Note page puts a small solid button in the
+   note, its primary fill under dark text; Rux Dark outlines it in the note's
+   own hue, in the rules after these; Ant's Alert page puts a small text
+   button in the alert's own ink, with the hover and pressed fills of
+   `colorBgTextHover` and `colorBgTextActive`, which are this theme's
+   background-hover and background-active. On a tint, the ring is the page's
+   focus colour rather than Carbon's inverse one. */
+[data-theme="geist-dark"] .rux--actionable-notification .rux--actionable-notification__action-button.rux--btn--ghost:not(:disabled):not(.rux--btn--disabled) {
+  background-color: var(--rux-button-primary);
+  color: var(--rux-text-on-color);
+}
+/* Carbon sets its text action against the notification's end, where a word
+   needs no room. A solid button there touches the border, so it stands in
+   from the end by the 8px it already keeps above and below. A toast lays its
+   button under its words and keeps Carbon's own. */
+:is([data-theme="geist-dark"], [data-theme="rux-dark"]) .rux--actionable-notification:not(.rux--actionable-notification--toast) .rux--actionable-notification__action-button.rux--btn--ghost {
+  margin-inline-end: var(--rux-spacing-03);
+}
+[data-theme="geist-dark"] .rux--actionable-notification .rux--actionable-notification__action-button.rux--btn--ghost:not(:disabled):not(.rux--btn--disabled):hover {
+  background-color: var(--rux-button-primary-hover);
+}
+[data-theme="geist-dark"] .rux--actionable-notification .rux--actionable-notification__action-button.rux--btn--ghost:not(:disabled):not(.rux--btn--disabled):active {
+  background-color: var(--rux-button-primary-active);
+}
+/* RUX DARK OUTLINES A NOTIFICATION'S ACTION IN THE NOTIFICATION'S OWN HUE:
+   its ring and its words take the colour the notice's words already are,
+   the ring at 45% of it over the tint, so the notice reads as one object and
+   its button does not outshout its words. Pressed, it fills with a wash of
+   that hue. A toast's tertiary action is drawn the same as an inline
+   notice's ghost one, and its focus ring is the border, as Rux Dark's
+   other rings are. */
+[data-theme="rux-dark"] .rux--actionable-notification .rux--actionable-notification__action-button:is(.rux--btn--ghost, .rux--btn--tertiary):not(:disabled):not(.rux--btn--disabled) {
+  border-color: color-mix(in srgb, currentColor 45%, transparent);
+  background-color: transparent;
+  color: inherit;
+}
+[data-theme="rux-dark"] .rux--actionable-notification .rux--actionable-notification__action-button:is(.rux--btn--ghost, .rux--btn--tertiary):not(:disabled):not(.rux--btn--disabled):hover {
+  background-color: color-mix(in srgb, currentColor 14%, transparent);
+}
+[data-theme="rux-dark"] .rux--actionable-notification .rux--actionable-notification__action-button:is(.rux--btn--ghost, .rux--btn--tertiary):not(:disabled):not(.rux--btn--disabled):active {
+  background-color: color-mix(in srgb, currentColor 24%, transparent);
+}
+[data-theme="rux-dark"] .rux--actionable-notification .rux--actionable-notification__action-button:is(.rux--btn--ghost, .rux--btn--tertiary):not(:disabled):not(.rux--btn--disabled):focus-visible {
+  border-color: var(--rux-focus);
+  box-shadow: inset 0 0 0 1px var(--rux-focus);
+}
+[data-theme="ant-dark"] .rux--actionable-notification .rux--actionable-notification__action-button.rux--btn--ghost:not(:disabled):not(.rux--btn--disabled) {
+  color: var(--rux-text-primary);
+}
+[data-theme="ant-dark"] .rux--actionable-notification .rux--actionable-notification__action-button.rux--btn--ghost:not(:disabled):not(.rux--btn--disabled):hover {
+  background-color: var(--rux-background-hover);
+}
+[data-theme="ant-dark"] .rux--actionable-notification .rux--actionable-notification__action-button.rux--btn--ghost:not(:disabled):not(.rux--btn--disabled):active {
+  background-color: var(--rux-background-active);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--actionable-notification .rux--actionable-notification__action-button.rux--btn--ghost:focus-visible {
+  outline-color: var(--rux-focus);
+}
+/* A button that fills its bar edge to edge is that bar's edge, so it stays
+   square, and where it sits in a rounded corner it takes that corner's
+   curve: the header's actions, the side panel's back and close buttons and
+   action row, and a modal's close and footer. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--header__action,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--side-panel__navigation-back-button,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme^="apple-"]) .rux--side-panel__close-button,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set__action-button,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme^="apple-"]) .rux--modal-close-button,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer .rux--btn {
+  border-radius: 0;
+}
+/* A close button in a rounded corner takes that corner's curve, so neither its
+   hover fill nor its inset focus ring draws a square inside the curve, and a
+   side panel's back button, in the corner opposite, takes that one. A
+   notification's sits in the top corner only; it is 48px tall in a taller
+   surface, so its lower corners stay square. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme^="apple-"]) .rux--side-panel__close-button,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme^="apple-"]) .rux--modal-close-button {
+  border-start-end-radius: 12px;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--side-panel__navigation-back-button {
+  border-start-start-radius: 12px;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme^="apple-"]) .rux--inline-notification__close-button,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme^="apple-"]) .rux--toast-notification__close-button {
+  border-start-end-radius: 8px;
+}
+/* RUX-DARK'S MODAL AND DIALOG KEEP THEIR CLOSE BUTTON CLEAR OF THE CORNER
+   AND RING IT. It stands 12px in at the theme's 36px control size with the
+   6px corners its other buttons have, in the border a button has, so it
+   fills the 48px Carbon keeps for it at the header's end and the title
+   starts where it did. The border is the 1px the other rings are, so the
+   focus ring, which is that border, takes an inset line to stay Carbon's
+   2px. */
+[data-theme="rux-dark"] :is(.rux--modal-close-button, .rux--dialog__header-controls) {
+  inset-block-start: var(--rux-spacing-04);
+  inset-inline-end: var(--rux-spacing-04);
+  border-radius: 6px;
+}
+[data-theme="rux-dark"] :is(.rux--modal-close, .rux--dialog__close) {
+  padding: 7px;
+  border: 1px solid var(--rux-border-subtle-02);
+  border-radius: 6px;
+  block-size: 2.25rem;
+  inline-size: 2.25rem;
+}
+[data-theme="rux-dark"] :is(.rux--modal-close, .rux--dialog__close):focus-visible {
+  border-color: var(--rux-focus);
+  box-shadow: inset 0 0 0 1px var(--rux-focus);
+}
+/* ITS SIDE PANEL'S CLOSE BUTTON STANDS THE SAME 12px CLEAR, RINGED, and is
+   32px whichever size class a page gives it, which leaves 4px before the
+   48px the title keeps clear at its end. Carbon sizes the button by three
+   classes, so these rules name the panel and the button's two. */
+[data-theme="rux-dark"] .rux--side-panel__decorator-and-close {
+  inset-block-start: var(--rux-spacing-04);
+  inset-inline-end: var(--rux-spacing-04);
+}
+[data-theme="rux-dark"] .rux--side-panel .rux--btn.rux--side-panel__close-button {
+  border-radius: 6px;
+  block-size: 2rem;
+  inline-size: 2rem;
+}
+[data-theme="rux-dark"] .rux--side-panel .rux--btn.rux--side-panel__close-button:not(:focus) {
+  border-color: var(--rux-border-subtle-02);
+}
+/* A NOTIFICATION'S IS A RINGED 32px BUTTON 8px IN ON EVERY SIDE, which is
+   the 48px square Carbon gives it, so the words beside it wrap where they
+   did. A toast keeps the free margin that sets its button at the far end.
+   The ring and the cross are the notification's hue, as its action is, and
+   a press washes it with that hue. Carbon draws the focus ring as an
+   outline inside the button, so the border takes the focus colour with it. */
+[data-theme="rux-dark"] :is(.rux--inline-notification__close-button, .rux--toast-notification__close-button, .rux--actionable-notification__close-button) {
+  margin: var(--rux-spacing-03);
+  border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+  color: inherit;
+  border-radius: 6px;
+  block-size: 2rem;
+  inline-size: 2rem;
+  min-block-size: 2rem;
+  min-inline-size: 2rem;
+  max-inline-size: 2rem;
+}
+[data-theme="rux-dark"] .rux--toast-notification__close-button {
+  margin-inline-start: auto;
+}
+[data-theme="rux-dark"] :is(.rux--inline-notification__close-button, .rux--toast-notification__close-button, .rux--actionable-notification__close-button):focus-visible {
+  border-color: var(--rux-focus);
+}
+[data-theme="rux-dark"] :is(.rux--inline-notification__close-button, .rux--toast-notification__close-button, .rux--actionable-notification__close-button):hover {
+  background-color: color-mix(in srgb, currentColor 14%, transparent);
+}
+[data-theme="rux-dark"] :is(.rux--inline-notification, .rux--toast-notification, .rux--actionable-notification) :is(.rux--inline-notification__close-icon, .rux--toast-notification__close-icon, .rux--actionable-notification__close-icon) {
+  fill: currentColor;
+}
+/* A GUIDE BANNER AND A COACHMARK ARE SURFACES WITH AN INK OF THEIR OWN, a
+   colour or the inverse of the page, where the grey ring would read as dirt:
+   their close button is ringed in that ink at 30%, which stands about as
+   far off its surface as the grey ring does off a panel. The banner's
+   stands 8px clear at its 32px, without the 6px Carbon pads its top by,
+   which set the glyph low in the ring. A coachmark's head is 32px tall and its
+   tagline 36px, so their button is 24px, 4px in, and neither grows; the
+   handle a floating coachmark is dragged by is a grip, not a button to
+   ring. Carbon holds the tagline's border clear and its button at the far
+   end with `!important`, so those two declarations answer in kind. */
+[data-theme="rux-dark"] .rux--guidebanner__close-button {
+  inset-block-start: var(--rux-spacing-03);
+  inset-inline-end: var(--rux-spacing-03);
+}
+[data-theme="rux-dark"] .rux--guidebanner__close-button .rux--btn {
+  padding-block-start: 0;
+}
+[data-theme="rux-dark"] .rux--guidebanner__close-button .rux--btn:not(:focus) {
+  border-color: color-mix(in srgb, currentColor 30%, transparent);
+}
+[data-theme="rux-dark"] .rux--coachmark--content-header .rux--btn--icon-only:not(.rux--coachmark--content-header--drag-icon) {
+  margin: var(--rux-spacing-02);
+  block-size: 1.5rem;
+  inline-size: 1.5rem;
+  min-block-size: 1.5rem;
+}
+[data-theme="rux-dark"] .rux--coachmark--content-header .rux--btn--icon-only:not(.rux--coachmark--content-header--drag-icon, :focus) {
+  border-color: color-mix(in srgb, var(--rux-icon-inverse) 30%, transparent);
+}
+[data-theme="rux-dark"] .rux--coachmark-tagline--close-btn-container {
+  display: grid;
+  place-items: center;
+  align-self: center;
+}
+[data-theme="rux-dark"] .rux--coachmark-tagline--close-btn {
+  margin-inline-start: 0 !important;
+  border-radius: 6px;
+  block-size: 1.5rem;
+  inline-size: 1.5rem;
+  min-block-size: 1.5rem;
+}
+[data-theme="rux-dark"] .rux--coachmark-tagline--close-btn:not(:focus-visible) {
+  border-color: color-mix(in srgb, currentColor 30%, transparent) !important;
+}
+/* The side panel's header and action row paint their own fill over the
+   panel's corners, so they take its curve too. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--side-panel__header {
+  border-start-start-radius: 12px;
+  border-start-end-radius: 12px;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--side-panel__actions-container {
+  border-end-start-radius: 12px;
+  border-end-end-radius: 12px;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set__action-button:first-child,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer .rux--btn:first-child {
+  border-end-start-radius: 12px;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set__action-button:last-child,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer .rux--btn:last-child {
+  border-end-end-radius: 12px;
+}
+
+/* GEIST AND ANT END A SURFACE WITH BUTTONS, NOT WITH A BAND. Carbon fills the
+   last 64px of a side panel or a modal with its buttons, edge to edge and
+   divided between them by a flex basis, which is why the rules above make them
+   square and lend them the surface's corner. Geist puts ordinary buttons
+   with 6px corners inside the surface, over a transparent footer: its Sheet
+   gathers them at the end 8px apart, and its Modal sends Cancel to the start
+   and the action to the end, 12px from every edge. Ant's Modal page gathers
+   its buttons at the end of a transparent footer, 8px apart, at the control's
+   own height. Both themes take the gathered arrangement for every surface,
+   and geist-dark Geist's 12px. The two rounded themes
+   leave; every other theme keeps the band, so the rules above stand and the
+   corner is taken back here rather than the selector list being written twice.
+   The Dialog primitive's footer is the same band under another name and ends
+   the same way; its buttons were never squared, so only the layout names it.
+
+   A GRID, SO NO FLEX BASIS HAS TO BE OUTWEIGHED. Carbon divides the bar with
+   ten flex-basis rules, one per button count and size, the heaviest naming six
+   classes; a rule beating that would be aimed at the wrong selector. Laying
+   the footer out as a grid instead leaves every one of them inert, because
+   `flex` means nothing to a grid item, and a column track takes its button's
+   own width. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--dialog-footer {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  justify-content: end;
+  gap: var(--rux-spacing-03);
+  padding: var(--rux-spacing-05);
+  background-color: transparent;
+  block-size: auto;
+}
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer,
+:is([data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--dialog-footer {
+  padding: var(--rux-spacing-04);
+}
+/* The height is `md`, read through Carbon's own size variable rather than a
+   number, because it is the height of every field, toolbar button and menu
+   row in these apps and a footer is no reason for a third size. Carbon pads a
+   footer button's block to push its label to the top of a 64px block. A side
+   panel names its own button twice to set that height, so this names the panel
+   to meet it rather than doubling a class. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set .rux--action-set__action-button,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--side-panel .rux--side-panel__actions-container .rux--action-set__action-button,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer .rux--btn,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--dialog-footer .rux--btn {
+  align-items: center;
+  /* `btn-set` hands a button the whole bar, which is the band's idea of a
+     button; in a column that takes the free space it would fill that too. */
+  inline-size: max-content;
+  block-size: var(--rux-layout-size-height-md);
+  min-block-size: var(--rux-layout-size-height-md);
+  padding-block: 0;
+}
+/* The corner comes back on the two buttons the rules above lend the surface's
+   own, which name a child and so outrank a plain radius here. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set .rux--action-set__action-button,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set .rux--action-set__action-button:first-child,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set .rux--action-set__action-button:last-child,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer .rux--btn,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer .rux--btn:first-child,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer .rux--btn:last-child {
+  border-radius: 6px;
+}
+/* Carbon pads a footer button's trailing edge for an icon and its leading edge
+   for a ghost; at its own width either reads as a label pushed off centre. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set .rux--action-set__action-button,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set .rux--action-set__action-button--ghost,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer .rux--btn:not(.rux--skeleton),
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--dialog-footer .rux--btn:not(.rux--skeleton) {
+  padding-inline: var(--rux-spacing-05);
+}
+/* An icon in a footer button follows its label rather than covering it.
+   Carbon places the icon absolutely in the trailing padding the rule above
+   takes back, so at the button's own width it would sit on the words. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set .rux--action-set__action-button .rux--btn__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer .rux--btn .rux--btn__icon,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--dialog-footer .rux--btn .rux--btn__icon {
+  position: static;
+  margin-block-start: 0;
+  margin-inline-start: var(--rux-spacing-03);
+}
+/* Three or more, and the first stands away from the rest: the trip editor's
+   Cancel trip is destructive where Reset and Save are the safe pair, so a
+   reach for Save never crosses it. Two sit together at the end. The first
+   column takes the free space and its button sits at the column's start,
+   because a grid packed to the end leaves no space for an auto margin. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set:has(> :nth-child(3)),
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer:has(> :nth-child(3)),
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--dialog-footer:has(> :nth-child(3)) {
+  grid-template-columns: 1fr;
+  grid-auto-columns: max-content;
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--action-set:has(> :nth-child(3)) > :first-child,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--modal-footer:has(> :nth-child(3)) > :first-child,
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--dialog-footer:has(> :nth-child(3)) > :first-child {
+  justify-self: start;
+}
+/* A button set on a page is the same buttons, the same 8px apart. Carbon
+   joins a set edge to edge and rules a 1px line between two square buttons;
+   rounded ones touching read as one broken shape, and the line has nothing
+   left to divide. Stacked on a phone the gap runs down instead. */
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--btn-set {
+  gap: var(--rux-spacing-03);
+}
+:is([data-theme="ant-dark"], [data-theme="geist-dark"], [data-theme="rux-dark"], [data-theme^="apple-"]) .rux--btn-set .rux--btn:not(:focus-visible) {
+  box-shadow: none;
+}
+
+/* A TABLE TOOLBAR IS 40px. Carbon draws it at 48 -- its default is large,
+   and it redefines md inside the bar as 3rem, so the bar comes in 32 and 48
+   and nothing between -- while every other control's default is 40px, and a
+   page whose own bars are 40px had its table's bar alone at 48. Here md means
+   md and is the bar's default; its search and select take md to match. A
+   layout class above the bar still picks another size. */
+.rux--table-toolbar {
+  --rux-layout-size-height-md: 2.5rem;
+  --rux-layout-size-height-local: clamp(max(var(--rux-layout-size-height-min), var(--rux-layout-size-height-xs)), var(--rux-layout-size-height, var(--rux-layout-size-height-md)), min(var(--rux-layout-size-height-max), var(--rux-layout-size-height-lg)));
+}
+
+/* What sits in the bar takes the bar's size. A button's own default is large,
+   so the batch actions stood 48px in a 40px bar and hung 4px past it above
+   and below. The bar's two boxes hand its size down as the size chosen above,
+   which a layout class on a button inside still overrides. */
+.rux--table-toolbar > :is(.rux--batch-actions, .rux--toolbar-content) {
+  --rux-layout-size-height: var(--rux-layout-size-height-local);
+}
+/* A ROW'S ACTIONS ARE A COLUMN AS WIDE AS THEIR BUTTON. Carbon leaves the
+   column to the table's own arithmetic, which shares spare width with it, so
+   in a table of two or three columns the button stood in the middle of an
+   empty band a quarter of the table wide. No width means the least the cell
+   can be: the button and Carbon's 16px either side, at the table's end. */
+.rux--data-table td.rux--table-column-menu {
+  inline-size: 0;
+}
+
+/* AN INLINE SELECT IN A TABLE TOOLBAR STARTS ITS TEXT 16px IN, as the
+   persistent search's magnifier and a button's label do, so the band keeps one
+   inset. Carbon's inline select starts at 8px, which suits the pagination bar
+   it was drawn for -- and there Carbon itself moves it to 16px with this same
+   three-class selector -- but reads as crowded against the search in a band. */
+.rux--table-toolbar .rux--select--inline .rux--select-input {
+  padding-inline-start: var(--rux-spacing-05);
+}
+/* Its form item keeps the select's own width. A form item grows and shrinks
+   by default, and in the band the search beside it takes the room first, so
+   the select would narrow to its first letter. */
+.rux--table-toolbar .rux--form-item:has(> .rux--select--inline) {
+  flex: none;
+}
+
+/* A CLICKABLE TILE'S SECOND LINE IS SECONDARY TEXT. A tile that names a place
+   and says a few words about it sets both lines in the primary colour, so only
+   size parts a 20px name from its 14px line; supporting copy is secondary text
+   in Carbon's own convention, and it costs no weight and no space. The site's
+   home page and Design's draw their tiles this way. */
+.rux--tile--clickable .rux--type-body-01 {
+  color: var(--rux-text-secondary);
+}
+
+/* THE APPLE THEMES' OWN SHAPES, each from a measurement in
+   docs/apple-token-map.md. apple-light and apple-dark are one set of shapes
+   on two sets of colours, so a rule here names both as `apple-` and reads
+   its colours from tokens. The rounded themes' shared rules above already
+   name them; these are where a Mac differs.
+
+   - The face is the device's own system face, San Francisco on a Mac and an
+     iPhone, so no file is fetched. Carbon's 0.16px and 0.32px of tracking
+     are Plex's optical corrections and go.
+   - Apple's emphasis is bold and nothing of Apple's is light: its Headline
+     style is the body size in bold, and every title is regular. So each
+     style Carbon sets at 600 is 700 here, and each it sets at 300 is 400.
+   - A control 28px tall or more is a capsule on a Mac, and every button here
+     is 32px or more, so a button's corner is half its height.
+   - A field is its own fill inside a 1px line, which is border-subtle-02
+     here. The line is an inset shadow, so nothing moves.
+   - A push button is the secondary fill under the label colour, so the
+     secondary and tertiary buttons write their words in the text colour,
+     where Carbon writes a filled button's in text-on-color. */
+[data-theme^="apple-"] {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  --rux-display-02-font-weight: 700;
+  --rux-expressive-heading-01-font-weight: 700;
+  --rux-expressive-heading-02-font-weight: 700;
+  --rux-expressive-heading-06-font-weight: 700;
+  --rux-fluid-display-02-font-weight: 700;
+  --rux-fluid-heading-06-font-weight: 700;
+  --rux-heading-01-font-weight: 700;
+  --rux-heading-02-font-weight: 700;
+  --rux-heading-compact-01-font-weight: 700;
+  --rux-heading-compact-02-font-weight: 700;
+  --rux-productive-heading-01-font-weight: 700;
+  --rux-productive-heading-02-font-weight: 700;
+  --rux-display-01-font-weight: 400;
+  --rux-display-03-font-weight: 400;
+  --rux-display-04-font-weight: 400;
+  --rux-expressive-paragraph-01-font-weight: 400;
+  --rux-fluid-display-01-font-weight: 400;
+  --rux-fluid-display-03-font-weight: 400;
+  --rux-fluid-display-04-font-weight: 400;
+  --rux-fluid-paragraph-01-font-weight: 400;
+  --rux-fluid-quotation-02-font-weight: 400;
+  --rux-heading-06-font-weight: 400;
+  --rux-heading-07-font-weight: 400;
+  --rux-productive-heading-06-font-weight: 400;
+  --rux-productive-heading-07-font-weight: 400;
+  --rux-quotation-02-font-weight: 400;
+  --rux-body-01-letter-spacing: 0;
+  --rux-body-compact-01-letter-spacing: 0;
+  --rux-body-long-01-letter-spacing: 0;
+  --rux-body-short-01-letter-spacing: 0;
+  --rux-caption-01-letter-spacing: 0;
+  --rux-caption-02-letter-spacing: 0;
+  --rux-code-01-letter-spacing: 0;
+  --rux-code-02-letter-spacing: 0;
+  --rux-helper-text-01-letter-spacing: 0;
+  --rux-helper-text-02-letter-spacing: 0;
+  --rux-label-01-letter-spacing: 0;
+  --rux-label-02-letter-spacing: 0;
+  --rux-legal-01-letter-spacing: 0;
+  --rux-legal-02-letter-spacing: 0;
+  --rux-code-01-font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  --rux-code-02-font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+[data-theme^="apple-"] body,
+[data-theme^="apple-"] :is(input[type=number], input[type=text].rux--number, .rux--number input, .rux--content-switcher-btn, .rux--snippet .rux--popover-container, .rux--snippet-btn--expand, .rux--type-sans, .rux--date-picker__input, .rux--time-picker__input-field) {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+}
+[data-theme^="apple-"] :is(code, .rux--type-mono) {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+[data-theme^="apple-"] :is(.rux--date-picker__input, .rux--time-picker__input-field) {
+  font-variant-numeric: tabular-nums;
+}
+[data-theme^="apple-"] .rux--btn:not(.rux--header__action, .rux--modal-close-button, .rux--side-panel__close-button, .rux--side-panel__navigation-back-button) {
+  border-radius: 999px;
+}
+[data-theme^="apple-"] :is(.rux--text-input, .rux--text-area, .rux--select-input, .rux--date-picker__input, .rux--search-input, .rux--list-box, .rux--dropdown),
+[data-theme^="apple-"] .rux--number :is(input[type=number], input[type=text]) {
+  box-shadow: inset 0 0 0 1px var(--rux-border-subtle-02);
+}
+[data-theme^="apple-"] :is(.rux--btn--secondary, .rux--btn--tertiary):not(:disabled):not(.rux--btn--disabled),
+[data-theme^="apple-"] :is(.rux--btn--secondary, .rux--btn--tertiary):hover:not(:disabled):not(.rux--btn--disabled),
+[data-theme^="apple-"] :is(.rux--btn--secondary, .rux--btn--tertiary):focus-visible:not(:disabled):not(.rux--btn--disabled) {
+  color: var(--rux-text-primary);
+}
+[data-theme^="apple-"] .rux--btn--tertiary:not(:disabled):not(.rux--btn--disabled) {
+  border-color: transparent;
+  background-color: var(--rux-button-secondary);
+}
+[data-theme^="apple-"] .rux--btn--tertiary:not(:disabled):not(.rux--btn--disabled):hover {
+  background-color: var(--rux-button-secondary-hover);
+}
+/* Disabled, it is still that push button: the disabled fill under the
+   disabled label, as the secondary beside it turns. Carbon rings a disabled
+   tertiary and empties it, so one button was a fill at work and an outline
+   at rest. */
+[data-theme^="apple-"] .rux--btn--tertiary:is(:disabled, .rux--btn--disabled),
+[data-theme^="apple-"] .rux--btn--tertiary:is(:disabled, .rux--btn--disabled):hover {
+  border-color: transparent;
+  background-color: var(--rux-button-disabled);
+  color: var(--rux-text-on-color-disabled);
+}
+/* A button holds its label in the middle, 18px from each side at this
+   height: a 36px push button on a Mac measures 78px round "Cancel". Carbon
+   sets the label at the start and keeps 64px at the end for an icon. Its 1px
+   border is inside the padding, so each side is a pixel less. */
+[data-theme^="apple-"] .rux--btn:not(.rux--btn--icon-only) {
+  padding-inline: 17px;
+  justify-content: center;
+  text-align: center;
+}
+/* A footer's buttons are capsules too. The rounded themes' shared rules give
+   the first and the last a 6px corner by name, so they are named here. */
+[data-theme^="apple-"] .rux--action-set .rux--action-set__action-button,
+[data-theme^="apple-"] .rux--action-set .rux--action-set__action-button:first-child,
+[data-theme^="apple-"] .rux--action-set .rux--action-set__action-button:last-child,
+[data-theme^="apple-"] .rux--modal-footer .rux--btn,
+[data-theme^="apple-"] .rux--modal-footer .rux--btn:first-child,
+[data-theme^="apple-"] .rux--modal-footer .rux--btn:last-child {
+  border-radius: 999px;
+}
+/* A plain button in a table's bar is the grey push button, where geist-dark
+   rings it. */
+[data-theme^="apple-"] .rux--table-toolbar .rux--btn--ghost:not(:disabled):not(.rux--btn--disabled):not(:focus-visible) {
+  background-color: var(--rux-button-secondary);
+  color: var(--rux-text-primary);
+}
+/* A SELECT IS A POP-UP BUTTON, and on a Mac a pop-up button is the push
+   button's own shape: one height, one corner and the same grey fill, in
+   docs/apple-token-map.md. So a select, a dropdown and a multi-select that is
+   not typed into are that capsule, with no line, in a form and in a table's
+   bar and foot alike, and a page holds two kinds of control: a lined field
+   to type in and a grey button to press. A combo box is typed into and stays
+   a field. A fluid one keeps the tall box its label sits inside. */
+[data-theme^="apple-"] :is(.rux--select:not(.rux--select--fluid, .rux--select--fluid *), .rux--pagination .rux--select--inline) .rux--select-input,
+[data-theme^="apple-"] :is(.rux--dropdown, .rux--multi-select:not(.rux--multi-select--filterable)):not(.rux--list-box__wrapper--fluid *) {
+  border-radius: 999px;
+  background-color: var(--rux-button-secondary);
+  box-shadow: none;
+}
+[data-theme^="apple-"] :is(.rux--select:not(.rux--select--fluid, .rux--select--fluid *), .rux--pagination .rux--select--inline) .rux--select-input:is(:hover, :focus-visible),
+[data-theme^="apple-"] :is(.rux--dropdown, .rux--multi-select:not(.rux--multi-select--filterable)):not(.rux--list-box__wrapper--fluid *):hover {
+  background-color: var(--rux-button-secondary-hover);
+}
+[data-theme^="apple-"] :is(.rux--select:not(.rux--select--fluid, .rux--select--fluid *), .rux--pagination .rux--select--inline) .rux--select-input[disabled],
+[data-theme^="apple-"] :is(.rux--dropdown, .rux--multi-select:not(.rux--multi-select--filterable)):not(.rux--list-box__wrapper--fluid *):is(.rux--list-box--disabled, .rux--dropdown--disabled) {
+  background-color: var(--rux-button-disabled);
+}
+/* The dropdown's button fills its capsule, so its focus ring is the capsule's. */
+[data-theme^="apple-"] :is(.rux--dropdown, .rux--multi-select:not(.rux--multi-select--filterable)):not(.rux--list-box__wrapper--fluid *) .rux--list-box__field {
+  border-radius: inherit;
+}
+/* The search that opens from its magnifier is, closed, a button too: the
+   grey circle the overflow button beside it is. */
+[data-theme^="apple-"] .rux--toolbar-search-container-expandable:not(.rux--toolbar-search-container-active) {
+  background-color: var(--rux-button-secondary);
+}
+[data-theme^="apple-"] .rux--toolbar-search-container-expandable:not(.rux--toolbar-search-container-active):hover {
+  background-color: var(--rux-button-secondary-hover);
+}
+/* A SEARCH'S CLEAR BUTTON IS ROUND, as the capsule's end it stands in is.
+   Carbon fills the square button under the pointer, and inside a focused
+   field fills a rectangle 2px in from the ring; both drew a square corner
+   over the field's round end. */
+[data-theme^="apple-"] .rux--search-close {
+  border-radius: 50%;
+}
+[data-theme^="apple-"] .rux--search-input:focus-visible ~ .rux--search-close:hover::after {
+  border-radius: 999px;
+}
+/* The selection bar is a capsule, as the controls it covers are. */
+[data-theme^="apple-"] .rux--data-table-container .rux--table-toolbar .rux--batch-actions {
+  border-radius: 999px;
+}
+/* A field's corner is 10px at this height, measured on the Mac's text field
+   at its largest size, and the search field is a capsule. */
+[data-theme^="apple-"] :is(.rux--text-input, .rux--text-area, .rux--select-input, .rux--date-picker__input, .rux--list-box, .rux--dropdown),
+[data-theme^="apple-"] .rux--number :is(input[type=number], input[type=text]) {
+  border-radius: 10px;
+}
+[data-theme^="apple-"] :is(.rux--search-input, .rux--search) {
+  border-radius: 999px;
+}
+/* A TILE'S CORNER IS 12px, a step over the 10px of the field it holds: a
+   corner grows with the box, and the rounded themes' shared 8px left this
+   theme's tile tighter than its own fields. Not a measurement; the next step
+   up, which is the side panel's and the modal's. */
+[data-theme^="apple-"] .rux--tile {
+  border-radius: 12px;
+}
+/* A DAY IN THE CALENDAR IS A CIRCLE, 36px in its 40px row, so its hover, its
+   focus ring and the picked day's fill are all round. Carbon's day is the
+   whole cell, which is not square, so the circle is given its own size and
+   centred. A range is one capsule instead: its two ends and the days between
+   run the cell's width, the ends round on their outer side, and a row the
+   range wraps round closes and opens with the same curve. */
+[data-theme^="apple-"] .rux--date-picker--next .rux--date-picker__day {
+  justify-self: center;
+  block-size: 2.25rem;
+  inline-size: 2.25rem;
+  margin-block: 2px;
+  border-radius: 50%;
+}
+/* The two arrows that change the month are the same circle, in the 40px
+   Carbon gives each, so the pointer's fill on one is round as a day's is. */
+[data-theme^="apple-"] .rux--date-picker--next .rux--date-picker__month-nav {
+  block-size: 2.25rem;
+  inline-size: 2.25rem;
+  margin: 2px;
+  border-radius: 50%;
+}
+[data-theme^="apple-"] .rux--date-picker--next .rux--date-picker__day.inRange,
+[data-theme^="apple-"] .rux--date-picker--next .rux--date-picker__day.selected:has(+ .inRange),
+[data-theme^="apple-"] .rux--date-picker--next .rux--date-picker__day.inRange + .selected {
+  justify-self: stretch;
+  inline-size: auto;
+  border-radius: 0;
+}
+[data-theme^="apple-"] .rux--date-picker--next .rux--date-picker__day.selected:has(+ .inRange),
+[data-theme^="apple-"] .rux--date-picker--next .rux--date-picker__day.inRange + .selected:nth-child(7n + 1),
+[data-theme^="apple-"] .rux--date-picker--next .rux--date-picker__day.inRange:nth-child(7n + 1) {
+  border-start-start-radius: 1.125rem;
+  border-end-start-radius: 1.125rem;
+}
+[data-theme^="apple-"] .rux--date-picker--next .rux--date-picker__day.inRange + .selected,
+[data-theme^="apple-"] .rux--date-picker--next .rux--date-picker__day.selected:has(+ .inRange):nth-child(7n),
+[data-theme^="apple-"] .rux--date-picker--next .rux--date-picker__day.inRange:nth-child(7n) {
+  border-start-end-radius: 1.125rem;
+  border-end-end-radius: 1.125rem;
+}
+/* A TABLE'S BOX IS A REGION OF THE PAGE, told apart as these themes' regions
+   are: by its fill on the page, on the 12px corner a tile takes, with no
+   line. The line and the 8px are Geist's, measured on its Table page. */
+[data-theme^="apple-"] .rux--data-table-container {
+  border: 0;
+  border-radius: 12px;
+}
+/* THE PAGE ARROWS ARE THE GREY ROUND PUSH BUTTON a plain button is in the
+   toolbar, round by their own rule because Carbon's arrow need not be a
+   `btn`. The disabled one takes the disabled fill. */
+[data-theme^="apple-"] .rux--pagination .rux--pagination__button {
+  border-radius: 50%;
+  background-color: var(--rux-button-secondary);
+}
+[data-theme^="apple-"] .rux--pagination .rux--pagination__button:hover {
+  background-color: var(--rux-button-secondary-hover);
+}
+[data-theme^="apple-"] .rux--pagination .rux--pagination__button:is(:disabled, .rux--pagination__button--no-index),
+[data-theme^="apple-"] .rux--pagination .rux--pagination__button:is(:disabled, .rux--pagination__button--no-index):hover {
+  background-color: var(--rux-button-disabled);
+}
+/* EACH ARROW IS A CHEVRON, as a Mac's back and forward are, and the same
+   chevron the page select beside it points down with: Material's
+   keyboard_arrow, the sprite's own. Which glyph a page draws is in its
+   markup, where a theme cannot reach, so the page's glyph is hidden and the
+   chevron is drawn in its place as a mask over the icon colour. The second
+   arrow of the pair is the one that goes forward. */
+[data-theme^="apple-"] .rux--pagination .rux--pagination__button > svg {
+  display: none;
+}
+[data-theme^="apple-"] .rux--pagination .rux--pagination__button::before {
+  content: "";
+  block-size: 1rem;
+  inline-size: 1rem;
+  background-color: var(--rux-icon-primary);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='M561-240 320-481l241-241 43 43-198 198 198 198-43 43Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+[data-theme^="apple-"] .rux--pagination .rux--pagination__button + .rux--pagination__button::before {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='M530-481 332-679l43-43 241 241-241 241-43-43 198-198Z'/%3E%3C/svg%3E");
+}
+[data-theme^="apple-"] .rux--pagination .rux--pagination__button:is(:disabled, .rux--pagination__button--no-index)::before {
+  background-color: var(--rux-icon-disabled);
+}
+[dir=rtl] [data-theme^="apple-"] .rux--pagination .rux--pagination__button::before,
+[data-theme^="apple-"][dir=rtl] .rux--pagination .rux--pagination__button::before {
+  transform: rotate(0.5turn);
+}
+/* The bar is a region of the page too, on the 12px corner the table's box
+   takes. Inside that box it is clipped by it; under it, the bar's two upper
+   corners square off as the box's lower ones do. */
+[data-theme^="apple-"] .rux--pagination {
+  border-radius: 12px;
+}
+[data-theme^="apple-"] :is(.rux--data-table-container, :has(> .rux--data-table-container:last-child)) + .rux--pagination {
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+/* WHAT FLOATS CASTS A SHADOW. A menu, a dropdown's list, a popover and the
+   calendar stand over the page, and the ring the rounded themes give them
+   replaced the shadow Carbon casts, so here they lay flat on what they
+   covered. They keep the ring and take the theme's shadow, soft and low. A
+   tooltip is the inverse surface and needs neither. */
+[data-theme^="apple-"] :is(.rux--popover-content:not(.rux--tooltip-content), .rux--list-box__menu, .rux--menu, .rux--overflow-menu-options, .rux--date-picker__calendar) {
+  box-shadow: inset 0 0 0 1px var(--rux-border-subtle-02), 0 8px 24px var(--rux-shadow);
+}
+/* So does a panel that opens over the page from the header: the nav behind
+   the hamburger, and the switcher's and the account's panels. Each is the
+   colour of the region it opens over, where its 1px edge alone does not
+   show. */
+[data-theme^="apple-"] :is(.rux--side-nav--hidden.rux--side-nav--expanded, .rux--header-panel--expanded) {
+  box-shadow: 0 8px 24px var(--rux-shadow);
+}
+/* THE NAV'S ROWS ARE ROUNDED AND STAND OFF ITS EDGES, and the page you are
+   on is the row's fill alone: a Mac's sidebar marks its selection with a
+   rounded fill and no bar. The row is 8px in from each side and keeps its
+   words where Carbon set them. */
+[data-theme^="apple-"] a.rux--side-nav__link {
+  margin-inline: var(--rux-spacing-03);
+  border-radius: 8px;
+}
+[data-theme^="apple-"] .rux--side-nav__item > a.rux--side-nav__link {
+  padding-inline: var(--rux-spacing-03);
+}
+[data-theme^="apple-"] a.rux--side-nav__link[aria-current=page]::before,
+[data-theme^="apple-"] a.rux--side-nav__link--current::before {
+  content: none;
+}
+/* A MAC'S SIDEBAR NAMES EVERY ROW IN THE LABEL COLOUR AT REGULAR WEIGHT, under
+   an icon in the accent, and only the row you are on is bold: read from
+   Mail's. Carbon sets every row bold in the secondary colour under a grey
+   icon, which on a Mac reads as a list of headings. */
+[data-theme^="apple-"] a.rux--side-nav__link { font-weight: 400; }
+[data-theme^="apple-"] a.rux--side-nav__link:is([aria-current=page], .rux--side-nav__link--current),
+[data-theme^="apple-"] a.rux--side-nav__link:is([aria-current=page], .rux--side-nav__link--current) > span { font-weight: 700; }
+[data-theme^="apple-"] a.rux--side-nav__link > .rux--side-nav__link-text { color: var(--rux-text-primary); }
+[data-theme^="apple-"] a.rux--side-nav__link .rux--side-nav__icon:not(.rux--side-nav__submenu-chevron) > svg {
+  fill: var(--rux-icon-interactive);
+}
+/* On apple-dark the row you are on is AppKit's unemphasized selection, the
+   grey Mail's sidebar fills its chosen mailbox with. Carbon's selected
+   background is a fill on the page, and on the nav's raised surface it
+   stands 1.2 to 1 off it, where this stands 1.6. */
+[data-theme="apple-dark"] a.rux--side-nav__link:is([aria-current=page], .rux--side-nav__link--current) {
+  background-color: var(--rux-background-active);
+}
+/* A DIALOG FLOATS TOO, over the dimmed page, and casts the same shadow. Its
+   close button stands 12px clear of the corner as a circle, the theme's
+   control size, as a Mac's dialog keeps its close: Carbon's fills the corner
+   as a 48px square. */
+[data-theme^="apple-"] .rux--modal-container {
+  box-shadow: 0 8px 24px var(--rux-shadow);
+}
+[data-theme^="apple-"] .rux--modal-close-button {
+  inset-block-start: var(--rux-spacing-04);
+  inset-inline-end: var(--rux-spacing-04);
+  border-radius: 50%;
+}
+[data-theme^="apple-"] .rux--modal-close {
+  padding: 6px;
+  border-radius: 50%;
+  block-size: 2.25rem;
+  inline-size: 2.25rem;
+}
+/* ON APPLE-DARK EACH OF THOSE TAKES A LINE AS WELL. A shadow hardly shows on
+   a dark page, so a dialog and a panel from the header are told apart from
+   what they cover by the 1px edge a menu already has. */
+[data-theme="apple-dark"] :is(.rux--side-nav--hidden.rux--side-nav--expanded, .rux--header-panel--expanded, .rux--modal-container) {
+  box-shadow: inset 0 0 0 1px var(--rux-border-subtle-02), 0 8px 24px var(--rux-shadow);
+}
+/* A TILE ON THE PAGE IS TOLD APART BY ITS FILL, as a table's box and every
+   other region of the page is, so it draws no ring.
+   The ring is for a tile that stands on a surface of its own colour, where
+   it would otherwise have no shape: inside a panel, a dialog, a popover, a
+   table's box, another tile, or anything that names a layer. An app that
+   stands tiles on a region of its own gives them the ring there. */
+[data-theme^="apple-"] .rux--tile {
+  box-shadow: none;
+}
+[data-theme^="apple-"] :is(.rux--side-panel, .rux--modal-container, .rux--popover-content, .rux--data-table-container, .rux--header-panel, .rux--side-nav, .rux--tile, [class*="rux--layer-"]) .rux--tile {
+  box-shadow: inset 0 0 0 1px var(--rux-border-subtle-02);
+}
+/* A CHECKBOX AND A RADIO REST AS A GREY FILL WITH NO RING, measured on the
+   Mac's own: 16px, a 5.5px corner on the box, and at rest the fill colour on
+   its surface. Chosen, each fills with the button's blue under a white mark.
+   The theme's name adds no weight to the resting rules, so
+   Carbon's disabled, invalid and read-only rules still outrank them. */
+:where([data-theme^="apple-"]) .rux--checkbox-label::before {
+  border-color: transparent;
+  border-radius: 5.5px;
+  background-color: var(--rux-layer-accent-03);
+}
+:where([data-theme^="apple-"]) .rux--radio-button__appearance {
+  border-color: transparent;
+  background-color: var(--rux-layer-accent-03);
+  block-size: 1rem;
+  inline-size: 1rem;
+}
+[data-theme^="apple-"] :is(.rux--checkbox:checked, .rux--checkbox:indeterminate):not(:disabled) + .rux--checkbox-label::before {
+  background-color: var(--rux-button-primary);
+}
+[data-theme^="apple-"] .rux--radio-button:checked:not(:disabled) + .rux--radio-button__label .rux--radio-button__appearance {
+  border-color: transparent;
+  background-color: var(--rux-button-primary);
+}
+[data-theme^="apple-"] .rux--radio-button:checked:not(:disabled) + .rux--radio-button__label .rux--radio-button__appearance::before {
+  background-color: var(--rux-icon-on-color);
+}
+/* A switch is the button's blue when on, with a white thumb in both states.
+   Carbon's is green. The Mac's resting track is the fill colour. */
+:where([data-theme^="apple-"]) .rux--toggle__switch {
+  background-color: var(--rux-layer-accent-03);
+}
+:where([data-theme^="apple-"]) .rux--toggle__switch--checked {
+  background-color: var(--rux-button-primary);
+}
+:where([data-theme^="apple-"]) .rux--toggle__switch::before {
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+}
+:where([data-theme^="apple-"]) .rux--toggle__check {
+  fill: var(--rux-button-primary);
+}
+/* A progress bar is a capsule, as a Mac's is. Carbon sizes the filled part
+   by scaling it, which would squash a corner of its own, so the track clips
+   it: the bar's outer ends are round and the end of the filled part square. */
+[data-theme^="apple-"] .rux--progress-bar__track {
+  overflow: hidden;
+  border-radius: 999px;
+}
+/* The segmented control is a grey capsule with no ring, and its chosen
+   option the accent colour under white words, as AppKit draws one in the
+   front window. */
+[data-theme^="apple-"] .rux--content-switcher {
+  border-radius: 999px;
+  box-shadow: none;
+  background-color: var(--rux-layer-accent-02);
+}
+[data-theme^="apple-"] .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn,
+[data-theme^="apple-"] .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn:first-child,
+[data-theme^="apple-"] .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn:last-child,
+[data-theme^="apple-"] .rux--content-switcher-btn.rux--content-switcher--selected::after {
+  border-radius: 999px;
+}
+/* An option's words are the text colour chosen or not, as a Mac's are:
+   apple-light's secondary grey makes 4.39 to 1 on the capsule's fill. */
+[data-theme^="apple-"] .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn,
+[data-theme^="apple-"] .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn:first-child,
+[data-theme^="apple-"] .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn:last-child {
+  color: var(--rux-text-primary);
+}
+[data-theme^="apple-"] .rux--content-switcher:not(.rux--content-switcher--icon-only) .rux--content-switcher-btn.rux--content-switcher--selected:is(:first-child, :last-child, :nth-child(n)) {
+  color: var(--rux-text-on-color);
+}
+[data-theme^="apple-"] .rux--content-switcher-btn.rux--content-switcher--selected::after {
+  background-color: var(--rux-content-switcher-selected);
+}
+[data-theme^="apple-"] .rux--content-switcher--icon-only .rux--content-switcher-btn.rux--content-switcher--selected:not([disabled]) svg {
+  fill: var(--rux-icon-on-color);
+}
+/* A notification here is a tint of its hue, so its action is the link
+   colour. Carbon writes it in the inverse link colour, for the slab it draws
+   a notification on, which made 1.9 to 1 on apple-light's tint. */
+[data-theme^="apple-"] .rux--actionable-notification .rux--actionable-notification__action-button.rux--btn--ghost:not(:disabled):not(.rux--btn--disabled) {
+  color: var(--rux-link-primary);
+}
+/* Edit-in-place writes its warning in the status red, which is for a mark;
+   words take the red that reads on the page. */
+[data-theme^="apple-"] .rux--edit-in-place__warning-text {
+  color: var(--rux-text-error);
+}

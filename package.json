@@ -1,0 +1,10 @@
+{
+  "name": "escamillatourbuses",
+  "private": true,
+  "description": "Escamilla Tour Buses' public website",
+  "scripts": {
+    "serve": "node tools/serve.mjs",
+    "check": "node tools/check.mjs",
+    "sync": "node tools/sync-design.mjs"
+  }
+}

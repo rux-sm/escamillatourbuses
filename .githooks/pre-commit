@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# The site's check before every commit, the same one CI runs before a
+# deploy. Install once per clone:
+#
+#   git config core.hooksPath .githooks
+#
+set -eu
+cd "$(git rev-parse --show-toplevel)"
+exec node tools/check.mjs
