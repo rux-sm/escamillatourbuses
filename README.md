@@ -68,7 +68,8 @@ footer, and names it in an `hreflang` link.
   shows.
 - `photos/` holds each photo as WebP at two widths, the larger and a
   `-small` copy at half its width, without their metadata. A photo shows
-  whole, except a tall one beside words, cut to 4:3 from its foot.
+  whole, except a tall one beside words, cut to 4:3 from its foot, or from
+  its middle where the coach stands there.
 
 ## The facts on the pages
 
