@@ -62,23 +62,23 @@
   <a class="rux--header__name" href="./"><img class="website-logo" src="brand/logo-header.png" alt="Escamilla Tour Buses" width="528" height="60"></a>
   <nav class="rux--header__nav" aria-label="Escamilla Tour Buses">
     <ul class="rux--header__menu-bar">
-      <li><a class="rux--header__menu-item" href="buses.html"><span class="rux--text-truncate-end">Our buses</span></a></li>
-      <li><a class="rux--header__menu-item" href="services.html"><span class="rux--text-truncate-end">Trips</span></a></li>
+      <li><a class="rux--header__menu-item" href="buses.html"><span class="rux--text-truncate-end">Fleet</span></a></li>
+      <li><a class="rux--header__menu-item" href="services.html"><span class="rux--text-truncate-end">Services</span></a></li>
       <li><a class="rux--header__menu-item" href="about.html"><span class="rux--text-truncate-end">About us</span></a></li>
       <li><a class="rux--header__menu-item" href="contact.html"><span class="rux--text-truncate-end">Contact</span></a></li>
-      <li><a class="rux--header__menu-item rux--header__menu-item--current" aria-current="page" href="quote.html"><span class="rux--text-truncate-end">Request a quote</span></a></li>
       <li><a class="rux--header__menu-item" href="es/quote.html" lang="es" hreflang="es" aria-label="Ver en español"><span class="rux--text-truncate-end">Español</span></a></li>
     </ul>
   </nav>
   <div class="rux--header__global">
+    <a class="rux--btn rux--btn--primary rux--layout--size-md website-header-quote" href="quote.html" aria-current="page">Request a quote</a>
     <a class="rux--header__action rux--btn rux--layout--size-lg rux--btn--ghost rux--btn--icon-only" href="tel:+19569941169" aria-label="Call (956) 994-1169"><svg width="20" height="20" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><use href="#m-call"/></svg></a>
   </div>
   <div class="rux--side-nav__overlay"></div>
   <nav class="rux--side-nav__navigation rux--side-nav rux--side-nav--ux rux--side-nav--hidden" aria-label="Escamilla Tour Buses">
     <ul class="rux--side-nav__items">
       <ul class="rux--side-nav__header-navigation">
-        <li><a class="rux--header__menu-item" href="buses.html"><span class="rux--text-truncate-end">Our buses</span></a></li>
-        <li><a class="rux--header__menu-item" href="services.html"><span class="rux--text-truncate-end">Trips</span></a></li>
+        <li><a class="rux--header__menu-item" href="buses.html"><span class="rux--text-truncate-end">Fleet</span></a></li>
+        <li><a class="rux--header__menu-item" href="services.html"><span class="rux--text-truncate-end">Services</span></a></li>
         <li><a class="rux--header__menu-item" href="about.html"><span class="rux--text-truncate-end">About us</span></a></li>
         <li><a class="rux--header__menu-item" href="contact.html"><span class="rux--text-truncate-end">Contact</span></a></li>
         <li><a class="rux--header__menu-item rux--header__menu-item--current" aria-current="page" href="quote.html"><span class="rux--text-truncate-end">Request a quote</span></a></li>
@@ -88,7 +88,7 @@
   </nav>
 </header>
 
-<main id="main-content" class="rux--content">
+<main id="main-content" class="rux--content rux--layout--size-lg">
   <!-- THE PREVIEW STRIP, on every page until the site takes the company's
        address, so nobody mistakes it for the site the office answers. -->
   <p class="website-band website-band--preview rux--type-body-compact-01" data-theme="apple-dark"><svg width="16" height="16" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-information--filled"/></svg><span>This is a preview of our new website. To book a trip today, call <a class="rux--link rux--link--inline" href="tel:+19569941169">(956) 994-1169</a> or email <a class="rux--link rux--link--inline" href="mailto:e-escamilla@sbcglobal.net">e-escamilla@sbcglobal.net</a>.</span></p>
@@ -119,6 +119,138 @@
     <div class="rux--css-grid-column rux--sm:col-span-4 rux--md:col-span-8 rux--lg:col-span-10">
       <div class="rux--stack-vertical rux--stack-scale-10">
         <form id="quote-form" class="website-form rux--stack-vertical rux--stack-scale-9" novalidate data-thanks="thanks.html">
+          <fieldset class="rux--stack-vertical rux--stack-scale-6">
+            <legend class="rux--type-fluid-heading-04 website-legend">Your trip</legend>
+            <div class="rux--stack-vertical rux--stack-scale-6">
+              <div class="rux--form-item">
+                <fieldset class="rux--radio-button-group rux--radio-button-group--label-right">
+                  <legend class="rux--label">Trip</legend>
+                <div class="rux--radio-button-wrapper">
+                  <input id="q-trip-round" class="rux--radio-button" type="radio" name="trip" value="round" checked>
+                  <label for="q-trip-round" class="rux--radio-button__label">
+                    <span class="rux--radio-button__appearance"></span>
+                    <span class="rux--radio-button__label-text">Round trip</span>
+                  </label>
+                </div>
+                <div class="rux--radio-button-wrapper">
+                  <input id="q-trip-oneway" class="rux--radio-button" type="radio" name="trip" value="oneway">
+                  <label for="q-trip-oneway" class="rux--radio-button__label">
+                    <span class="rux--radio-button__appearance"></span>
+                    <span class="rux--radio-button__label-text">One way</span>
+                  </label>
+                </div>
+                </fieldset>
+              </div>
+              <div class="rux--form-item rux--text-input-wrapper">
+                <div class="rux--text-input__label-wrapper">
+                  <label class="rux--label" for="q-from">Pickup address</label>
+                </div>
+                <div class="rux--text-input__field-outer-wrapper">
+                  <div class="rux--text-input__field-wrapper">
+                    <input id="q-from" name="from" class="rux--text-input" type="text" autocomplete="street-address" required aria-describedby="q-from-error q-from-help">
+                  </div>
+                  <div class="rux--form-requirement" id="q-from-error"></div>
+                  <div class="rux--form__helper-text" id="q-from-help">Where the bus picks you up.</div>
+                </div>
+              </div>
+              <div class="rux--form-item rux--text-input-wrapper">
+                <div class="rux--text-input__label-wrapper">
+                  <label class="rux--label" for="q-to">Destination</label>
+                </div>
+                <div class="rux--text-input__field-outer-wrapper">
+                  <div class="rux--text-input__field-wrapper">
+                    <input id="q-to" name="to" class="rux--text-input" type="text" required aria-describedby="q-to-error q-to-help">
+                  </div>
+                  <div class="rux--form-requirement" id="q-to-error"></div>
+                  <div class="rux--form__helper-text" id="q-to-help">The city, venue or address you’re going to.</div>
+                </div>
+              </div>
+              <div class="website-pair">
+              <div class="rux--form-item rux--text-input-wrapper">
+                <div class="rux--text-input__label-wrapper">
+                  <label class="rux--label" for="q-leave-date">Departure date</label>
+                </div>
+                <div class="rux--text-input__field-outer-wrapper">
+                  <div class="rux--text-input__field-wrapper">
+                    <input id="q-leave-date" name="leave_date" class="rux--text-input" type="date" required aria-describedby="q-leave-date-error">
+                  </div>
+                  <div class="rux--form-requirement" id="q-leave-date-error"></div>
+                </div>
+              </div>
+              <div class="rux--form-item rux--text-input-wrapper">
+                <div class="rux--text-input__label-wrapper">
+                  <label class="rux--label" for="q-leave-time">Departure time (optional)</label>
+                </div>
+                <div class="rux--text-input__field-outer-wrapper">
+                  <div class="rux--text-input__field-wrapper">
+                    <input id="q-leave-time" name="leave_time" class="rux--text-input" type="time" aria-describedby="q-leave-time-error q-leave-time-help">
+                  </div>
+                  <div class="rux--form-requirement" id="q-leave-time-error"></div>
+                  <div class="rux--form__helper-text" id="q-leave-time-help">When the bus picks you up.</div>
+                </div>
+              </div>
+              </div>
+              <!-- A plain wrapper carries `hidden`, because the stack's display
+                   rule beats the browser's. app.js hides it on a one-way trip. -->
+              <div id="q-return">
+              <div class="website-pair">
+              <div class="rux--form-item rux--text-input-wrapper">
+                <div class="rux--text-input__label-wrapper">
+                  <label class="rux--label" for="q-return-date">Return date</label>
+                </div>
+                <div class="rux--text-input__field-outer-wrapper">
+                  <div class="rux--text-input__field-wrapper">
+                    <input id="q-return-date" name="return_date" class="rux--text-input" type="date" required aria-describedby="q-return-date-error">
+                  </div>
+                  <div class="rux--form-requirement" id="q-return-date-error"></div>
+                </div>
+              </div>
+              <div class="rux--form-item rux--text-input-wrapper">
+                <div class="rux--text-input__label-wrapper">
+                  <label class="rux--label" for="q-return-time">Time back (optional)</label>
+                </div>
+                <div class="rux--text-input__field-outer-wrapper">
+                  <div class="rux--text-input__field-wrapper">
+                    <input id="q-return-time" name="return_time" class="rux--text-input" type="time" aria-describedby="q-return-time-error q-return-time-help">
+                  </div>
+                  <div class="rux--form-requirement" id="q-return-time-error"></div>
+                  <div class="rux--form__helper-text" id="q-return-time-help">When you want to be back where the bus picked you up.</div>
+                </div>
+              </div>
+              </div>
+              </div>
+              <div class="rux--form-item rux--text-input-wrapper">
+                <div class="rux--text-input__label-wrapper">
+                  <label class="rux--label" for="q-people">Passengers</label>
+                </div>
+                <div class="rux--text-input__field-outer-wrapper">
+                  <div class="rux--text-input__field-wrapper">
+                    <input id="q-people" name="people" class="rux--text-input" type="text" required inputmode="numeric" aria-describedby="q-people-error q-people-help">
+                  </div>
+                  <div class="rux--form-requirement" id="q-people-error"></div>
+                  <div class="rux--form__helper-text" id="q-people-help">We seat 52 on most coaches and 56 on request.</div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset class="rux--stack-vertical rux--stack-scale-6">
+            <legend class="rux--type-fluid-heading-04 website-legend">Needs and details</legend>
+            <div class="rux--stack-vertical rux--stack-scale-6">
+              <div class="rux--form-item rux--checkbox-wrapper">
+                <input id="q-lift" name="lift" class="rux--checkbox" type="checkbox" value="yes">
+                <label for="q-lift" class="rux--checkbox-label"><span class="rux--checkbox-label-text">We need a wheelchair lift</span></label>
+              </div>
+              <div class="rux--form-item">
+                <div class="rux--text-area__label-wrapper">
+                  <label class="rux--label" for="q-details">Stops and other details (optional)</label>
+                </div>
+                <div class="rux--text-area__wrapper">
+                  <textarea id="q-details" name="details" class="rux--text-area" rows="5" maxlength="2000" aria-describedby="q-details-help"></textarea>
+                </div>
+                <div class="rux--form__helper-text" id="q-details-help">Times, stops along the way, or anything else we should know.</div>
+              </div>
+            </div>
+          </fieldset>
           <fieldset class="rux--stack-vertical rux--stack-scale-6">
             <legend class="rux--type-fluid-heading-04 website-legend">About you</legend>
             <div class="rux--stack-vertical rux--stack-scale-6">
@@ -207,135 +339,27 @@
               </div>
             </div>
           </fieldset>
-          <fieldset class="rux--stack-vertical rux--stack-scale-6">
-            <legend class="rux--type-fluid-heading-04 website-legend">Your trip</legend>
-            <div class="rux--stack-vertical rux--stack-scale-6">
-              <div class="rux--form-item">
-                <fieldset class="rux--radio-button-group rux--radio-button-group--label-right">
-                  <legend class="rux--label">Trip</legend>
-                <div class="rux--radio-button-wrapper">
-                  <input id="q-trip-round" class="rux--radio-button" type="radio" name="trip" value="round" checked>
-                  <label for="q-trip-round" class="rux--radio-button__label">
-                    <span class="rux--radio-button__appearance"></span>
-                    <span class="rux--radio-button__label-text">Round trip</span>
-                  </label>
-                </div>
-                <div class="rux--radio-button-wrapper">
-                  <input id="q-trip-oneway" class="rux--radio-button" type="radio" name="trip" value="oneway">
-                  <label for="q-trip-oneway" class="rux--radio-button__label">
-                    <span class="rux--radio-button__appearance"></span>
-                    <span class="rux--radio-button__label-text">One way</span>
-                  </label>
-                </div>
-                </fieldset>
-              </div>
-              <div class="rux--form-item rux--text-input-wrapper">
-                <div class="rux--text-input__label-wrapper">
-                  <label class="rux--label" for="q-from">Pickup address</label>
-                </div>
-                <div class="rux--text-input__field-outer-wrapper">
-                  <div class="rux--text-input__field-wrapper">
-                    <input id="q-from" name="from" class="rux--text-input" type="text" autocomplete="street-address" required aria-describedby="q-from-error q-from-help">
-                  </div>
-                  <div class="rux--form-requirement" id="q-from-error"></div>
-                  <div class="rux--form__helper-text" id="q-from-help">Where the bus picks you up.</div>
-                </div>
-              </div>
-              <div class="rux--form-item rux--text-input-wrapper">
-                <div class="rux--text-input__label-wrapper">
-                  <label class="rux--label" for="q-to">Destination</label>
-                </div>
-                <div class="rux--text-input__field-outer-wrapper">
-                  <div class="rux--text-input__field-wrapper">
-                    <input id="q-to" name="to" class="rux--text-input" type="text" required aria-describedby="q-to-error q-to-help">
-                  </div>
-                  <div class="rux--form-requirement" id="q-to-error"></div>
-                  <div class="rux--form__helper-text" id="q-to-help">The city, venue or address you’re going to.</div>
-                </div>
-              </div>
-              <div class="website-pair">
-              <div class="rux--form-item rux--text-input-wrapper">
-                <div class="rux--text-input__label-wrapper">
-                  <label class="rux--label" for="q-leave-date">Departure date</label>
-                </div>
-                <div class="rux--text-input__field-outer-wrapper">
-                  <div class="rux--text-input__field-wrapper">
-                    <input id="q-leave-date" name="leave_date" class="rux--text-input" type="date" required aria-describedby="q-leave-date-error">
-                  </div>
-                  <div class="rux--form-requirement" id="q-leave-date-error"></div>
-                </div>
-              </div>
-              <div class="rux--form-item rux--text-input-wrapper">
-                <div class="rux--text-input__label-wrapper">
-                  <label class="rux--label" for="q-leave-time">Departure time (optional)</label>
-                </div>
-                <div class="rux--text-input__field-outer-wrapper">
-                  <div class="rux--text-input__field-wrapper">
-                    <input id="q-leave-time" name="leave_time" class="rux--text-input" type="time" aria-describedby="q-leave-time-error">
-                  </div>
-                  <div class="rux--form-requirement" id="q-leave-time-error"></div>
-                </div>
-              </div>
-              </div>
-              <!-- A plain wrapper carries `hidden`, because the stack's display
-                   rule beats the browser's. app.js hides it on a one-way trip. -->
-              <div id="q-return">
-              <div class="website-pair">
-              <div class="rux--form-item rux--text-input-wrapper">
-                <div class="rux--text-input__label-wrapper">
-                  <label class="rux--label" for="q-return-date">Return date</label>
-                </div>
-                <div class="rux--text-input__field-outer-wrapper">
-                  <div class="rux--text-input__field-wrapper">
-                    <input id="q-return-date" name="return_date" class="rux--text-input" type="date" required aria-describedby="q-return-date-error">
-                  </div>
-                  <div class="rux--form-requirement" id="q-return-date-error"></div>
-                </div>
-              </div>
-              <div class="rux--form-item rux--text-input-wrapper">
-                <div class="rux--text-input__label-wrapper">
-                  <label class="rux--label" for="q-return-time">Return time (optional)</label>
-                </div>
-                <div class="rux--text-input__field-outer-wrapper">
-                  <div class="rux--text-input__field-wrapper">
-                    <input id="q-return-time" name="return_time" class="rux--text-input" type="time" aria-describedby="q-return-time-error">
-                  </div>
-                  <div class="rux--form-requirement" id="q-return-time-error"></div>
-                </div>
-              </div>
-              </div>
-              </div>
-              <div class="rux--form-item rux--text-input-wrapper">
-                <div class="rux--text-input__label-wrapper">
-                  <label class="rux--label" for="q-people">Passengers</label>
-                </div>
-                <div class="rux--text-input__field-outer-wrapper">
-                  <div class="rux--text-input__field-wrapper">
-                    <input id="q-people" name="people" class="rux--text-input" type="text" required inputmode="numeric" aria-describedby="q-people-error q-people-help">
-                  </div>
-                  <div class="rux--form-requirement" id="q-people-error"></div>
-                  <div class="rux--form__helper-text" id="q-people-help">We seat 52 on most coaches and 56 on request.</div>
-                </div>
-              </div>
-              <div class="rux--form-item rux--checkbox-wrapper">
-                <input id="q-lift" name="lift" class="rux--checkbox" type="checkbox" value="yes">
-                <label for="q-lift" class="rux--checkbox-label"><span class="rux--checkbox-label-text">We need a wheelchair lift</span></label>
-              </div>
-              <div class="rux--form-item">
-                <div class="rux--text-area__label-wrapper">
-                  <label class="rux--label" for="q-details">Stops and other details (optional)</label>
-                </div>
-                <div class="rux--text-area__wrapper">
-                  <textarea id="q-details" name="details" class="rux--text-area" rows="5" maxlength="2000" aria-describedby="q-details-help"></textarea>
-                </div>
-                <div class="rux--form__helper-text" id="q-details-help">Times, stops along the way, or anything else we should know.</div>
-              </div>
-            </div>
-          </fieldset>
           <div><button type="submit" class="rux--btn rux--btn--primary">Send request<svg class="rux--btn__icon" width="16" height="16" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><use href="#i-arrow--right"/></svg></button></div>
         </form>
       </div>
     </div>
+    <!-- WHAT HAPPENS NEXT, beside the form on a wide screen, where it stays in
+         view, and under it on a phone: the booking's steps and the phone. -->
+    <aside class="rux--css-grid-column rux--sm:col-span-4 rux--md:col-span-8 rux--lg:col-span-5 rux--lg:col-start-12">
+      <div class="rux--tile website-aside rux--stack-vertical rux--stack-scale-6">
+        <h2 class="rux--type-heading-03">What happens next</h2>
+        <ol class="website-steps website-steps--stacked">
+          <li><span class="website-steps__number" aria-hidden="true">1</span><p class="rux--type-body-02">We reply with a written quote, priced by the trip’s miles and days.</p></li>
+          <li><span class="website-steps__number" aria-hidden="true">2</span><p class="rux--type-body-02">The quote holds the bus for a week while you decide.</p></li>
+          <li><span class="website-steps__number" aria-hidden="true">3</span><p class="rux--type-body-02">To book, sign the quote and our terms, and send a 20% down payment or your purchase order.</p></li>
+        </ol>
+        <div class="website-aside__call rux--stack-vertical rux--stack-scale-3">
+          <h3 class="rux--type-heading-compact-02">Rather call?</h3>
+          <p><a class="rux--link rux--link--lg" href="tel:+19569941169">Call (956) 994-1169</a></p>
+          <p class="rux--type-body-02 website-aside__hours">Monday to Friday, 8 a.m. to 5 p.m.</p>
+        </div>
+      </div>
+    </aside>
   </div>
 </main>
 
@@ -364,8 +388,8 @@
         <div class="rux--stack-vertical rux--stack-scale-4">
           <h2 class="rux--type-heading-compact-01">Pages</h2>
           <ul class="rux--stack-vertical rux--stack-scale-3">
-            <li><a class="rux--link" href="buses.html">Our buses</a></li>
-            <li><a class="rux--link" href="services.html">Trips</a></li>
+            <li><a class="rux--link" href="buses.html">Fleet</a></li>
+            <li><a class="rux--link" href="services.html">Services</a></li>
             <li><a class="rux--link" href="about.html">About us</a></li>
             <li><a class="rux--link" href="contact.html">Contact</a></li>
             <li><a class="rux--link" href="quote.html">Request a quote</a></li>

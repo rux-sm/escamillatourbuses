@@ -43,7 +43,8 @@ rux-sm.github.io, with Design's invented content, and synced.
 block. A rule on a Carbon component goes in `overrides.css` at Carbon's own
 specificity, with no `!important`. A part Carbon lacks is the site's own, in
 `app.css` under `website-`, every colour a `--rux-*` token. Carbon's header
-takes only icon actions, so it carries no text button.
+takes icon actions and one text button, Request a quote, the site's main
+action, shown from a tablet's width up.
 
 ## The facts on the pages
 

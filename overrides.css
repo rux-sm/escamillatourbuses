@@ -19,10 +19,39 @@
   flex: 1 1 auto;
 }
 
-/* A tile in a row of them gets more room inside: Carbon's 1rem crowds an
-   icon, a name and a line of words against a rounded edge. */
+/* A tile that is also a vertical stack keeps the stack's grid and its gaps:
+   Carbon's tile rule comes later and sets it back to a block, which drops
+   the space between its icon, its name and its words. */
+.rux--tile.rux--stack-vertical {
+  display: grid;
+}
+
+/* A tile in a row of them gets more room inside, 24px and 32px on a wide
+   screen: Carbon's 1rem crowds an icon, a name and a line of words against
+   a rounded edge. */
 .website-cards .rux--tile {
   padding: var(--rux-spacing-06);
+}
+@media (min-width: 66rem) {
+  .website-cards .rux--tile {
+    padding: var(--rux-spacing-07);
+  }
+}
+/* The quote page's box beside its form has a card's room inside. */
+.website-aside.rux--tile {
+  padding: var(--rux-spacing-06);
+}
+@media (min-width: 66rem) {
+  .website-aside.rux--tile {
+    padding: var(--rux-spacing-07);
+  }
+}
+
+/* A photo card's photo runs to the tile's edges, so the tile itself has no
+   inset; the words under the photo carry their own. */
+.website-cards .rux--tile.website-photo-card {
+  padding: 0;
+  overflow: hidden;
 }
 
 /* The quote form's words read on a phone: what is typed is 16px, below which

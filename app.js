@@ -173,7 +173,10 @@
 
   form.addEventListener('submit', event => {
     event.preventDefault();
-    const wrong = Object.keys(RULES).filter(name => !check(name));
+    // Every field is checked, and the reader is taken to the first wrong one
+    // in the order the form shows them.
+    const order = [...new Set([...form.elements].map(el => el.name))].filter(name => name in RULES);
+    const wrong = order.filter(name => !check(name));
     if (wrong.length) {
       field(wrong[0]).focus();
       return;

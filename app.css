@@ -12,6 +12,21 @@
   flex: none;
 }
 
+/* THE HEADER'S QUOTE BUTTON, the site's main action, filled in the company's
+   blue beside the phone icon from a tablet's width up. A phone has the
+   quote in its menu and in the page's own buttons, and no room beside the
+   logo for it. */
+.website-header-quote {
+  align-self: center;
+  margin-inline-end: var(--rux-spacing-03);
+  white-space: nowrap;
+}
+@media (max-width: 41.98rem) {
+  .website-header-quote {
+    display: none;
+  }
+}
+
 /* A PHOTO keeps its own shape, from the width and height its <img> carries,
    so the page keeps its place while it loads and nothing in it is cut. A
    tall photo beside words is cropped to a wider shape, its foot kept, since
@@ -24,6 +39,17 @@
   block-size: auto;
   border-radius: 8px;
   background-color: var(--rux-layer-01);
+}
+/* A PHOTO CARD's photo fills the top of its tile, edge to edge at 3:2, cut
+   around its middle; the card's name and words stand under it, clear of the
+   tile's arrow. */
+.website-photo--card {
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 0;
+}
+.website-photo-card__words {
+  padding: var(--rux-spacing-06) var(--rux-spacing-06) var(--rux-spacing-09);
 }
 .website-photo--crop {
   aspect-ratio: 4 / 3;
@@ -63,7 +89,6 @@
   margin-block-start: -2rem;
   padding-block: var(--rux-spacing-04);
   color: var(--rux-text-secondary);
-  text-align: center;
   border-block-end: 1px solid var(--rux-border-subtle-01);
 }
 .website-band--preview > svg {
@@ -75,7 +100,6 @@
     padding-block: var(--rux-spacing-04);
     align-items: flex-start;
     justify-content: flex-start;
-    text-align: start;
   }
 }
 
@@ -384,6 +408,43 @@
   }
 }
 
+/* THE STEPS STACKED, one under another with each number beside its words,
+   where a narrow column has no room for three across. */
+.website-steps.website-steps--stacked {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--rux-spacing-05);
+}
+.website-steps--stacked > li {
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  column-gap: var(--rux-spacing-05);
+  align-items: center;
+}
+.website-steps--stacked > li:not(:last-child)::after {
+  content: none;
+}
+
+/* WHAT HAPPENS NEXT, the quote page's box beside its form: on a wide screen
+   it stays in view below the header as the form scrolls past it, and on a
+   narrower one it stands clear below the form. Its phone stands apart from
+   the steps on a hairline. */
+.website-aside {
+  margin-block-start: var(--rux-spacing-09);
+}
+@media (min-width: 66rem) {
+  .website-aside {
+    position: sticky;
+    inset-block-start: calc(3rem + var(--rux-spacing-07));
+    margin-block-start: 0;
+  }
+}
+.website-aside__call {
+  padding-block-start: var(--rux-spacing-06);
+  border-block-start: 1px solid var(--rux-border-subtle-01);
+}
+.website-aside__hours {
+  color: var(--rux-text-secondary);
+}
+
 /* THE PAGE'S CALLS TO ACTION, which wrap onto a second line where the two
    do not fit beside each other. Carbon's `btn-set` holds its buttons on one
    line at 12.25rem each, which cuts "Call (956) 994-1169" in two, and its
@@ -402,10 +463,12 @@
 
 /* THE FOOTER is a dark zone of its own: `data-theme="apple-dark"` on it
    gives every token inside Apple's dark values, and theme.css greys its
-   links, so its links and text need no colour of their own here. Its inline padding is `.rux--content`'s, so its
+   links, so its links and text need no colour of their own here. A hairline
+   parts it from a dark photo band above it. Its inline padding is `.rux--content`'s, so its
    columns line up with the page above. */
 .website-footer {
   padding: 3rem 2rem 2rem;
+  border-block-start: 1px solid var(--rux-border-subtle-01);
   background-color: var(--rux-background);
   color: var(--rux-text-primary);
 }
