@@ -30,6 +30,22 @@
 <link rel="stylesheet" href="app.css">
 <!-- The business as search engines read it: its name, address, phone and hours. -->
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "Escamilla Tour Buses", "url": "https://www.escamillatourbuses.com/", "telephone": "+1-956-994-1169", "faxNumber": "+1-956-994-9491", "email": "e-escamilla@sbcglobal.net", "address": {"@type": "PostalAddress", "streetAddress": "2801 Zinnia Ave.", "addressLocality": "McAllen", "addressRegion": "TX", "postalCode": "78504", "addressCountry": "US"}, "openingHours": "Mo-Fr 08:00-17:00", "foundingDate": "2002", "areaServed": "Rio Grande Valley, Texas", "sameAs": ["https://www.facebook.com/Escamilla-Tour-Buses-197950903620317/", "https://www.instagram.com/escamillatourbuses/"]}</script>
+<!-- THE OLD SITE'S LINKS. The company's current site is one page whose parts
+     are reached by #buses, #quote-form and the like; once this site takes its
+     address, a link saved with one of them opens the page that holds it now. -->
+<script>
+(() => {
+  const to = {
+    'buses': 'buses.html', 'our-buses': 'buses.html', 'buses-modal-gallery': 'buses.html',
+    'about': 'about.html', 'about-us': 'about.html',
+    'work': 'about.html#drive', 'work-for-us': 'about.html#drive',
+    'pricing': 'contact.html#faq', 'our-pricing': 'contact.html#faq',
+    'quote': 'quote.html', 'quote-form': 'quote.html',
+    'contact': 'contact.html',
+  }[location.hash.slice(1)];
+  if (to) location.replace(to);
+})();
+</script>
 </head>
 <body>
 <!-- SPRITE:BEGIN — generated, do not edit. npm run sync rewrites this block
@@ -104,9 +120,9 @@
     <div class="rux--css-grid">
       <div class="rux--css-grid-column rux--sm:col-span-4 rux--md:col-span-6 rux--lg:col-span-7">
         <div class="website-lead__words rux--stack-vertical rux--stack-scale-6">
-          <p class="rux--type-heading-compact-01 website-eyebrow">Family owned in McAllen since 2002</p>
+          <p class="rux--type-heading-compact-01 website-eyebrow">Quality national transportation</p>
           <h1 class="rux--type-fluid-display-02">Charter buses from the Rio Grande Valley</h1>
-          <p class="rux--type-body-02 website-measure">Our Prevost motorcoaches take schools, universities, teams and groups across Texas and across the country.</p>
+          <p class="rux--type-body-02 website-measure">Family owned and operated in McAllen since 2002. Our Prevost motorcoaches take schools, universities, teams and groups across Texas and across the country.</p>
           <div class="website-actions"><a class="rux--btn rux--btn--primary rux--btn--expressive" href="quote.html">Request a quote<svg class="rux--btn__icon" width="16" height="16" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><use href="#i-arrow--right"/></svg></a><a class="rux--btn rux--btn--tertiary rux--btn--expressive" href="tel:+19569941169">Call (956) 994-1169<svg class="rux--btn__icon" width="16" height="16" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><use href="#m-call"/></svg></a></div>
         </div>
       </div>
