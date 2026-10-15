@@ -82,7 +82,7 @@
    edge, faded into the dark where the words stand; on a phone it runs edge to
    edge above them. */
 .website-band--lead {
-  margin-block: -2rem var(--rux-spacing-10);
+  margin-block: -2rem 0;
   padding-block: 0;
   overflow: hidden;
 }
@@ -132,6 +132,48 @@
     padding-block: var(--rux-spacing-11);
   }
 }
+/* THE FACTS, a dark bar joined to the foot of the home page's hero: four
+   numbers, each with its words under it, two across on a phone and four on
+   a wide screen, parted by hairlines. */
+.website-band--facts {
+  margin-block: 0 var(--rux-spacing-10);
+  padding-block: var(--rux-spacing-07);
+  border-block-start: 1px solid var(--rux-border-subtle-01);
+}
+.website-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--rux-spacing-06) 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.website-facts > li {
+  padding-inline: var(--rux-spacing-06);
+  border-inline-start: 1px solid var(--rux-border-subtle-01);
+}
+.website-facts > li:nth-child(odd) {
+  padding-inline-start: 0;
+  border-inline-start: 0;
+}
+@media (min-width: 66rem) {
+  .website-facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .website-facts > li:nth-child(odd) {
+    padding-inline-start: var(--rux-spacing-06);
+    border-inline-start: 1px solid var(--rux-border-subtle-01);
+  }
+  .website-facts > li:first-child {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+  }
+}
+.website-facts__label {
+  margin-block-start: var(--rux-spacing-02);
+  color: var(--rux-text-secondary);
+}
+
 /* A SHORT LINE ABOVE A HEADING, in capitals, saying who is speaking. */
 .website-eyebrow {
   color: var(--rux-text-secondary);
@@ -222,7 +264,7 @@
 
 /* A ROW OF EQUAL PARTS: one column on a phone, two on a tablet, three or four
    on a wide screen. A list carries it, so its items are counted aloud. A row
-   of four short parts, the big numbers or tall photos, is two across even on
+   of four short parts, such as tall photos, is two across even on
    a phone; a row of two wide photos stays two across on a wide screen. */
 .website-cards {
   display: grid;
@@ -239,11 +281,6 @@
   .website-cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
-/* THE BIG NUMBERS stand on a hairline each, as a row of figures does. */
-.website-stats > li {
-  padding-block-start: var(--rux-spacing-05);
-  border-block-start: 1px solid var(--rux-border-subtle-01);
 }
 /* Where a row is two across, an odd last part takes the whole row, so three
    parts leave no empty cell beside the third. */
