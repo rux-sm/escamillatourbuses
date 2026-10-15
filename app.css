@@ -4,15 +4,17 @@
    Carbon's own components are used as Design compiles them and are never
    restyled here. */
 
-/* The company logo, 20px tall in the footer and 24px in the 64px header. In
-   the header it sits in Carbon's `header__name`, which lays it out. */
+/* The company's whole logo, ESCAMILLA over TOUR BUSES, the Scheduler's own
+   brand/logo.svg: 32px tall in the footer and 40px in the 64px header, tall
+   enough for TOUR BUSES to read. In the header it sits in Carbon's
+   `header__name`, which lays it out. */
 .website-logo {
-  block-size: 1.25rem;
+  block-size: 2rem;
   inline-size: auto;
   flex: none;
 }
 .rux--header__name .website-logo {
-  block-size: 1.5rem;
+  block-size: 2.5rem;
 }
 
 /* THE HEADER'S QUOTE BUTTON, the site's main action, filled in the company's
