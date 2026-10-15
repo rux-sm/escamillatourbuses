@@ -19,7 +19,7 @@
 (() => {
   'use strict';
 
-  const form = document.getElementById('website-quote');
+  const form = document.getElementById('quote-form');
   if (!form) return;
 
   const es = document.documentElement.lang === 'es';

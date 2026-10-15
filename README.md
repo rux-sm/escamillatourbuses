@@ -27,8 +27,8 @@ footer, and names it in an `hreflang` link.
 ## A preview, until it takes the address
 
 - Every page asks search engines not to list it, with `robots` `noindex`.
-- Every page opens with a notice that it is a preview, with the office's
-  phone and email.
+- Every page but the 404 opens on a strip saying it is a preview, with the
+  office's phone and email.
 - The quote form checks what is typed and sends nothing: `app.js` opens the
   thank-you page, which says no request was sent.
 
@@ -37,19 +37,22 @@ footer, and names it in an `hreflang` link.
 - `design/` is Design's built stylesheets, fonts and the scripts the header's
   menu and the FAQ need, copied from rux-sm.github.io by `npm run sync` and
   never edited here. `design/SOURCE` names the commit they came from.
-- Every page is on Carbon's `g10` theme, a light grey page with its tiles
-  and fields white on it. `theme.css` sets the company's blue, the deep end
-  of the logo, as the action colour there and as the primary button's on the
-  dark bands.
+- Every page is on Design's `apple-light` theme, a light grey page with its
+  tiles and fields white on it, rounded corners and the device's own
+  typeface. `theme.css` sets the company's blue, the deep end of the logo,
+  as the action colour there and as the primary button's in the dark parts,
+  and greys the footer's links.
 - `app.css` holds the parts Carbon has no component for, under `website-`:
-  the bands, the hero, rows of tiles, features, photos, the calls to action,
-  the form's pairs and headings, and the footer. Every page opens on a dark
-  band, a `g100` zone from edge to edge, holding the preview notice and the
-  heading; four close on a photo band holding the call to action; the footer
-  is `g100` too.
-- `overrides.css` narrows the page's inset on a phone, widens the quote
-  form's text area, keeps a row's big numbers level, and lets a call to action
-  fill a phone's width.
+  the bands, the hero, the page's opening heading, section heads, rows of
+  tiles and their icons, the steps, the customer's words, features, photos,
+  the calls to action, the form's pairs and headings, and the footer. The
+  preview strip, the home page's hero, the photo bands and the footer are
+  `apple-dark` zones from edge to edge; every other page opens on its heading
+  on the light grey; four close on a photo band holding the call to action.
+- `overrides.css` narrows the page's inset on a phone, gives a row's tiles
+  more room inside, widens the quote form's text area, rings its unchosen
+  radios and checkbox, keeps a row's big numbers level, and lets a call to
+  action fill a phone's width.
 - `app.js` is the quote form: its checks and their words in both languages,
   the return that a one-way trip hides, and the draft kept in the tab's
   session storage until a request lands.
