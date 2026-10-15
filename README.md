@@ -44,19 +44,21 @@ footer, and names it in an `hreflang` link.
   and greys the footer's links. Each page's `main` carries Carbon's large
   layout size, so its buttons, fields and FAQ rows are 48px tall.
 - `app.css` holds the parts Carbon has no component for, under `website-`:
-  the header's quote button, the bands, the hero and its facts, the page's opening
-  heading, section heads, rows of tiles and their icons, photo cards, the
-  steps, the customer's words, features, photos, the calls to action, the
-  form's pairs and headings, the quote page's What happens next box, and the
-  footer. The home page's hero and the facts bar under it, the photo bands
-  and the footer are
-  `apple-dark` zones from edge to edge; every other page opens on its heading
-  on the light grey; four close on a photo band holding the call to action.
-- `overrides.css` narrows the page's inset on a phone, keeps a stacked
-  tile's gaps, gives a row's tiles and the What happens next box more room
-  inside and a photo card none, sets the quote form's typing at 16px and its
-  labels at 14px, widens its text area, rings its unchosen radios and
-  checkbox, and lets a call to action fill a phone's width.
+  the header's quote button, the bands, the hero and its facts, the page's
+  opening heading, section heads, rows of tiles and their icons, photo cards,
+  the steps, a note under a row of tiles, the common questions' width, the
+  customer's words, features, photos, the calls to action, the form's pairs
+  and headings, the quote page's What happens next box, and the footer. The
+  home page's hero and the facts bar under it, the photo bands and the footer
+  are `apple-dark` zones from edge to edge; every other page opens on its
+  heading on the light grey; four close on a photo band holding the call to
+  action.
+- `overrides.css` sets the header at 64px, narrows the page's inset on a
+  phone, keeps a stacked tile's gaps, gives a row's tiles and the What
+  happens next box more room inside and a photo card none, sets the quote
+  form's typing at 16px and its labels at 14px, widens its text area, rings
+  its unchosen radios and checkbox, and lets a call to action fill a phone's
+  width.
 - `app.js` is the quote form: its checks and their words in both languages,
   the first wrong field in the form's order, the return that a one-way trip
   hides, and the draft kept in the tab's session storage until a request

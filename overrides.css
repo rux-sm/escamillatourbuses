@@ -12,6 +12,26 @@
   }
 }
 
+/* THE HEADER IS 64px, a public site's bar: Carbon's 48px with room around
+   its logo, its menu and its quote button, as Design's geist-dark sets its
+   own. The page, the phone's menu and its shade start below it, and the
+   menu button stands in its middle. */
+.rux--header {
+  block-size: 4rem;
+}
+.rux--header ~ .rux--content {
+  margin-block-start: 4rem;
+}
+.rux--header :is(.rux--side-nav--ux, .rux--side-nav__overlay) {
+  inset-block-start: 4rem;
+}
+.rux--header .rux--side-nav--ux {
+  block-size: calc(100% - 4rem);
+}
+.rux--header .rux--header__menu-toggle {
+  align-self: center;
+}
+
 /* `.rux--text-area` sets no width, so inside its flex wrapper it sits at the
    browser's 20 columns; on the quote form it takes the field's width, as
    every other field there does. */

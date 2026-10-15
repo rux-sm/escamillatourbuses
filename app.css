@@ -4,12 +4,15 @@
    Carbon's own components are used as Design compiles them and are never
    restyled here. */
 
-/* The company logo in the header, at the height the Scheduler shows it. It
-   sits in Carbon's `header__name`, which lays it out. */
+/* The company logo, 20px tall in the footer and 24px in the 64px header. In
+   the header it sits in Carbon's `header__name`, which lays it out. */
 .website-logo {
   block-size: 1.25rem;
   inline-size: auto;
   flex: none;
+}
+.rux--header__name .website-logo {
+  block-size: 1.5rem;
 }
 
 /* THE HEADER'S QUOTE BUTTON, the site's main action, filled in the company's
@@ -199,27 +202,22 @@
 /* The page's last band meets the footer, past the content's bottom inset:
    a photo of a coach behind the page's call to action, darkened behind the
    words so they read at full contrast and clear over the coach. Wider than a
-   phone, the band is never shorter than a third of its width, so the whole
-   coach fits in it however wide the window, and its words stand in the
-   middle of it. */
+   phone, the band is never shorter than 28% of its width, the least that
+   still holds the whole coach however wide the window, and its words stand
+   in the middle of it with 64px above and below them at the least. */
 .website-band--photo {
   margin-block: var(--rux-spacing-10) -2rem;
-  padding-block: var(--rux-spacing-12);
+  padding-block: var(--rux-spacing-10);
   overflow: hidden;
 }
 @media (min-width: 42rem) {
   .website-band--photo {
     display: flex;
     align-items: center;
-    min-block-size: 34vw;
+    min-block-size: 28vw;
   }
   .website-band--photo > .rux--css-grid {
     inline-size: 100%;
-  }
-}
-@media (min-width: 66rem) {
-  .website-band--photo {
-    padding-block: var(--rux-spacing-13);
   }
 }
 /* The photo fills the band, cut to its height. The coach stands in its lower
@@ -315,6 +313,18 @@
   border-radius: 50%;
   background-color: color-mix(in srgb, var(--rux-interactive) 12%, transparent);
   fill: var(--rux-interactive);
+}
+
+/* THE COMMON QUESTIONS at a reading width, so each question stays near its
+   arrow on a wide screen. */
+.website-faq {
+  max-inline-size: 56rem;
+}
+
+/* A NOTE UNDER A ROW OF TILES, for what applies to one of them in detail,
+   such as what a school district needs, in the quieter grey. */
+.website-note {
+  color: var(--rux-text-secondary);
 }
 
 /* THE CUSTOMER'S WORDS, centred on a tile under a large quotation mark. */
@@ -450,7 +460,7 @@
 @media (min-width: 66rem) {
   .website-aside {
     position: sticky;
-    inset-block-start: calc(3rem + var(--rux-spacing-07));
+    inset-block-start: calc(4rem + var(--rux-spacing-07));
     margin-block-start: 0;
   }
 }
@@ -554,14 +564,14 @@
   margin-block-end: 1.5rem;
 }
 
-/* A part a link opens, such as a group on the Trips page, stops clear of the
-   fixed 3rem header with a gap above it. */
+/* A part a link opens, such as a group on the Services page, stops clear of
+   the fixed 4rem header with a gap above it. */
 main [id] {
-  scroll-margin-block-start: 5rem;
+  scroll-margin-block-start: 6rem;
 }
 
 /* A field the form sends a reader to, its first error, stops clear of the
-   fixed 3rem header with its label in view. */
+   fixed 4rem header with its label in view. */
 .website-form :is(input, textarea) {
-  scroll-margin-block-start: 6rem;
+  scroll-margin-block-start: 7rem;
 }

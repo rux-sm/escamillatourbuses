@@ -34,6 +34,7 @@
     past: 'Elija un día a partir de hoy.',
     return_date: 'Elija el día de regreso.',
     before: 'Elija un día igual o posterior al de salida.',
+    earlier: 'Elija una hora de regreso después de la hora de salida.',
     people: 'Escriba cuántas personas viajan, con número.',
   } : {
     first: 'Enter your first name.',
@@ -46,6 +47,7 @@
     past: 'Pick a day from today on.',
     return_date: 'Pick the day you come back.',
     before: 'Pick a day on or after the day you leave.',
+    earlier: 'Pick a time back after the time you leave.',
     people: 'Enter how many are going, as a number.',
   };
 
@@ -88,7 +90,7 @@
     const hide = oneWay();
     ret.hidden = hide;
     field('return_date').required = !hide;
-    if (hide) unmark(field('return_date'));
+    if (hide) { unmark(field('return_date')); unmark(field('return_time')); }
   }
 
   // The earliest day each date may take: today, and the day the trip leaves.
@@ -116,6 +118,14 @@
       const v = value('return_date');
       if (!v) return SAY.return_date;
       return v < value('leave_date') ? SAY.before : '';
+    },
+    // A trip back the same day it leaves is back after it leaves, when both
+    // times are given; a later day may be back at any hour.
+    return_time: () => {
+      if (oneWay()) return '';
+      const leave = value('leave_time'), back = value('return_time');
+      if (!leave || !back || value('return_date') !== value('leave_date')) return '';
+      return back > leave ? '' : SAY.earlier;
     },
     people: () => {
       const n = Number(value('people'));
@@ -163,6 +173,7 @@
   form.addEventListener('input', event => {
     const name = event.target.name;
     if (name in RULES && event.target.getAttribute('aria-invalid') === 'true') check(name);
+    if (['leave_date', 'leave_time', 'return_date'].includes(name) && field('return_time').getAttribute('aria-invalid') === 'true') check('return_time');
     if (name === 'leave_date') bound();
     keep();
   });
