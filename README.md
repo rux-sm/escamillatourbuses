@@ -50,14 +50,16 @@ footer, and names it in an `hreflang` link.
   `apple-dark` zones from edge to edge; every other page opens on its heading
   on the light grey; four close on a photo band holding the call to action.
 - `overrides.css` narrows the page's inset on a phone, gives a row's tiles
-  more room inside, widens the quote form's text area, rings its unchosen
-  radios and checkbox, keeps a row's big numbers level, and lets a call to
-  action fill a phone's width.
+  more room inside, sets the quote form's typing at 16px and its labels at
+  14px, widens its text area, rings its unchosen radios and checkbox, keeps
+  a row's big numbers level, and lets a call to action fill a phone's width.
 - `app.js` is the quote form: its checks and their words in both languages,
   the return that a one-way trip hides, and the draft kept in the tab's
   session storage until a request lands.
 - `brand/` holds the logo, `favicon.svg`, the company's bus, for a customer's
-  tab, and `share.jpg`, the picture a shared link shows.
+  tab, `apple-touch-icon.png`, the same bus in white on the company's blue
+  for a phone's home screen, and `share.jpg`, the picture a shared link
+  shows.
 - `photos/` holds each photo as WebP at two widths, the larger and a
   `-small` copy at half its width, without their metadata. A photo shows
   whole, except a tall one beside words, cut to 4:3 from its foot.

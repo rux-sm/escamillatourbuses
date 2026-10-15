@@ -25,6 +25,17 @@
   padding: var(--rux-spacing-06);
 }
 
+/* The quote form's words read on a phone: what is typed is 16px, below which
+   an iPhone zooms the page in on every field it opens, and the labels and
+   the help under a field are 14px where Carbon sets 12. */
+.website-form :is(.rux--text-input, .rux--text-area) {
+  font-size: 1rem;
+}
+.website-form :is(.rux--label, .rux--form__helper-text) {
+  font-size: var(--rux-label-02-font-size);
+  line-height: var(--rux-label-02-line-height);
+}
+
 /* An unchosen radio or checkbox on the quote form is white inside a thin
    line, as the form's text fields are: Apple's resting grey fill all but
    vanishes on the page's own grey, where this form stands. */

@@ -31,6 +31,15 @@
   --rux-button-primary-active: #1f4263;
 }
 
+/* A SECTION'S HEADING IS BOLD at Design's fixed 32px, half the page
+   heading's size at a wide screen, so the page has one heading that leads.
+   Apple's theme sets this step regular. */
+[data-theme="apple-light"],
+[data-theme="apple-dark"] {
+  --rux-heading-05-font-weight: 700;
+  --rux-heading-05-letter-spacing: -0.01em;
+}
+
 /* THE FOOTER'S LINKS IN ITS OWN GREYS. A column of a dozen links in blue
    reads as noise; in the secondary grey they read as a list, and turn the
    primary text colour on hover. */

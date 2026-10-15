@@ -151,20 +151,34 @@
   }
 }
 /* The page's last band meets the footer, past the content's bottom inset:
-   a photo of a coach behind the page's call to action, darkened most where
-   the words stand so they read at full contrast. */
+   a photo of a coach behind the page's call to action, darkened behind the
+   words so they read at full contrast and clear over the coach. Wider than a
+   phone, the band is never shorter than a third of its width, so the whole
+   coach fits in it however wide the window, and its words stand in the
+   middle of it. */
 .website-band--photo {
   margin-block: var(--rux-spacing-10) -2rem;
   padding-block: var(--rux-spacing-12);
   overflow: hidden;
+}
+@media (min-width: 42rem) {
+  .website-band--photo {
+    display: flex;
+    align-items: center;
+    min-block-size: 34vw;
+  }
+  .website-band--photo > .rux--css-grid {
+    inline-size: 100%;
+  }
 }
 @media (min-width: 66rem) {
   .website-band--photo {
     padding-block: var(--rux-spacing-13);
   }
 }
-/* The photo fills the band, cut to its height; the coach's side and its
-   name stand about two thirds of the way down, so that part is kept. */
+/* The photo fills the band, cut to its height. The coach stands in its lower
+   half, from about half way down to near its foot, so the cut keeps the
+   bottom of the photo and gives up sky. */
 .website-band__backdrop {
   position: absolute;
   inset: 0;
@@ -172,7 +186,7 @@
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
-  object-position: 50% 68%;
+  object-position: 50% 85%;
 }
 .website-band--photo::after {
   content: "";
@@ -180,13 +194,20 @@
   inset: 0;
   z-index: -1;
   background: linear-gradient(90deg,
-    color-mix(in srgb, var(--rux-background) 92%, transparent) 0%,
-    color-mix(in srgb, var(--rux-background) 78%, transparent) 50%,
-    color-mix(in srgb, var(--rux-background) 40%, transparent) 100%);
+    color-mix(in srgb, var(--rux-background) 90%, transparent) 0%,
+    color-mix(in srgb, var(--rux-background) 80%, transparent) 45%,
+    color-mix(in srgb, var(--rux-background) 15%, transparent) 75%,
+    transparent 100%);
 }
-@media (max-width: 41.98rem) {
+/* The band's words stop short of the coach, where the dark ends. */
+.website-band--photo .website-measure {
+  max-inline-size: 30rem;
+}
+/* Narrower than a wide screen the words run across the coach, so the whole
+   photo is darkened evenly. */
+@media (max-width: 65.98rem) {
   .website-band--photo::after {
-    background: color-mix(in srgb, var(--rux-background) 82%, transparent);
+    background: color-mix(in srgb, var(--rux-background) 76%, transparent);
   }
 }
 
