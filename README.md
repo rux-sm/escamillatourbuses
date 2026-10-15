@@ -27,10 +27,10 @@ footer, and names it in an `hreflang` link.
 ## A preview, until it takes the address
 
 - Every page asks search engines not to list it, with `robots` `noindex`.
-- Every page but the 404 opens on a strip saying it is a preview, with the
-  office's phone and email.
+- No page carries a preview notice; the pages read as the finished site.
 - The quote form checks what is typed and sends nothing: `app.js` opens the
-  thank-you page, which says no request was sent.
+  thank-you page, which says a request reaches the office once the site is
+  live.
 
 ## Its parts
 
@@ -48,8 +48,7 @@ footer, and names it in an `hreflang` link.
   heading, section heads, rows of tiles and their icons, photo cards, the
   steps, the customer's words, features, photos, the calls to action, the
   form's pairs and headings, the quote page's What happens next box, and the
-  footer. The
-  preview strip, the home page's hero, the photo bands and the footer are
+  footer. The home page's hero, the photo bands and the footer are
   `apple-dark` zones from edge to edge; every other page opens on its heading
   on the light grey; four close on a photo band holding the call to action.
 - `overrides.css` narrows the page's inset on a phone, keeps a stacked

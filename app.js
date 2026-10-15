@@ -13,8 +13,8 @@
    window, and then the form simply starts empty.
 
    THE PREVIEW SENDS NOTHING. A form that passes opens the thank-you page its
-   `data-thanks` names, which says nothing was sent; the live form will post to
-   the `quote-request` function first.
+   `data-thanks` names, which says a request reaches the office once the site
+   is live; the live form will post to the `quote-request` function first.
    ========================================================================== */
 (() => {
   'use strict';
