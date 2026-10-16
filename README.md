@@ -55,7 +55,8 @@ footer, and names it in an `hreflang` link.
   short facts, the first the company's federal safety rating; every other page opens on its heading, and four close on
   a photo band holding the call to action.
 - `overrides.css` sets the header at 64px, inset 8px at each end with its
-  menu and call buttons in its middle, charcoal with a hairline under it and
+  menu and call buttons in its middle, a small quote button beside the call
+  on a phone, charcoal with a hairline under it and
   see-through over the home page's hero, narrows the page's inset on a
   phone, keeps a stacked tile's gaps, gives a row's tiles and the What
   happens next box more room inside and a photo card none, sets the quote

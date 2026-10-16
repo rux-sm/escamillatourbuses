@@ -7,7 +7,10 @@
 /* The company's whole logo, ESCAMILLA over TOUR BUSES, the Scheduler's own
    brand/logo.svg: 32px tall in the footer and 40px in the 64px header, tall
    enough for TOUR BUSES to read. In the header it sits in Carbon's
-   `header__name`, which lays it out. */
+   `header__name`, which lays it out. On a phone the header's logo is 32px,
+   leaving room for the quote button, and narrower than 375px it shrinks with
+   the screen: 13rem is the rest of the bar with the Spanish label, and 5.2
+   the logo's width to its height. */
 .website-logo {
   block-size: 2rem;
   inline-size: auto;
@@ -16,19 +19,33 @@
 .rux--header__name .website-logo {
   block-size: 2.5rem;
 }
+@media (max-width: 41.98rem) {
+  .rux--header__name .website-logo {
+    block-size: min(2rem, calc((100vw - 13rem) / 5.2));
+  }
+}
 
 /* THE HEADER'S QUOTE BUTTON, the site's main action, filled in the company's
-   blue beside the phone icon from a tablet's width up. A phone has the
-   quote in its menu and in the page's own buttons, and no room beside the
-   logo for it. */
+   blue beside the phone icon at every width. A phone shows its one-word
+   label, Quote or Cotizar, and the call button's own 48px box spaces the
+   two. */
 .website-header-quote {
   align-self: center;
   margin-inline-end: var(--rux-spacing-03);
   white-space: nowrap;
 }
+.website-header-quote__short {
+  display: none;
+}
 @media (max-width: 41.98rem) {
   .website-header-quote {
+    margin-inline-end: 0;
+  }
+  .website-header-quote__full {
     display: none;
+  }
+  .website-header-quote__short {
+    display: inline;
   }
 }
 

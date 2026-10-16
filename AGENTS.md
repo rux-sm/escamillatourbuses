@@ -44,7 +44,7 @@ block. A rule on a Carbon component goes in `overrides.css` at Carbon's own
 specificity, with no `!important`. A part Carbon lacks is the site's own, in
 `app.css` under `website-`, every colour a `--rux-*` token. Carbon's header
 takes icon actions and one text button, Request a quote, the site's main
-action, shown from a tablet's width up.
+action, shown at every width, as Quote or Cotizar on a phone.
 
 ## The facts on the pages
 
