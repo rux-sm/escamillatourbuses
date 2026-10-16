@@ -14,10 +14,15 @@
 
 /* THE HEADER IS 64px, a public site's bar: Carbon's 48px with room around
    its logo, its menu and its quote button, as Design's geist-dark sets its
-   own. The page, the phone's menu and its shade start below it, and the
-   menu button stands in its middle. */
+   own. The page, the phone's menu and its shade start below it. Its icon
+   actions, the menu and the call, stand in its middle at Carbon's 48px with
+   the site's 6px corner, as Design's geist-dark rounds the actions of its own
+   64px bar: a square fill that no longer reaches the bar's edges would hang
+   from its top. The bar is inset 8px at each end, so a rounded fill never
+   meets the screen's edge. */
 .rux--header {
   block-size: 4rem;
+  padding-inline: var(--rux-spacing-03);
 }
 .rux--header ~ .rux--content {
   margin-block-start: 4rem;
@@ -28,8 +33,9 @@
 .rux--header .rux--side-nav--ux {
   block-size: calc(100% - 4rem);
 }
-.rux--header .rux--header__menu-toggle {
+.rux--header .rux--header__action {
   align-self: center;
+  border-radius: 6px;
 }
 
 /* THE HEADER IS CHARCOAL, Design's apple-dark, with a hairline under it that
@@ -139,8 +145,8 @@ a.rux--header__menu-item {
 /* EVERY BUTTON HAS A 6PX CORNER, the corner Apple's theme gives a field, so
    every control on the site shares one shape; the theme's capsule read apart
    from the site's rectangular layout. The selector is the theme's own capsule
-   rule, so this replaces it at its specificity, and the header's round
-   actions keep theirs. */
+   rule, so this replaces it at its specificity; the header's icon actions
+   take theirs from the header's own rule above. */
 [data-theme^="apple-"] .rux--btn:not(.rux--header__action, .rux--modal-close-button, .rux--side-panel__close-button, .rux--side-panel__navigation-back-button) {
   border-radius: 6px;
 }
