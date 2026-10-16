@@ -336,27 +336,6 @@
   color: var(--rux-text-secondary);
 }
 
-/* THE CUSTOMER'S WORDS, centred on a tile under a large quotation mark. */
-.website-praise {
-  display: grid;
-  gap: var(--rux-spacing-06);
-  justify-items: center;
-  margin: 0;
-  padding: var(--rux-spacing-09) var(--rux-spacing-07);
-  text-align: center;
-}
-.website-praise > blockquote {
-  max-inline-size: 48rem;
-}
-.website-praise > figcaption {
-  color: var(--rux-text-secondary);
-}
-.website-praise__mark {
-  color: var(--rux-interactive);
-  font-size: 4rem;
-  font-weight: 700;
-  line-height: 0.6;
-}
 /* A tile in the row is as tall as the tallest beside it, with its words at
    the top: Carbon's vertical stack is a grid, which would otherwise share the
    extra height out between its rows. */

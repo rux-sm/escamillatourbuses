@@ -48,7 +48,7 @@ footer, and names it in an `hreflang` link.
   the header's quote button, the bands, the hero and its reasons to book, the page's
   opening heading, section heads, rows of tiles and their icons, photo cards,
   the steps, a note under a row of tiles, the common questions' width, the
-  customer's words, features, photos, the calls to action, the form's pairs
+  features, photos, the calls to action, the form's pairs
   and headings, the quote page's What happens next box, and the footer. The
   home page's hero runs under the header, and a bar under it gives four
   reasons to book; every other page opens on its heading, and four close on
