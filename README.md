@@ -37,10 +37,11 @@ footer, and names it in an `hreflang` link.
 - `design/` is Design's built stylesheets, fonts and the scripts the header's
   menu and the FAQ need, copied from rux-sm.github.io by `npm run sync` and
   never edited here. `design/SOURCE` names the commit they came from.
-- Every page is on Design's `apple-dark` theme, a charcoal page with its
-  tiles a step lighter and its fields a step darker, rounded corners and the device's own
-  typeface. `theme.css` makes every primary button the logo's blue made
-  vivid, keeps Apple's light blue for links, and greys the footer's links.
+- Every page is on Design's `apple-dark` theme, which `theme.css` takes
+  to near black with brighter type: tiles a step lighter, fields black
+  inside a line, rounded corners and the device's own typeface. It also
+  makes every primary button the logo's blue made vivid, keeps Apple's
+  light blue for links, and greys the footer's links.
   Each page's `main` carries Carbon's large layout size, so its buttons,
   fields and FAQ rows are 48px tall.
 - `app.css` holds the parts Carbon has no component for, under `website-`:

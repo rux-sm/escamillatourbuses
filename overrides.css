@@ -60,8 +60,9 @@
   background-color: transparent;
 }
 /* The header's links are the primary text colour, near white on the
-   charcoal: Carbon's secondary grey reads dim over the photo. */
-.rux--header__menu-item {
+   charcoal: Carbon's secondary grey reads dim over the photo. Carbon writes
+   its colour on `a.rux--header__menu-item`, so this rule names the tag too. */
+a.rux--header__menu-item {
   color: var(--rux-text-primary);
 }
 

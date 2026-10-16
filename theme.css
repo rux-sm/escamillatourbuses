@@ -13,6 +13,32 @@
   --rux-button-primary-active: #075585;
 }
 
+/* A NEAR-BLACK PAGE WITH BRIGHTER TYPE. Apple's dark window grey, #1f2022,
+   under its soft #dedede type read washed out beside the hero's photo,
+   whose road is nearly black. The page is #0a0a0b, a tile or panel one step
+   up at #18181a, a field black inside a #636367 line, which Apple's theme
+   draws in the second subtle border and a radio in the strong one, standing
+   3.3 to 1 off the page, and the type and icons in what Apple's own site uses on
+   black: #f5f5f7, with #a1a1a6 for the quieter ones. */
+[data-theme="apple-dark"] {
+  --rux-background: #0a0a0b;
+  --rux-background-hover: #1a1a1c;
+  --rux-layer-01: #18181a;
+  --rux-layer-02: #18181a;
+  --rux-layer-hover-01: #222224;
+  --rux-field-01: #000000;
+  --rux-field-02: #000000;
+  --rux-border-subtle-00: #262628;
+  --rux-border-subtle-01: #262628;
+  --rux-border-strong-01: #636367;
+  --rux-border-subtle-02: #636367;
+  --rux-text-primary: #f5f5f7;
+  --rux-text-secondary: #a1a1a6;
+  --rux-text-helper: #a1a1a6;
+  --rux-icon-primary: #f5f5f7;
+  --rux-icon-secondary: #a1a1a6;
+}
+
 /* A SECTION'S HEADING IS BOLD at Design's fixed 32px, half the page
    heading's size at a wide screen, so the page has one heading that leads.
    Apple's theme sets this step regular. */
