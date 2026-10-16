@@ -37,22 +37,21 @@ footer, and names it in an `hreflang` link.
 - `design/` is Design's built stylesheets, fonts and the scripts the header's
   menu and the FAQ need, copied from rux-sm.github.io by `npm run sync` and
   never edited here. `design/SOURCE` names the commit they came from.
-- Every page is on Design's `apple-light` theme, a light grey page with its
-  tiles and fields white on it, rounded corners and the device's own
-  typeface. `theme.css` sets the company's blues from the logo: its deep end
-  for links and chosen controls, and the same hue made vivid for every
-  primary button; and it greys the footer's links. Each page's `main` carries Carbon's large
-  layout size, so its buttons, fields and FAQ rows are 48px tall.
+- Every page is on Design's `apple-dark` theme, a charcoal page with its
+  tiles a step lighter and its fields a step darker, rounded corners and the device's own
+  typeface. `theme.css` makes every primary button the logo's blue made
+  vivid, keeps Apple's light blue for links, and greys the footer's links.
+  Each page's `main` carries Carbon's large layout size, so its buttons,
+  fields and FAQ rows are 48px tall.
 - `app.css` holds the parts Carbon has no component for, under `website-`:
-  the header's quote button, the bands, the hero and its facts, the page's
+  the header's quote button, the bands, the hero and its reasons to book, the page's
   opening heading, section heads, rows of tiles and their icons, photo cards,
   the steps, a note under a row of tiles, the common questions' width, the
   customer's words, features, photos, the calls to action, the form's pairs
   and headings, the quote page's What happens next box, and the footer. The
-  header, the home page's hero and the facts bar under it, the photo bands
-  and the footer are `apple-dark` zones from edge to edge; every other page opens on its
-  heading on the light grey; four close on a photo band holding the call to
-  action.
+  home page's hero runs under the header, and a bar under it gives four
+  reasons to book; every other page opens on its heading, and four close on
+  a photo band holding the call to action.
 - `overrides.css` sets the header at 64px, charcoal with a hairline under
   it and see-through over the home page's hero, narrows the page's inset on a
   phone, keeps a stacked tile's gaps, gives a row's tiles and the What

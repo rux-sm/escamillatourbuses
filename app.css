@@ -143,9 +143,9 @@
     padding-block: calc(var(--rux-spacing-11) + 4rem) var(--rux-spacing-11);
   }
 }
-/* THE FACTS, a dark bar joined to the foot of the home page's hero: four
-   numbers, each with its words under it, two across on a phone and four on
-   a wide screen, parted by hairlines. */
+/* WHY BOOK WITH US, a dark bar joined to the foot of the home page's hero:
+   four reasons, each an icon, a short title and a line under it, two across
+   on a phone and four on a wide screen, parted by hairlines. */
 .website-band--facts {
   margin-block: 0 var(--rux-spacing-10);
   padding-block: var(--rux-spacing-07);
@@ -180,6 +180,12 @@
     border-inline-start: 0;
   }
 }
+.website-facts .website-icon {
+  margin-block-end: var(--rux-spacing-05);
+}
+.website-facts__title {
+  color: var(--rux-text-primary);
+}
 .website-facts__label {
   margin-block-start: var(--rux-spacing-02);
   color: var(--rux-text-secondary);
@@ -192,7 +198,7 @@
   letter-spacing: 0.12em;
 }
 
-/* EVERY OTHER PAGE OPENS ON ITS HEADING on the page's own grey, under the
+/* EVERY OTHER PAGE OPENS ON ITS HEADING on the page's own charcoal, under the
    strip, with what the page is about below it. */
 .website-intro {
   padding-block: var(--rux-spacing-10) var(--rux-spacing-09);

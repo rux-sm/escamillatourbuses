@@ -37,7 +37,7 @@
    see-through: the same charcoal at 65%, blurring the coach under it, its
    links without their own fill. app.js sets `website-header--clear` while
    the hero is under the header and takes it off once the page scrolls past,
-   so over the light page the header is solid and its words keep their
+   so over the rest of the page the header is solid and its words keep their
    contrast. The blur is drawn on a layer behind the header's contents rather
    than on the header, because a blur on the header would hold the phone's
    menu, which opens fixed below it, inside its 64px. */
@@ -118,9 +118,8 @@
   line-height: var(--rux-label-02-line-height);
 }
 
-/* An unchosen radio or checkbox on the quote form is white inside a thin
-   line, as the form's text fields are: Apple's resting grey fill all but
-   vanishes on the page's own grey, where this form stands. */
+/* An unchosen radio or checkbox on the quote form takes the field's fill
+   inside a thin line, as the form's text fields do. */
 .website-form .rux--radio-button:not(:checked) + .rux--radio-button__label .rux--radio-button__appearance,
 .website-form .rux--checkbox:not(:checked, :indeterminate) + .rux--checkbox-label::before {
   background-color: var(--rux-field-01);
