@@ -89,9 +89,11 @@
 }
 /* THE HOME PAGE'S HERO, a band that runs up under the 64px header, past the
    content's top inset, so the coach shows through the see-through header: on
-   a wide screen the coach fills the right of the window to its edge, faded
-   into the dark over a broad, eased stretch where the words stand, and the
-   words start below the header; on a phone it runs edge to edge above them.
+   a wide screen the photograph runs the band's whole width at 130%, held to
+   its left edge, so its coach, in the middle of the picture, lands in the
+   right half, clear of the words; it fades into the dark over a broad, eased
+   stretch where the words stand, and the words start below the header. On a
+   phone it runs edge to edge above them, cropped close to the coach.
    Rio Grande Valley stays on one line from a tablet's width up. */
 .website-band--lead {
   margin-block: -6rem 0;
@@ -106,7 +108,7 @@
   margin-inline: calc(-1 * var(--website-inset));
   aspect-ratio: 3 / 2;
   object-fit: cover;
-  object-position: 50% 80%;
+  object-position: 55% 75%;
 }
 .website-lead__words {
   padding-block: var(--rux-spacing-07) var(--rux-spacing-09);
@@ -115,6 +117,10 @@
   .website-keep {
     white-space: nowrap;
   }
+}
+/* The headline's lines are evened out, so no word is left alone on one. */
+.website-lead__words > h1 {
+  text-wrap: balance;
 }
 @media (min-width: 66rem) {
   .website-band--lead {
@@ -128,28 +134,29 @@
   .website-lead__photo {
     position: absolute;
     inset-block: 0;
-    inset-inline-end: 0;
+    inset-inline-start: 0;
     z-index: -2;
-    inline-size: 60%;
+    inline-size: 130%;
     block-size: 100%;
     margin: 0;
     aspect-ratio: auto;
-    object-position: 30% 75%;
+    object-position: 0% 70%;
   }
   .website-band--lead::after {
     content: "";
     position: absolute;
     inset-block: 0;
-    inset-inline-start: 40%;
+    inset-inline-start: 0;
     z-index: -1;
-    inline-size: 30%;
+    inline-size: 64%;
     background: linear-gradient(90deg,
-      var(--rux-background),
-      color-mix(in srgb, var(--rux-background) 82%, transparent) 22%,
-      color-mix(in srgb, var(--rux-background) 50%, transparent) 50%,
-      color-mix(in srgb, var(--rux-background) 18%, transparent) 78%,
+      var(--rux-background) 34%,
+      color-mix(in srgb, var(--rux-background) 85%, transparent) 50%,
+      color-mix(in srgb, var(--rux-background) 55%, transparent) 70%,
+      color-mix(in srgb, var(--rux-background) 20%, transparent) 88%,
       transparent);
   }
+
   .website-lead__words {
     padding-block: calc(var(--rux-spacing-11) + 4rem) var(--rux-spacing-11);
   }
