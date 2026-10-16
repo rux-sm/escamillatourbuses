@@ -58,8 +58,9 @@ footer, and names it in an `hreflang` link.
   phone, keeps a stacked tile's gaps, gives a row's tiles and the What
   happens next box more room inside and a photo card none, sets the quote
   form's typing at 16px and its labels at 14px, widens its text area, rings
-  its unchosen radios and checkbox, and lets a call to action fill a phone's
-  width.
+  its unchosen radios and checkbox, lets a call to action fill a phone's
+  width, gives every button a 6px corner and sets a page's headline at
+  medium weight.
 - `app.js` turns the header see-through while the home page's hero is under
   it, and is the quote form: its checks and their words in both languages,
   the first wrong field in the form's order, the return that a one-way trip

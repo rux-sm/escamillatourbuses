@@ -90,8 +90,9 @@
 /* THE HOME PAGE'S HERO, a band that runs up under the 64px header, past the
    content's top inset, so the coach shows through the see-through header: on
    a wide screen the coach fills the right of the window to its edge, faded
-   into the dark where the words stand, and the words start below the header;
-   on a phone it runs edge to edge above them. */
+   into the dark over a broad, eased stretch where the words stand, and the
+   words start below the header; on a phone it runs edge to edge above them.
+   Rio Grande Valley stays on one line from a tablet's width up. */
 .website-band--lead {
   margin-block: -6rem 0;
   padding-block: 0;
@@ -109,6 +110,11 @@
 }
 .website-lead__words {
   padding-block: var(--rux-spacing-07) var(--rux-spacing-09);
+}
+@media (min-width: 42rem) {
+  .website-keep {
+    white-space: nowrap;
+  }
 }
 @media (min-width: 66rem) {
   .website-band--lead {
@@ -136,8 +142,13 @@
     inset-block: 0;
     inset-inline-start: 40%;
     z-index: -1;
-    inline-size: 16%;
-    background: linear-gradient(90deg, var(--rux-background), transparent);
+    inline-size: 30%;
+    background: linear-gradient(90deg,
+      var(--rux-background),
+      color-mix(in srgb, var(--rux-background) 82%, transparent) 22%,
+      color-mix(in srgb, var(--rux-background) 50%, transparent) 50%,
+      color-mix(in srgb, var(--rux-background) 18%, transparent) 78%,
+      transparent);
   }
   .website-lead__words {
     padding-block: calc(var(--rux-spacing-11) + 4rem) var(--rux-spacing-11);
@@ -189,13 +200,6 @@
 .website-facts__label {
   margin-block-start: var(--rux-spacing-02);
   color: var(--rux-text-secondary);
-}
-
-/* A SHORT LINE ABOVE A HEADING, in capitals, saying who is speaking. */
-.website-eyebrow {
-  color: var(--rux-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
 }
 
 /* EVERY OTHER PAGE OPENS ON ITS HEADING on the page's own charcoal, under the

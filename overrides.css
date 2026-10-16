@@ -135,3 +135,19 @@ a.rux--header__menu-item {
     max-inline-size: none;
   }
 }
+
+/* EVERY BUTTON HAS A 6PX CORNER, the corner Apple's theme gives a field, so
+   every control on the site shares one shape; the theme's capsule read apart
+   from the site's rectangular layout. The selector is the theme's own capsule
+   rule, so this replaces it at its specificity, and the header's round
+   actions keep theirs. */
+[data-theme^="apple-"] .rux--btn:not(.rux--header__action, .rux--modal-close-button, .rux--side-panel__close-button, .rux--side-panel__navigation-back-button) {
+  border-radius: 6px;
+}
+
+/* A PAGE'S HEADLINE IS MEDIUM WEIGHT. Carbon writes its display type at 600,
+   which beside the photographs read heavy; medium lets the hero's photograph
+   lead. */
+.rux--type-fluid-display-02 {
+  font-weight: 500;
+}
