@@ -46,12 +46,13 @@ footer, and names it in an `hreflang` link.
   fields and FAQ rows are 48px tall.
 - `app.css` holds the parts Carbon has no component for, under `website-`:
   the header's quote button, the bands, the hero and its reasons to book, the page's
-  opening heading, section heads, rows of tiles and their icons, photo cards,
+  opening heading, section heads, rows of tiles, plain icons, lists of linked
+  rows, photo cards,
   the steps, a note under a row of tiles, the common questions' width, the
   features, photos, the calls to action, the form's pairs
   and headings, the quote page's What happens next box, and the footer. The
-  home page's hero runs under the header, and a bar under it gives four
-  reasons to book; every other page opens on its heading, and four close on
+  home page's hero runs under the header, and a strip under it gives five
+  short facts, the first the company's federal safety rating; every other page opens on its heading, and four close on
   a photo band holding the call to action.
 - `overrides.css` sets the header at 64px, charcoal with a hairline under
   it and see-through over the home page's hero, narrows the page's inset on a

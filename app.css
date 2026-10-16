@@ -154,51 +154,52 @@
     padding-block: calc(var(--rux-spacing-11) + 4rem) var(--rux-spacing-11);
   }
 }
-/* WHY BOOK WITH US, a dark bar joined to the foot of the home page's hero:
-   four reasons, each an icon, a short title and a line under it, two across
-   on a phone and four on a wide screen, parted by hairlines. */
+/* WHY BOOK WITH US, a strip joined to the foot of the home page's hero: five
+   short facts, each a plain icon beside a title and a line, parted by fine
+   lines: a row each on a phone, side by side on a wide screen. */
 .website-band--facts {
   margin-block: 0 var(--rux-spacing-10);
-  padding-block: var(--rux-spacing-07);
-  border-block-start: 1px solid var(--rux-border-subtle-01);
+  padding-block: var(--rux-spacing-06);
+  border-block: 1px solid var(--rux-border-subtle-01);
 }
 .website-facts {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--rux-spacing-06) 0;
+  grid-template-columns: minmax(0, 1fr);
   padding: 0;
   margin: 0;
   list-style: none;
 }
 .website-facts > li {
-  padding-inline: var(--rux-spacing-06);
-  border-inline-start: 1px solid var(--rux-border-subtle-01);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--rux-spacing-04);
+  align-items: start;
+  padding-block: var(--rux-spacing-05);
 }
-.website-facts > li:nth-child(odd) {
-  padding-inline-start: 0;
-  border-inline-start: 0;
+.website-facts > li + li {
+  border-block-start: 1px solid var(--rux-border-subtle-01);
 }
 @media (min-width: 66rem) {
   .website-facts {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
-  .website-facts > li:nth-child(odd) {
-    padding-inline-start: var(--rux-spacing-06);
-    border-inline-start: 1px solid var(--rux-border-subtle-01);
+  .website-facts > li {
+    padding-block: var(--rux-spacing-03);
+    padding-inline: var(--rux-spacing-05);
   }
   .website-facts > li:first-child {
     padding-inline-start: 0;
-    border-inline-start: 0;
   }
-}
-.website-facts .website-icon {
-  margin-block-end: var(--rux-spacing-05);
+  .website-facts > li + li {
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--rux-border-subtle-01);
+  }
 }
 .website-facts__title {
   color: var(--rux-text-primary);
 }
 .website-facts__label {
-  margin-block-start: var(--rux-spacing-02);
+  margin-block-start: var(--rux-spacing-01);
   color: var(--rux-text-secondary);
 }
 
@@ -317,15 +318,58 @@
   }
 }
 
-/* A TILE'S ICON, in the company's blue on a soft round of it. */
+/* AN ICON STANDS ALONE in the accent blue, with no round behind it, beside or
+   above the words it marks. */
 .website-icon {
-  box-sizing: content-box;
+  flex: none;
   inline-size: 1.5rem;
   block-size: 1.5rem;
-  padding: var(--rux-spacing-04);
-  border-radius: 50%;
-  background-color: color-mix(in srgb, var(--rux-interactive) 12%, transparent);
   fill: var(--rux-interactive);
+}
+
+/* A LIST OF LINKED ROWS, such as the groups on the home page: a title and a
+   line each, parted by fine lines, one column on a phone and two from a
+   tablet's width up, an arrow at each row's end. The whole row is the link. */
+.website-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: var(--rux-spacing-09);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+@media (min-width: 42rem) {
+  .website-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.website-list > li {
+  border-block-end: 1px solid var(--rux-border-subtle-01);
+}
+.website-list__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--rux-spacing-02) var(--rux-spacing-05);
+  padding-block: var(--rux-spacing-06);
+  color: var(--rux-text-primary);
+  text-decoration: none;
+}
+.website-list__row:focus-visible {
+  outline: 2px solid var(--rux-focus);
+  outline-offset: 2px;
+}
+.website-list__row:hover .website-list__title {
+  color: var(--rux-link-primary);
+}
+.website-list__line {
+  grid-column: 1;
+  color: var(--rux-text-secondary);
+}
+.website-list__arrow {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
+  fill: var(--rux-link-primary);
 }
 
 /* THE COMMON QUESTIONS at a reading width, so each question stays near its
