@@ -1,4 +1,25 @@
 /* ==========================================================================
+   Website — THE HEADER OVER THE HERO
+   --------------------------------------------------------------------------
+   index.html and es/index.html. The header is see-through while the home
+   page's hero is under it, and solid charcoal once the page scrolls past:
+   `website-header--clear` is on while any of the hero shows below the 64px
+   header. Without a hero or without the observer the header stays solid,
+   which is every other page.
+   ========================================================================== */
+(() => {
+  'use strict';
+
+  const header = document.querySelector('.rux--header');
+  const hero = document.querySelector('.website-band--lead');
+  if (!header || !hero || !('IntersectionObserver' in window)) return;
+
+  new IntersectionObserver(([entry]) => {
+    header.classList.toggle('website-header--clear', entry.isIntersecting);
+  }, { rootMargin: '-64px 0px 0px 0px' }).observe(hero);
+})();
+
+/* ==========================================================================
    Website — THE QUOTE FORM
    --------------------------------------------------------------------------
    quote.html and es/quote.html. Checks each field the office quotes from and

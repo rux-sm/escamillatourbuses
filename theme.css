@@ -3,32 +3,33 @@
    "Where a change goes".
 
    THE COMPANY'S BLUE IN PLACE OF APPLE'S. The site is the company's, so its
-   one action colour is the deep end of the logo's own gradient, which carries
-   white type at 6.4 to 1 and reads as a link at 6.4 to 1 on a white tile and
-   5.9 to 1 on the page's apple-light grey. Hover and active step darker.
-   Focus keeps Apple's brighter blue, so a focused button still shows a ring
-   of its own. */
+   action colours come from the logo's own blue. A link, a chosen control
+   and the brand fill take the deep end of the logo's gradient, which reads at
+   6.4 to 1 on a white tile and 5.9 to 1 on the page's apple-light grey. A
+   primary button takes the same hue made vivid, #0a7abf, the brightest that
+   still carries white type at 4.6 to 1. Hover and active step darker. Focus
+   keeps Apple's brighter blue, so a focused button still shows a ring of its
+   own. */
 [data-theme="apple-light"] {
   --rux-background-brand: #2f6293;
   --rux-interactive: #2f6293;
   --rux-border-interactive: #2f6293;
-  --rux-button-primary: #2f6293;
-  --rux-button-primary-hover: #29567f;
-  --rux-button-primary-active: #1f4263;
+  --rux-button-primary: #0a7abf;
+  --rux-button-primary-hover: #0967a2;
+  --rux-button-primary-active: #075585;
   --rux-link-primary: #2f6293;
   --rux-link-primary-hover: #1f4263;
   --rux-icon-interactive: #2f6293;
 }
 
-/* THE SAME BUTTON IN THE DARK PARTS. The home page's hero, the preview strip,
-   the photo bands and the footer are apple-dark zones, and their primary
-   button keeps the company's blue, which carries white type at 6.4 to 1
-   whatever is behind it. Links there keep Apple's light blue, which the
-   company's blue is too dark to replace on black. */
+/* THE SAME BUTTON IN THE DARK PARTS. The header, the home page's hero, the
+   photo bands and the footer are apple-dark zones, and their primary button
+   keeps the same vivid blue. Links there keep Apple's light blue, which the
+   company's deep blue is too dark to replace on black. */
 [data-theme="apple-dark"] {
-  --rux-button-primary: #2f6293;
-  --rux-button-primary-hover: #29567f;
-  --rux-button-primary-active: #1f4263;
+  --rux-button-primary: #0a7abf;
+  --rux-button-primary-hover: #0967a2;
+  --rux-button-primary-active: #075585;
 }
 
 /* A SECTION'S HEADING IS BOLD at Design's fixed 32px, half the page

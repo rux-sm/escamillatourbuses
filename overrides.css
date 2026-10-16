@@ -32,6 +32,34 @@
   align-self: center;
 }
 
+/* THE HEADER IS CHARCOAL, Design's apple-dark, with a hairline under it that
+   parts it from a dark band below. Over the home page's hero it is
+   see-through: the same charcoal at 65%, blurring the coach under it, its
+   links without their own fill. app.js sets `website-header--clear` while
+   the hero is under the header and takes it off once the page scrolls past,
+   so over the light page the header is solid and its words keep their
+   contrast. The blur is drawn on a layer behind the header's contents rather
+   than on the header, because a blur on the header would hold the phone's
+   menu, which opens fixed below it, inside its 64px. */
+.rux--header {
+  border-block-end: 1px solid var(--rux-border-subtle-01);
+}
+.rux--header.website-header--clear {
+  background-color: transparent;
+}
+.rux--header.website-header--clear::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: color-mix(in srgb, var(--rux-background) 65%, transparent);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+.website-header--clear .rux--header__menu-item:not(:hover) {
+  background-color: transparent;
+}
+
 /* `.rux--text-area` sets no width, so inside its flex wrapper it sits at the
    browser's 20 columns; on the quote form it takes the field's width, as
    every other field there does. */

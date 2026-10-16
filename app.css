@@ -87,12 +87,13 @@
     padding-block: var(--rux-spacing-09);
   }
 }
-/* THE HOME PAGE'S HERO, a band that meets the header, past the content's
-   top inset: on a wide screen the coach fills the right of the window to its
-   edge, faded into the dark where the words stand; on a phone it runs edge to
-   edge above them. */
+/* THE HOME PAGE'S HERO, a band that runs up under the 64px header, past the
+   content's top inset, so the coach shows through the see-through header: on
+   a wide screen the coach fills the right of the window to its edge, faded
+   into the dark where the words stand, and the words start below the header;
+   on a phone it runs edge to edge above them. */
 .website-band--lead {
-  margin-block: -2rem 0;
+  margin-block: -6rem 0;
   padding-block: 0;
   overflow: hidden;
 }
@@ -113,7 +114,7 @@
   .website-band--lead {
     display: flex;
     align-items: center;
-    min-block-size: min(78vh, 42rem);
+    min-block-size: calc(min(78vh, 42rem) + 4rem);
   }
   .website-band--lead > .rux--css-grid {
     inline-size: 100%;
@@ -139,7 +140,7 @@
     background: linear-gradient(90deg, var(--rux-background), transparent);
   }
   .website-lead__words {
-    padding-block: var(--rux-spacing-11);
+    padding-block: calc(var(--rux-spacing-11) + 4rem) var(--rux-spacing-11);
   }
 }
 /* THE FACTS, a dark bar joined to the foot of the home page's hero: four
