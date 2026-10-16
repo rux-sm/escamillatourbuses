@@ -59,6 +59,11 @@
 .website-header--clear .rux--header__menu-item:not(:hover) {
   background-color: transparent;
 }
+/* The header's links are the primary text colour, near white on the
+   charcoal: Carbon's secondary grey reads dim over the photo. */
+.rux--header__menu-item {
+  color: var(--rux-text-primary);
+}
 
 /* `.rux--text-area` sets no width, so inside its flex wrapper it sits at the
    browser's 20 columns; on the quote form it takes the field's width, as
