@@ -49,18 +49,24 @@ footer, and names it in an `hreflang` link.
   opening heading, section heads, rows of tiles, plain icons, lists of linked
   rows, photo cards,
   the steps, a note under a row of tiles, the common questions' width, the
-  features, photos, the calls to action, the form's pairs
-  and headings, the quote page's What happens next box, and the footer. The
-  home page's hero runs under the header, and a strip under it gives five
-  short facts, the first the company's federal safety rating; every other page opens on its heading, and four close on
-  a photo band holding the call to action.
+  features, photos and the gallery's links to them at full size, the calls
+  to action, the form's pairs and headings, the quote page's What happens
+  next box and the phone under its opening, and the footer. The home page's
+  hero runs under the header, and a strip under it gives five short facts,
+  the first the company's federal safety rating; every other page opens on
+  its heading. Five pages close on a photo band holding the call to action:
+  Home and Fleet on the same coach, since Fleet's gallery holds every other
+  photo, and Services, About and Contact each on their own.
 - `overrides.css` sets the header at 64px, inset 8px at each end with its
   menu and call buttons in its middle, a small quote button beside the call
   on a phone, charcoal with a hairline under it and
-  see-through over the home page's hero, narrows the page's inset on a
+  see-through over the home page's hero, sets the phone's menu at 16px in
+  48px rows, narrows the page's inset on a
   phone, keeps a stacked tile's gaps, gives a row's tiles and the What
   happens next box more room inside and a photo card none, sets the quote
-  form's typing at 16px and its labels at 14px, widens its text area, rings
+  form's typing at 16px and its labels at 14px, shows a wrong field's error
+  in place of its help, keeps a date's box level with its time's, widens its
+  text area, rings
   its unchosen radios and checkbox, lets a call to action fill a phone's
   width, gives every button a 6px corner and sets a page's headline at
   medium weight.

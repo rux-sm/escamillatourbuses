@@ -37,6 +37,16 @@
   align-self: center;
   border-radius: 6px;
 }
+/* The phone's menu names its pages at 16px, the site's reading size, where
+   Carbon's 14px suits an app's dense nav. Its rows are 48px, the size of
+   every button and field on the site. */
+.rux--side-nav a.rux--header__menu-item {
+  min-block-size: 3rem;
+}
+.rux--side-nav a.rux--header__menu-item .rux--text-truncate-end {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
 
 /* A PHONE'S HEADER fits the menu, the logo, the quote button and the call:
    the logo's room is 4px before it and 12px after, in place of Carbon's 16px
@@ -137,6 +147,28 @@ a.rux--header__menu-item {
 .website-form :is(.rux--label, .rux--form__helper-text) {
   font-size: var(--rux-label-02-font-size);
   line-height: var(--rux-label-02-line-height);
+}
+
+/* A WRONG FIELD'S ERROR TAKES THE PLACE OF ITS HELP, as Carbon's own text
+   input shows one or the other: under the error the help only says the same
+   thing again. */
+.rux--text-input__field-wrapper[data-invalid] ~ .rux--form__helper-text {
+  display: none;
+}
+
+/* A date and its time beside it keep their boxes level when one label takes
+   two lines, as "Departure time (optional)" does on a phone: the pair's
+   labels share a row, and so do its boxes. Each keeps to its half, which a
+   date box's own width would otherwise push past. */
+.website-pair > .rux--form-item {
+  display: grid;
+  grid-row: span 2;
+  grid-template-rows: subgrid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+}
+.website-pair > .rux--form-item > .rux--text-input__label-wrapper {
+  align-self: end;
 }
 
 /* An unchosen radio or checkbox on the quote form takes the field's fill
