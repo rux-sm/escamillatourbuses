@@ -33,12 +33,26 @@
    a request that lands clears it. Storage can be refused, as in a private
    window, and then the form simply starts empty.
 
-   THE PREVIEW SENDS NOTHING. A form that passes opens the thank-you page its
-   `data-thanks` names, which says a request reaches the office once the site
-   is live; the live form will post to the `quote-request` function first.
+   A FORM THAT PASSES IS SENT to the scheduler's `quote-request` function,
+   behind Cloudflare's Turnstile, and the thank-you page its `data-thanks`
+   names opens with the request's number, which this file, loaded there too,
+   puts in its words. A send that fails says why beside the button.
+
+   A BLANK SITE KEY SENDS NOTHING, as in the preview: a form that passes opens
+   the thank-you page with no number, which says a request reaches the office
+   once the site is live.
    ========================================================================== */
 (() => {
   'use strict';
+
+  // THE THANK-YOU PAGE says the request's number, which its address carries,
+  // and with it what happens next in place of the preview's words.
+  const number = new URLSearchParams(location.search).get('request');
+  if (/^\d{1,9}$/.test(number ?? '')) {
+    for (const el of document.querySelectorAll('[data-request-number]')) el.textContent = number;
+    for (const el of document.querySelectorAll('[data-request]')) el.hidden = false;
+    for (const el of document.querySelectorAll('[data-no-request]')) el.hidden = true;
+  }
 
   const form = document.getElementById('quote-form');
   if (!form) return;
@@ -203,6 +217,113 @@
     keep();
   });
 
+  // -- sending -----------------------------------------------------------------
+  /* The request goes to the scheduler's quote-request function, which stores
+     it and puts a New quote on the office's Tasks, and answers with its
+     number. Turnstile's widget is the site's own, and its key is not a secret. */
+  const ENDPOINT = 'https://udnmqhayzhrbltxzzhjw.supabase.co/functions/v1/quote-request';
+  const TURNSTILE_SITE_KEY = '';
+  const CALL = '(956) 994-1169';
+  const FAILED = es ? {
+    down: `No pudimos enviarla, y lo que escribió sigue aquí. Inténtelo de nuevo, o llame al ${CALL}.`,
+    captcha: `No se pudo confirmar que la envía una persona. Inténtelo de nuevo, o llame al ${CALL}.`,
+    limit: `Ya recibimos varias solicitudes suyas en esta hora. Llame al ${CALL} y con gusto le ayudamos.`,
+    fields: 'Revise los campos marcados.',
+    field: 'Revise esta respuesta.',
+  } : {
+    down: `We could not send it, and what you typed is still here. Try again, or call ${CALL}.`,
+    captcha: `We could not confirm a person is sending it. Try again, or call ${CALL}.`,
+    limit: `We already have several requests from you this hour. Call ${CALL} and we’ll help.`,
+    fields: 'Check the marked fields.',
+    field: 'Check this answer.',
+  };
+  const failed = document.getElementById('q-failed');
+  const failedWords = document.getElementById('q-failed-words');
+  const sayFailed = words => {
+    failedWords.textContent = words;
+    failed.hidden = false;
+  };
+
+  /* One Turnstile token for one send, rendered into `host`, as the log-in
+     asks for one. A token works once, so each send replaces the widget. Every
+     way the check can end without a token resolves null, so a challenge left
+     unsolved or a dropped network hands the button back. */
+  let widget = null;
+  const captchaToken = host => new Promise(resolve => {
+    let tries = 0;
+    const attempt = () => {
+      if (!window.turnstile) {
+        if (++tries > 50) return resolve(null);
+        return setTimeout(attempt, 200);
+      }
+      try {
+        if (widget !== null) window.turnstile.remove(widget);
+        widget = window.turnstile.render(host, {
+          sitekey: TURNSTILE_SITE_KEY,
+          appearance: 'interaction-only',
+          language: es ? 'es' : 'en',
+          callback: token => resolve(token),
+          'error-callback': () => resolve(null),
+          'expired-callback': () => resolve(null),
+          'timeout-callback': () => resolve(null),
+          'unsupported-callback': () => resolve(null),
+        });
+      } catch { resolve(null); }
+    };
+    attempt();
+  });
+
+  // What the form says, as the function reads it.
+  function fields() {
+    const out = { lang: es ? 'es' : 'en' };
+    for (const el of form.elements) {
+      if (!el.name) continue;
+      if (el.type === 'radio') { if (el.checked) out[el.name] = el.value; }
+      else if (el.type === 'checkbox') out[el.name] = el.checked ? el.value : '';
+      else out[el.name] = el.value;
+    }
+    return out;
+  }
+
+  async function send(button) {
+    button.disabled = true;
+    failed.hidden = true;
+    try {
+      const token = await captchaToken(document.getElementById('q-captcha'));
+      if (!token) { sayFailed(FAILED.captcha); return; }
+      let res;
+      try {
+        res = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ ...fields(), token }),
+        });
+      } catch {
+        sayFailed(FAILED.down);
+        return;
+      }
+      const answer = await res.json().catch(() => ({}));
+      if (res.ok) {
+        forget();
+        location.href = answer.number ? `${form.dataset.thanks}?request=${answer.number}` : form.dataset.thanks;
+        return;
+      }
+      if (answer.error === 'fields' && Array.isArray(answer.fields)) {
+        // A field the page passed and the function did not is marked with the
+        // page's own words where it has them.
+        for (const name of answer.fields) {
+          const input = field(name);
+          if (input && input.type !== 'radio') mark(input, RULES[name]?.() || FAILED.field);
+        }
+        const first = answer.fields.map(field).find(input => input && input.type !== 'radio');
+        if (first) first.focus();
+      }
+      sayFailed(FAILED[answer.error] ?? FAILED.down);
+    } finally {
+      button.disabled = false;
+    }
+  }
+
   form.addEventListener('submit', event => {
     event.preventDefault();
     // Every field is checked, and the reader is taken to the first wrong one
@@ -213,7 +334,11 @@
       field(wrong[0]).focus();
       return;
     }
-    forget();
-    location.href = form.dataset.thanks;
+    if (!TURNSTILE_SITE_KEY) {
+      forget();
+      location.href = form.dataset.thanks;
+      return;
+    }
+    send(event.submitter ?? form.querySelector('[type="submit"]'));
   });
 })();

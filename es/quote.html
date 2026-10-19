@@ -41,6 +41,7 @@
      The sprite wrapper and the symbol naming are Design. See NOTICE. -->
 <symbol id="i-close" viewBox="0 0 32 32"><path d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z" style="fill:var(--rux-icon-path-1)"/></symbol>
 <symbol id="i-warning--filled" viewBox="0 0 16 16"><path d="M8,1C4.2,1,1,4.2,1,8s3.2,7,7,7s7-3.1,7-7S11.9,1,8,1z M7.5,4h1v5h-1C7.5,9,7.5,4,7.5,4z M8,12.2	c-0.4,0-0.8-0.4-0.8-0.8s0.3-0.8,0.8-0.8c0.4,0,0.8,0.4,0.8,0.8S8.4,12.2,8,12.2z" style="fill:var(--rux-icon-path-1)"/><path d="M7.5,4h1v5h-1C7.5,9,7.5,4,7.5,4z M8,12.2c-0.4,0-0.8-0.4-0.8-0.8s0.3-0.8,0.8-0.8	c0.4,0,0.8,0.4,0.8,0.8S8.4,12.2,8,12.2z" data-icon-path="inner-path" opacity="0" style="fill:var(--rux-icon-path-2,var(--rux-icon-inner,none));opacity:1"/></symbol>
+<symbol id="i-error--filled" viewBox="0 0 16 16"><path d="M8,1C4.1,1,1,4.1,1,8s3.1,7,7,7s7-3.1,7-7S11.9,1,8,1z M10.7,11.5L4.5,5.3l0.8-0.8l6.2,6.2L10.7,11.5z" style="fill:var(--rux-icon-path-1)"/><path fill="none" d="M10.7,11.5L4.5,5.3l0.8-0.8l6.2,6.2L10.7,11.5z" data-icon-path="inner-path" opacity="0" style="fill:var(--rux-icon-path-2,var(--rux-icon-inner,none));opacity:1"/></symbol>
 <symbol id="i-menu" viewBox="0 0 16 16"><path d="M2 12H14V13H2z" style="fill:var(--rux-icon-path-1)"/><path d="M2 9H14V10H2z" style="fill:var(--rux-icon-path-2)"/><path d="M2 6H14V7H2z"/><path d="M2 3H14V4H2z"/></symbol>
 <symbol id="i-arrow--right" viewBox="0 0 16 16"><path d="M9.3 3.7 13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z" style="fill:var(--rux-icon-path-1)"/></symbol>
 <symbol id="m-close" viewBox="0 -960 960 960"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"/></symbol>
@@ -324,6 +325,26 @@
               </div>
             </div>
           </fieldset>
+          <!-- A FIELD NO PERSON SEES, which only a bot fills: the request is then
+               answered as sent, and nothing is stored. -->
+          <div class="website-trap" aria-hidden="true"><label for="q-website">Deje esto vacío</label><input id="q-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+          <!-- Cloudflare's check that a person is sending, which shows only when
+               it needs an answer. -->
+          <div id="q-captcha"></div>
+          <!-- WHY A REQUEST DID NOT LAND, beside the button, with what was typed
+               still in the form. The wrapper hides it, since Carbon shows a
+               notification whatever its hidden attribute says. -->
+          <div id="q-failed" hidden>
+            <div class="rux--inline-notification rux--inline-notification--error rux--inline-notification--low-contrast" role="alert">
+              <div class="rux--inline-notification__details">
+                <svg class="rux--inline-notification__icon" width="20" height="20" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><use href="#i-error--filled"/></svg>
+                <div class="rux--inline-notification__text-wrapper">
+                  <div class="rux--inline-notification__title">Su solicitud no se envió</div>
+                  <div class="rux--inline-notification__subtitle" id="q-failed-words"></div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div><button type="submit" class="rux--btn rux--btn--primary">Enviar solicitud<svg class="rux--btn__icon" width="16" height="16" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><use href="#i-arrow--right"/></svg></button></div>
         </form>
       </div>
@@ -391,6 +412,7 @@
 <!-- The kernel first, then the shell's menu, which needs it. -->
 <script src="../design/js/overlay.js"></script>
 <script src="../design/js/ui-shell.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <script src="../app.js"></script>
 </body>
 </html>

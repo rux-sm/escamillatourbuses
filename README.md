@@ -28,9 +28,11 @@ footer, and names it in an `hreflang` link.
 
 - Every page asks search engines not to list it, with `robots` `noindex`.
 - No page carries a preview notice; the pages read as the finished site.
-- The quote form checks what is typed and sends nothing: `app.js` opens the
-  thank-you page, which says a request reaches the office once the site is
-  live.
+- The quote form sends nothing while `app.js` has no Turnstile site key: it
+  opens the thank-you page, which says a request reaches the office once the
+  site is live. With the key, it sends a request that passes its checks to
+  the scheduler's `quote-request` function, and the thank-you page gives the
+  request's number and what happens next.
 
 ## Its parts
 
@@ -73,9 +75,10 @@ footer, and names it in an `hreflang` link.
 - `app.js` turns the header see-through while the home page's hero is under
   it, and is the quote form: its checks and their words in both languages,
   the first wrong field in the form's order, the return that a one-way trip
-  hides, and the draft kept in the tab's session storage until a request
-  lands. The form asks for the trip first, then its needs, then who is
-  asking.
+  hides, the draft kept in the tab's session storage until a request lands,
+  the send, with a field only a bot fills and why a send failed, and the
+  number on the thank-you page. The form asks for the trip first, then its
+  needs, then who is asking.
 - `brand/` holds the logo, `logo-on-dark.svg`, the same with its grey
   lightened for the dark header and footer, `favicon.svg`, the company's bus, for a customer's
   tab, `apple-touch-icon.png`, the same bus in white on the company's blue
