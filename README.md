@@ -80,7 +80,8 @@ footer, and names it in an `hreflang` link.
   number on the thank-you page. The form asks for the trip first, then its
   needs, then who is asking.
 - `brand/` holds the logo, `logo-on-dark.svg`, the same with its grey
-  lightened for the dark header and footer, `favicon.svg`, the company's bus, for a customer's
+  lightened for the dark header and footer, `logo-wordmark.svg`, the logo
+  without TOUR BUSES, `favicon.svg`, the company's bus, for a customer's
   tab, `apple-touch-icon.png`, the same bus in white on the company's blue
   for a phone's home screen, and `share.jpg`, the picture a shared link
   shows.
